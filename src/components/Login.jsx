@@ -5,7 +5,8 @@ export default class Login extends Component {
         return(
             <div> 
                 <form onSubmit={this.props.onSubmit}>
-                    <input className="users" type="text"  onChange={(e) => this.props.onChange(e, "currentUser")} />
+                    <input className="users" type="text"  onChange={(e) => this.props.handleChange(e)} />
+                    <button type="submit">Submit</button>
                 </form>
             </div>
         )
