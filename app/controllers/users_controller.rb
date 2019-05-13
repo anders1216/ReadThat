@@ -1,18 +1,24 @@
 class UsersController < ApplicationController
-    create
-    @user = User.create(user_params)
-    render json: @user
-end
+    
+    def index 
+        @users = User.all
+        render json: @users
+    end
 
-update
-    @user = User.find(params[:id])
-    @user.update
-    render json: @user
-end
+    def create
+        @user = User.create(user_params)
+        render json: @user
+    end
 
-private
+    def update
+        @user = User.find(params[:id])
+        @user.update
+        render json: @user
+    end
 
-user_params
-    params.require(:user).permit!
-end
+    private
+
+    def user_params
+        params.require(:user).permit!
+    end
 end

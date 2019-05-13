@@ -1,10 +1,16 @@
 class VotesController < ApplicationController
-    create
+
+    def index 
+        @votes = User.all
+        render json: @votes
+    end
+    
+    def create
         @vote = Vote.create(vote_params)
         render json: @vote
     end
 
-    update
+    def update
         @vote = Vote.find(params[:id])
         @vote.update
         render json: @vote
@@ -12,7 +18,7 @@ class VotesController < ApplicationController
 
  private
 
-    vote_params
+    def vote_params
         params.require(:vote).permit!
     end
 

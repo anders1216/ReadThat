@@ -1,10 +1,16 @@
 class CommentsController < ApplicationController
-    create
+    
+    def index 
+        @comments = User.all
+        render json: @comments
+    end
+
+    def create
         @comment = Comment.create(comment_params)
         render json: @comment
     end
 
-    update
+    def update
         @comment = Comment.find(params[:id])
         @comment.update
         render json: @comment
@@ -12,7 +18,7 @@ class CommentsController < ApplicationController
 
 private
 
-    comment_params
+    def comment_params
         params.require(:comment).permit!
     end
 end

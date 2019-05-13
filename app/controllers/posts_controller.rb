@@ -1,10 +1,16 @@
 class PostsController < ApplicationController
-    create
+    
+    def index 
+        @posts = User.all
+        render json: @posts
+    end
+
+    def create
         @post = Post.create(post_params)
         render json: @post
     end
 
-    update
+    def update
         @post = Post.find(params[:id])
         @post.update
         render json: @post
@@ -13,7 +19,7 @@ class PostsController < ApplicationController
 
     private
 
-    post_params
+    def post_params
         params.require(:post).permit!
     end
 end
