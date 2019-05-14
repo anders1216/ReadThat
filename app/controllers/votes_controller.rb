@@ -1,7 +1,7 @@
 class VotesController < ApplicationController
 
     def index 
-        @votes = User.all
+        @votes = Vote.all
         render json: @votes
     end
     
