@@ -3,45 +3,46 @@ import Login from '../components/Login';
 import Feed from './Feed'
 
 
-const API = "http://localhost:3000/"
+export const API = "http://localhost:3000/"
 
 
 export default class MainPage extends Component {
     state = {
-        currentUser: null,
+        currentUser: {},
         input: "",
+        password: "",
+        username: "",
         isLoggedIn: false,
         isPoster: false,
         isMod: false
     }
 
   handleChange = (e) => {
-        this.setState({input: e.target.value})
-        console.log(this.state.input)
-
+        let key = e.target.name
+        let newState =e.target.value
+        this.setState({[key]: newState})
     }
 
     onLoginSubmit = (e) => {
+        const {username, password} = this.state
         e.preventDefault()
+
         fetch(API+"users", {
             method: 'POST',
             headers: {"Content-Type": "application/json", "Accept":"application/json"},
-            body: JSON.stringify({username: this.state.input})
+            body: JSON.stringify({username: username, password: password})
         }).then(res => res.json()).then(res => this.setState({currentUser: res, isLoggedIn: true}))
-
     }
+
 
     render(){
         const {currentUser, isLoggedIn} = this.state
-        console.log(this.state.input)
        let Component;
         if (!isLoggedIn){
             Component = <Login handleChange={this.handleChange} onSubmit={this.onLoginSubmit}/>
         }else if(isLoggedIn) {
-            Component = <Feed currentUser={currentUser}/> 
-            
+            Component = <Feed currentUser={currentUser}/>  
         }
-        console.log(Component)
         return(
             <div> 
                 {Component}
