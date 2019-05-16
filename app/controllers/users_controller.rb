@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+    skip_before_action :authorized, only: [:create]
     
     def index 
         @users = User.all
@@ -6,8 +7,15 @@ class UsersController < ApplicationController
     end
 
     def create
-        @user = User.find_or_create_by(user_params)
-        render json: @user
+        if user_params[:password] == user_params[:password_confirmation]
+            @user = User.create(user_params)
+            if @user.valid?
+                @token = encode_token(user_id: @user.id)
+                render json: {user: @user, token: @token}
+            else
+                render json: { error: 'failed to create user' }
+            end 
+        end
     end
 
     def update

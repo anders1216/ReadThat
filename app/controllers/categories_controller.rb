@@ -1,4 +1,5 @@
 class CategoriesController < ApplicationController     
+    
     def index 
         @categories = Category.all
         render json: @categories
@@ -14,6 +15,12 @@ class CategoriesController < ApplicationController
         @category.update(category_params)
         render json: @category
     end
+
+    def category
+        category = Category.find_by(category: params[:category])
+        @posts = Post.where(category_id: category.id)
+        render json: @posts
+    end   
 
 private
 
