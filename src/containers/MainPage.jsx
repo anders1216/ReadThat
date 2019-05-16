@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import Login from '../components/Login';
+import Login from '../components/forms/Login';
 import Feed from './Feed'
-import NewUser from '../components/NewUser';
+import NewUser from '../components/forms/NewUser';
 
 
 export const API = "http://localhost:3000/"

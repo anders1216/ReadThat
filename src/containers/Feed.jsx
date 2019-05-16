@@ -12,8 +12,8 @@ export default class Feed extends Component {
     }
 
     handleSelect = async () => {
-        const {selectedCategories} = this.state
-        if (!selectedCategories){
+        const {selectedCategories, posts} = this.state
+        if (!selectedCategories && posts){
             fetch(API + "posts").then(res => res.json()).then(res => this.setState({posts: res}))
         }else {
             console.log(selectedCategories)
@@ -36,20 +36,28 @@ export default class Feed extends Component {
     render(){
         const {selectedCategories, posts, selectedPosts} = this.state
         console.log("selectedPosts:", selectedPosts)
-        return(
-            <div>
-                <CategorySelector handleChange={this.handleChange} selectedCategories={selectedCategories}/>
-                <User currentUser={this.props.currentUser}/>
-                {selectedPosts.length > 0 ? 
-                selectedPosts.map((post, i) => {
-                    return <Post key={i} post={post}/>
-                })
-                : 
-                posts.map((post, i) => {
-                    return <Post post={post}/>
-                })
-                }   
-            </div>
-        )
+        if (posts.length > 0) {
+            return(
+                <div>
+                    <CategorySelector handleChange={this.handleChange} selectedCategories={selectedCategories}/>
+                    <User currentUser={this.props.currentUser}/>
+                    {selectedPosts.length > 0 ? 
+                    selectedPosts.map((post, i) => {
+                        return <Post key={i} post={post}/>
+                    })
+                    : 
+                    posts.map((post, i) => {
+                        return <Post post={post}/>
+                    })
+                    }   
+                </div>
+            )   
+        }else{
+            return(
+                <div>
+                    <h1>NO POSTS</h1>
+                </div>
+            )
+        }
     }
 }
