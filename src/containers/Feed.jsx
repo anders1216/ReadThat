@@ -1,30 +1,32 @@
 import React, {Component} from 'react'
 import User from '../components/User'
-import API from './MainPage'
+import {API} from './MainPage'
 import Post from '../components/Post'
 import CategorySelector from '../components/CategorySelector'
 
 export default class Feed extends Component {
     state = {
         posts: [],
-        selectedCategories: []
+        selectedPosts: [],
+        selectedCategories: null
     }
 
-    handleSelect = () => {
-        const {selectedCategories, posts} = this.state
+    handleSelect = async () => {
+        const {selectedCategories} = this.state
         if (!selectedCategories){
             fetch(API + "posts").then(res => res.json()).then(res => this.setState({posts: res}))
         }else {
-            selectedCategories.map((category, i) => {
-            return fetch(API + `${category}`).then(res => res.json()).then(res => this.setState({...posts, res}))
+            console.log(selectedCategories)
+            await this.setState({selectedPosts: []})
+            selectedCategories.forEach((category) => {
+                fetch(API + "categories/"+`${category.value}`).then(res => res.json()).then(res => this.setState({selectedPosts: [...this.state.selectedPosts, res].flat()}))
             })
         }
     }
 
-    handleChange = (newSelection) => {
-        const {selectedCategories} = this.state
-        console.log(selectedCategories)
-        this.setState({selectedCategories: newSelection})
+    handleChange = async (newSelection) => {
+        await this.setState({selectedCategories: newSelection})
+        await this.handleSelect()
     }
 
     componentDidMount(){
@@ -32,14 +34,21 @@ export default class Feed extends Component {
     }
 
     render(){
-        const {selectedCategories, posts} = this.state
+        const {selectedCategories, posts, selectedPosts} = this.state
+        console.log("selectedPosts:", selectedPosts)
         return(
             <div>
                 <CategorySelector handleChange={this.handleChange} selectedCategories={selectedCategories}/>
                 <User currentUser={this.props.currentUser}/>
-                {posts.map(post => {
+                {selectedPosts.length > 0 ? 
+                selectedPosts.map((post, i) => {
+                    return <Post key={i} post={post}/>
+                })
+                : 
+                posts.map((post, i) => {
                     return <Post post={post}/>
-                })}
+                })
+                }   
             </div>
         )
     }
