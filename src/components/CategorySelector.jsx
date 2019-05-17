@@ -9,7 +9,10 @@ export default class CategorySelector extends Component {
 	};
 
 	componentDidMount() {
-		fetch(API + 'categories')
+		console.log("CategorySelector:", this.props)
+		fetch(API + 'categories', {
+			headers: {'Authorization': `Bearer ${this.props.token}`}
+		})
 			.then(res => res.json())
 			.then(res => this.setState({ categories: res }))
 			.then(res => this.manageData());

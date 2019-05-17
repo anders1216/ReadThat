@@ -14,22 +14,26 @@ export default class Feed extends Component {
 	handleSelect = async () => {
 		const { selectedCategories, posts } = this.state;
 		if (!selectedCategories && posts) {
-			fetch(API + 'posts')
+			fetch(API + 'posts', {
+				headers: {'Authorization': `Bearer ${this.props.token}`}
+			})
 				.then(res => res.json())
 				.then(res => this.setState({ posts: res }));
 		} else {
 			console.log(selectedCategories);
 			await this.setState({ selectedPosts: [] });
 			selectedCategories.forEach(category => {
-				fetch(API + 'categories/' + `${category.value}`)
+				fetch(API + 'categories/' + `${category.value}`, {
+					headers: {'Authorization': `Bearer ${this.props.token}`}
+				})
 					.then(res => res.json())
-					.then(res => this.setState({ selectedPosts: [...this.state.selectedPosts, res].flat() }));
+					.then(res => this.setState( { selectedPosts: [...this.state.selectedPosts, res].flat() } ) );
 			});
 		}
 	};
 
 	handleChange = async newSelection => {
-		await this.setState({ selectedCategories: newSelection });
+		await this.setState( { selectedCategories: newSelection } );
 		await this.handleSelect();
 	};
 
@@ -39,30 +43,32 @@ export default class Feed extends Component {
 
 	render() {
 		const { selectedCategories, posts, selectedPosts } = this.state;
-		console.log('selectedPosts:', selectedPosts);
-		if (posts.length > 0) {
+		const { token, currentUser } = this.props
+		console.log("render-token:", token);
+		if ( posts.length > 0 ) {
 			return (
 				<div>
 					<CategorySelector
-						handleChange={this.handleChange}
-						selectedCategories={selectedCategories}
+						handleChange={ this.handleChange }
+						selectedCategories={ selectedCategories }
+						token={token}
 					/>
-					<User currentUser={this.props.currentUser} />
-					{selectedPosts.length > 0
+					<User currentUser={ currentUser } />
+					{ selectedPosts.length > 0
 						? selectedPosts.map((post, i) => {
-								return <Post key={i} post={post} />;
-						  })
-						: posts.map((post, i) => {
-								return <Post post={post} />;
-						  })}
+								return <Post key={ i } post={ post } />;
+						   } )
+						: posts.map( ( post, i ) => { 
+								return <Post key={ i } post={ post } />;
+						   } ) }
 				</div>
 			);
-		} else {
+		 } else { 
 			return (
 				<div>
 					<CategorySelector
-						handleChange={this.handleChange}
-						selectedCategories={selectedCategories}
+						handleChange={ this.handleChange }
+						selectedCategories={ selectedCategories }
 					/>
 					<h1>NO POSTS</h1>
 				</div>

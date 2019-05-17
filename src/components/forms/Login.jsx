@@ -5,7 +5,9 @@ export default class Login extends Component {
 	render() {
 		return (
 			<div className="login-card">
+				<div className='login-img-container'>
 				<img className="login-img" src={logo} alt='LOGO'/> 
+				</div>
 				<form onSubmit={this.props.onSubmit}>
 					<input
 						name='username'
@@ -19,6 +21,7 @@ export default class Login extends Component {
 						onChange={e => this.props.handleChange(e)}
 						placeholder='password'
 					/>
+					<br/>
 					<button type='submit'>Submit</button>
 				</form>
 				<button onClick={this.props.onClick}>Create User</button>

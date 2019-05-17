@@ -7,7 +7,6 @@ export const API = 'http://localhost:3000/';
 
 export default class MainPage extends Component {
 	state = {
-		currentUser: {},
 		input: '',
 		password: '',
 		passwordConfirmation: '',
@@ -80,8 +79,8 @@ export default class MainPage extends Component {
 				);
 			}
 		} else if (isLoggedIn) {
-			Component = <Feed currentUser={currentUser} />;
+			Component = <Feed currentUser={currentUser} token={this.state.token} />;
 		}
-		return <div>{Component}</div>;
+		return <div className="main-container">{Component}</div>;
 	}
 }
