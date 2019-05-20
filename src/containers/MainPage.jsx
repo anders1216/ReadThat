@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Login from '../components/forms/Login';
 import Feed from './Feed';
 import NewUser from '../components/forms/NewUser';
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import history from '../history';
 
 export const API = 'http://localhost:3000/';
 
@@ -14,8 +16,6 @@ export default class MainPage extends Component {
 		token: '',
 		isLoggedIn: false,
 		isNewUser: false,
-		isPoster: false,
-		isMod: false
 	};
 
 	handleChange = e => {
@@ -42,8 +42,8 @@ export default class MainPage extends Component {
 			.then(res => {
 				res.error
 					? console.log(res.error)
-					: this.setState({ currentUser: res.user, isLoggedIn: true, token: res.token });
-			}).then(res => localStorage.setItem(this.state.currentUser, this.state.token));
+					: this.setState({ currentUser: res.user, isLoggedIn: true, token: res.token, password: '', passwordConfirmation: ''});
+			}).then(res => localStorage.setItem(this.state.currentUser, this.state));
 	};
 
 	onLoginSubmit = e => {
@@ -55,7 +55,8 @@ export default class MainPage extends Component {
 			body: JSON.stringify({ user: { username: username, password: password } })
 		})
 			.then(res => res.json())
-			.then(res => this.setState({ currentUser: res.user, isLoggedIn: true, token: res.token })).then(res => localStorage.setItem(this.state.currentUser, this.state.token));
+			.then(res => this.setState({ currentUser: res.user, isLoggedIn: true, token: res.token, password: "", passwordConfirmation: ""}))
+			.then(res => localStorage.setItem(this.state.currentUser, this.state));
 	};
 	//
 
@@ -63,24 +64,39 @@ export default class MainPage extends Component {
 		this.setState({ isNewUser: true });
 	};
 
-	render() {
-		const { currentUser, isLoggedIn, isNewUser } = this.state;
-		let Component;
-		if (!isLoggedIn) {
-			if (isNewUser) {
-				Component = <NewUser handleChange={this.handleChange} onSubmit={this.onNewUserSubmit} />;
-			} else {
-				Component = (
-					<Login
-						handleChange={this.handleChange}
-						onClick={this.newUserClickHandler}
-						onSubmit={this.onLoginSubmit}
-					/>
-				);
+	conditionalRender = () => {
+		console.log("Render")
+		let Component; 
+		const { isLoggedIn, isNewUser, currentUser } = this.state
+			if (!isLoggedIn) {
+				if (isNewUser) {
+					history.push('/new-user')
+					Component = <NewUser 
+					handleChange={this.handleChange} 
+					onSubmit={this.onNewUserSubmit} />
+				} else {
+					history.push('/login')
+					Component = <Login
+					handleChange={this.handleChange}
+					onClick={this.newUserClickHandler}
+					onSubmit={this.onLoginSubmit}/>
+				}
+			}else {
+			history.push('/feed')
+			Component = <Feed 
+			currentUser={currentUser} 
+			token={this.state.token} />
 			}
-		} else if (isLoggedIn) {
-			Component = <Feed currentUser={currentUser} token={this.state.token} />;
+			return Component
 		}
-		return <div className="main-container">{Component}</div>;
+
+	render() {
+		return(
+			<div className="main-container">
+				{this.conditionalRender()}
+			</div>
+		)	
 	}
 }
+
+// ===================ROUTER STUFF :( ========================= // 

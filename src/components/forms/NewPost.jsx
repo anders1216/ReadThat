@@ -1,32 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class NewPost extends Component {
-	render() {
+const NewPost = (props) => {
+		const { handleChange, onSubmit } = this.props
 		return (
 			<div>
-				<form onSubmit={this.props.onSubmit}>
+				<form name="posts" onSubmit={e => onSubmit(e, "post")}>
                     <input
 						name='title'
 						type='text'
-						onChange={e => this.props.handleChange(e)}
+						onChange={e => handleChange(e, "post")}
 						placeholder='Title'
 					/>
 					<input
 						name='content'
 						type='text-field'
-						onChange={e => this.props.handleChange(e)}
+						onChange={e => handleChange(e, "post")}
 						placeholder='Content'
 					/>
 					<input
 						name='img'
 						type='url'
-						onChange={e => this.props.handleChange(e)}
+						onChange={e => handleChange(e, "post")}
 						placeholder='Image URL'
 					/>
 					<input
 						name='link'
 						type='url'
-						onChange={e => this.props.handleChange(e)}
+						onChange={e => handleChange(e, "post")}
 						placeholder='Any Links?'
 					/>
 					<button type='submit'>Submit</button>
@@ -34,4 +34,4 @@ export default class NewPost extends Component {
 			</div>
 		);
 	}
-}
+	export default NewPost;

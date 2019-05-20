@@ -2,20 +2,23 @@ import React, { Component } from 'react';
 import User from '../components/User';
 import { API } from './MainPage';
 import Post from '../components/Post';
-import CategorySelector from '../components/CategorySelector';
+import Header from './Header'
 
 export default class Feed extends Component {
 	state = {
 		posts: [],
 		selectedPosts: [],
-		selectedCategories: null
+		selectedCategories: null,
+		isPoster: false,
+		isMod: false
 	};
 
 	handleSelect = async () => {
 		const { selectedCategories, posts } = this.state;
+		const{ currentUser } = this.props
 		if (!selectedCategories && posts) {
 			fetch(API + 'posts', {
-				headers: {'Authorization': `Bearer ${this.props.token}`}
+				headers: {'Authorization': `Bearer ${localStorage.getItem(currentUser).token}`}
 			})
 				.then(res => res.json())
 				.then(res => this.setState({ posts: res }));
@@ -24,7 +27,7 @@ export default class Feed extends Component {
 			await this.setState({ selectedPosts: [] });
 			selectedCategories.forEach(category => {
 				fetch(API + 'categories/' + `${category.value}`, {
-					headers: {'Authorization': `Bearer ${this.props.token}`}
+					headers: {'Authorization': `Bearer ${localStorage.getItem(currentUser).token}`}
 				})
 					.then(res => res.json())
 					.then(res => this.setState( { selectedPosts: [...this.state.selectedPosts, res].flat() } ) );
@@ -48,11 +51,7 @@ export default class Feed extends Component {
 		if ( posts.length > 0 ) {
 			return (
 				<div>
-					<CategorySelector
-						handleChange={ this.handleChange }
-						selectedCategories={ selectedCategories }
-						token={token}
-					/>
+					<Header selectedCategories={selectedCategories} token={token} currentUser={currentUser}/>
 					<User currentUser={ currentUser } />
 					{ selectedPosts.length > 0
 						? selectedPosts.map((post, i) => {
@@ -66,10 +65,8 @@ export default class Feed extends Component {
 		 } else { 
 			return (
 				<div>
-					<CategorySelector
-						handleChange={ this.handleChange }
-						selectedCategories={ selectedCategories }
-					/>
+					<Header selectedCategories={selectedCategories} token={token} currentUser={currentUser}/>
+					<User currentUser={ currentUser } />
 					<h1>NO POSTS</h1>
 				</div>
 			);
