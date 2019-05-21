@@ -11,7 +11,8 @@ export default class Feed extends Component {
 		selectedCategories: null,
 		isPoster: false,
 		isMod: false,
-		categories: []
+		categories: [], 
+		prevState: null
 	};
 
 	handleSelect = async () => {
@@ -41,13 +42,14 @@ export default class Feed extends Component {
 	};
 
 	componentDidMount() {
+		this.setState({prevState: this.state.posts})
 		fetch(API + 'categories', {
 			headers: {'Authorization': `Bearer ${this.props.token}`}
 		})
 			.then(res => res.json())
 			.then(res => this.setState({ categories: res })).then(this.handleSelect());
-		
 	}
+
 
 	render() {
 		const { selectedCategories, posts, selectedPosts } = this.state;
@@ -55,7 +57,7 @@ export default class Feed extends Component {
 		if ( posts.length > 0 ) {
 			return (
 				<div>
-					<Header categories={this.state.categories} selectedCategories={selectedCategories} handleChange={this.handleChange} token={token} currentUser={currentUser}/>
+					<Header categories={this.state.categories} selectedCategories={selectedCategories} handleChange={this.handleChange} token={token} currentUser={currentUser} handleSelect={this.handleSelect}/>
 					<User currentUser={ currentUser } />
 					{ selectedPosts.length > 0
 						? selectedPosts.map((post, i) => {
@@ -69,7 +71,7 @@ export default class Feed extends Component {
 		 } else { 
 			return (
 				<div>
-					<Header categories={this.state.categories} selectedCategories={selectedCategories} handleChange={this.handleChange} token={token} currentUser={currentUser}/>
+					<Header handleSelect={this.handleSelect} categories={this.state.categories} selectedCategories={selectedCategories} handleChange={this.handleChange} token={token} currentUser={currentUser}/>
 					<User currentUser={ currentUser } />
 					<h1>NO POSTS</h1>
 				</div>

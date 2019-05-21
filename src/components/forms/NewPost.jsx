@@ -1,9 +1,13 @@
 import React from 'react';
-import Dropzone from 'react-dropzone';
 
 const NewPost = (props) => {
-		const { handleChange, onSubmit, categories } = props
+		const { handleChange, handleWidget, handleImageUpload, onSubmit, categories } = props
 		console.log("Categories:", categories)
+
+		const widget = window.cloudinary.createUploadWidget({ cloud_name: 'readthat', upload_preset: 'mipbqbmk', sources: ["local", "url", 'camera', 'facebook'], singleUploadAutoClose: false, inlineContainer: 'DOM Element'}, 
+		function(errors, image) {handleImageUpload(errors, image)})
+		
+
 		return (
 			<div>
 				<form name="posts" onSubmit={e => onSubmit(e, "post")}>
@@ -26,25 +30,14 @@ const NewPost = (props) => {
 						placeholder='Image URL'
 					/>
 					<p>Or Upload an Image:</p>
-					
-					<Dropzone onDrop={droppedFiles => handleChange(droppedFiles, 'post')}>
-					{({getRootProps, getInputProps}) => (
-						<section>
-							<div {...getRootProps()}>
-								<input name='uploadedFile' {...getInputProps()} />
-								<p>Drag 'n' drop some files here, or click to select files</p>
-							</div>
-						</section>
-						)}
-					</Dropzone>
-					
+					<button className="upload-img-btn" onClick={e => handleWidget(e, widget)}>Upload Image</button>
 					<input
 						name='link'
 						type='url'
 						onChange={e => handleChange(e, "post")}
 						placeholder='Any Links?'
 					/>
-					<select name="category" onClick={ e => handleChange(e, 'post')}>
+					<select name="category" defaultValue="All" onClick={ e => handleChange(e, 'post')}> 
 						{categories.map(category => {
 							return <option value={category.category}>{category.category}</option>
 						})}

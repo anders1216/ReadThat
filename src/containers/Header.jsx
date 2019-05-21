@@ -15,7 +15,7 @@ export default class Header extends Component {
             uploadedFile: null,
             title: null,
             link: null,
-            category: null
+            category: 'All'
         },
         category: {
             category: null,
@@ -28,27 +28,38 @@ export default class Header extends Component {
         this.setState({[e.target.name]: !this.state[e.target.name]})
     }
 
-	handleChange = (e, loc) => {
-		let key = e.target.name;
-        let newState = e.target.value;
+	handleChange = (e, loc, name) => {
+        let key;
+            name ? key = name : key = e.target.name
+        let newState
+            e.length > 0 ? newState = e : newState = e.target.value; 
         this.setState({ [loc]: {...this.state[loc], [key]: newState }});
         console.log(this.state[loc])
     };
+
+    handleWidget = (e, widget) => {
+        e.preventDefault()
+        widget.open();
+    }
+
+    handleImageUpload = (errors, image) => {
+        errors ? console.log(errors) : this.setState({post:{...this.state.post, uploadedFile: image[0]['url']}})
+    }
 
     handleSelect = (e) => {
         this.setState({post: {category: [e.target.value]}})
     }
     
-    handleSubmit = (e, loc) => {
+    handleSubmit = async (e, loc) => {
         e.preventDefault();
         const { token, currentUser } = this.props
         let stateHolder;
         loc === "post" ? stateHolder = 'newPost' : stateHolder = 'newCategory'
-        fetch(API + `${e.target.name}`, {
+        await fetch(API + `${e.target.name}`, {
             method: 'POST',
             headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/json'},
             body: JSON.stringify({[loc]: this.state[loc], user: currentUser })
-        }).then(this.setState({[stateHolder]: ![this.state.stateHolder] }))
+        }).then(this.setState({[stateHolder]: ![this.state.stateHolder] })).then(this.props.handleSelect())
     }
 
     render () {
@@ -65,12 +76,10 @@ export default class Header extends Component {
                 />
                 </span>
                 <span className="newPost">
-                    {newPost ? <NewPost handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} categories={categories}/> : null}
-                    <button name="newPost" onClick={e => this.handleClick(e)}>Create New Post</button>
+                    {newPost ? <NewPost handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} categories={categories} handleWidget={this.handleWidget} handleImageUpload={this.handleImageUpload}/> : <button name="newPost" onClick={e => this.handleClick(e)}>Create New Post</button>}
                 </span>
                 <span className="newCategory">
-                    {newCategory ? <NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} /> : null}
-                    <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>
+                    {newCategory ? <NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} /> : <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
                 </span>
             </div>
         )
