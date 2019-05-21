@@ -1,7 +1,7 @@
 import React from 'react';
 
 const NewCategory = (props) => {
-		const { handleChange, onSubmit } = this.props
+		const { handleChange, onSubmit } = props
 		return (
 			<div>
 				<form name="categories" onSubmit={e => onSubmit(e, "category")}>

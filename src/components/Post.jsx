@@ -3,7 +3,7 @@ import defaultImage from '../images/logo.png';
 
 const Post = (props) => {
 
-		const { img, title, content, link } = this.props.post;
+		const { img, title, content, link } = props.post;
 		let image;
 		if(!img){
 			image = defaultImage

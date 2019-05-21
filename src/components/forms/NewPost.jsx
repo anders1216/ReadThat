@@ -1,7 +1,8 @@
 import React from 'react';
 
 const NewPost = (props) => {
-		const { handleChange, onSubmit } = this.props
+		const { handleChange, onSubmit, categories } = props
+		console.log("Categories:", categories)
 		return (
 			<div>
 				<form name="posts" onSubmit={e => onSubmit(e, "post")}>
@@ -29,9 +30,14 @@ const NewPost = (props) => {
 						onChange={e => handleChange(e, "post")}
 						placeholder='Any Links?'
 					/>
+					<select name="category" onClick={ e => handleChange(e, 'post')}>
+						{categories.map(category => {
+							return <option value={category.category}>{category.category}</option>
+						})}
+					</select>
 					<button type='submit'>Submit</button>
 				</form>
-			</div>
+			</div> 
 		);
 	}
 	export default NewPost;

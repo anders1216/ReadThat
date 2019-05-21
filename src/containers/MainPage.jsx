@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Login from '../components/forms/Login';
 import Feed from './Feed';
 import NewUser from '../components/forms/NewUser';
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+// import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import history from '../history';
 
 export const API = 'http://localhost:3000/';
@@ -42,8 +42,8 @@ export default class MainPage extends Component {
 			.then(res => {
 				res.error
 					? console.log(res.error)
-					: this.setState({ currentUser: res.user, isLoggedIn: true, token: res.token, password: '', passwordConfirmation: ''});
-			}).then(res => localStorage.setItem(this.state.currentUser, this.state));
+					: this.setState({ username: res.user, isLoggedIn: true, token: res.token, password: '', passwordConfirmation: ''});
+			}).then(res => localStorage.setItem(username, this.state.token));
 	};
 
 	onLoginSubmit = e => {
@@ -55,8 +55,8 @@ export default class MainPage extends Component {
 			body: JSON.stringify({ user: { username: username, password: password } })
 		})
 			.then(res => res.json())
-			.then(res => this.setState({ currentUser: res.user, isLoggedIn: true, token: res.token, password: "", passwordConfirmation: ""}))
-			.then(res => localStorage.setItem(this.state.currentUser, this.state));
+			.then(res => this.setState({ username: res.user, isLoggedIn: true, token: res.token, password: "", passwordConfirmation: ""}))
+			.then(res => localStorage.setItem(username, this.state));
 	};
 	//
 
@@ -67,7 +67,7 @@ export default class MainPage extends Component {
 	conditionalRender = () => {
 		console.log("Render")
 		let Component; 
-		const { isLoggedIn, isNewUser, currentUser } = this.state
+		const { isLoggedIn, isNewUser, username, token } = this.state
 			if (!isLoggedIn) {
 				if (isNewUser) {
 					history.push('/new-user')
@@ -84,8 +84,8 @@ export default class MainPage extends Component {
 			}else {
 			history.push('/feed')
 			Component = <Feed 
-			currentUser={currentUser} 
-			token={this.state.token} />
+			currentUser={username} 
+			token={token} />
 			}
 			return Component
 		}
@@ -99,4 +99,4 @@ export default class MainPage extends Component {
 	}
 }
 
-// ===================ROUTER STUFF :( ========================= // 
+// =================== ROUTER STUFF :( ========================= // 

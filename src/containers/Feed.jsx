@@ -10,15 +10,17 @@ export default class Feed extends Component {
 		selectedPosts: [],
 		selectedCategories: null,
 		isPoster: false,
-		isMod: false
+		isMod: false,
+		categories: []
 	};
 
 	handleSelect = async () => {
 		const { selectedCategories, posts } = this.state;
-		const{ currentUser } = this.props
+		const{ token } = this.props;
+		console.log(this.props)
 		if (!selectedCategories && posts) {
 			fetch(API + 'posts', {
-				headers: {'Authorization': `Bearer ${localStorage.getItem(currentUser).token}`}
+				headers: {'Authorization': `Bearer ${token}`}
 			})
 				.then(res => res.json())
 				.then(res => this.setState({ posts: res }));
@@ -27,7 +29,7 @@ export default class Feed extends Component {
 			await this.setState({ selectedPosts: [] });
 			selectedCategories.forEach(category => {
 				fetch(API + 'categories/' + `${category.value}`, {
-					headers: {'Authorization': `Bearer ${localStorage.getItem(currentUser).token}`}
+					headers: {'Authorization': `Bearer ${token}`}
 				})
 					.then(res => res.json())
 					.then(res => this.setState( { selectedPosts: [...this.state.selectedPosts, res].flat() } ) );
@@ -41,17 +43,21 @@ export default class Feed extends Component {
 	};
 
 	componentDidMount() {
-		this.handleSelect();
+		fetch(API + 'categories', {
+			headers: {'Authorization': `Bearer ${this.props.token}`}
+		})
+			.then(res => res.json())
+			.then(res => this.setState({ categories: res })).then(this.handleSelect());
+		
 	}
 
 	render() {
 		const { selectedCategories, posts, selectedPosts } = this.state;
 		const { token, currentUser } = this.props
-		console.log("render-token:", token);
 		if ( posts.length > 0 ) {
 			return (
 				<div>
-					<Header selectedCategories={selectedCategories} token={token} currentUser={currentUser}/>
+					<Header categories={this.state.categories} selectedCategories={selectedCategories} handleChange={this.handleChange} token={token} currentUser={currentUser}/>
 					<User currentUser={ currentUser } />
 					{ selectedPosts.length > 0
 						? selectedPosts.map((post, i) => {
@@ -65,7 +71,7 @@ export default class Feed extends Component {
 		 } else { 
 			return (
 				<div>
-					<Header selectedCategories={selectedCategories} token={token} currentUser={currentUser}/>
+					<Header categories={this.state.categories} selectedCategories={selectedCategories} handleChange={this.handleChange} token={token} currentUser={currentUser}/>
 					<User currentUser={ currentUser } />
 					<h1>NO POSTS</h1>
 				</div>

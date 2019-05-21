@@ -1,26 +1,17 @@
 import React, { Component } from 'react';
-import { API } from '../containers/MainPage';
 import Select from 'react-select';
 
 export default class CategorySelector extends Component {
 	state = {
-		categories: [],
-		data: []
+		data: [],
+		prevProps: null
 	};
-
-	componentDidMount() {
-		console.log("CategorySelector:", this.props)
-		fetch(API + 'categories', {
-			headers: {'Authorization': `Bearer ${this.props.token}`}
-		})
-			.then(res => res.json())
-			.then(res => this.setState({ categories: res }))
-			.then(res => this.manageData());
-	}
+	
 
 	manageData = () => {
-		const { categories } = this.state;
-		if (categories.length > 0) {
+		const { categories } = this.props;
+		console.log('categories:', categories)
+		if (this.props.categories.length > 0) {
 			const editedData = categories.map((category, i) => {
 				return { value: `${category.category}`, label: `${category.category}` };
 			});
@@ -28,9 +19,21 @@ export default class CategorySelector extends Component {
 		}
 	};
 
+	componentDidMount(){
+		this.setState({prevProps: this.state.data})
+		
+	}
+
+	componentDidUpdate(){
+		if(this.state.prevProps === this.state.data)
+		this.manageData()
+	}
+
 	render() {
 		const { handleChange, selectedCategories } = this.props;
 		const { data } = this.state;
+		console.log('prevProps:',this.state.prevProps)
+		console.log("data:", data)
 		return (
 			<Select
 				closeMenuOnSelect={false}
