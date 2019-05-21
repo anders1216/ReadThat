@@ -1,12 +1,15 @@
 class PostsController < ApplicationController
-    
+    skip_before_action :authorized, only: [:index, :create]
+
     def index
         @posts = Post.all
         render json: @posts
     end
 
     def create
-        @post = Post.create(post_params)
+        category = Category.find_by(category: post_params[:category])
+        user = User.find_by(username: params[:user])
+        @post = category.posts.create(title: post_params[:title], content: post_params[:content], img: post_params[:img], link: post_params[:link], user_id: user.id )
         render json: @post
     end
 
@@ -20,6 +23,6 @@ class PostsController < ApplicationController
     private
 
     def post_params
-        params.require(:post).permit!
+        params.require(:post || :user).permit!
     end
 end
