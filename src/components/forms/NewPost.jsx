@@ -1,4 +1,5 @@
 import React from 'react';
+import Dropzone from 'react-dropzone';
 
 const NewPost = (props) => {
 		const { handleChange, onSubmit, categories } = props
@@ -24,6 +25,19 @@ const NewPost = (props) => {
 						onChange={e => handleChange(e, "post")}
 						placeholder='Image URL'
 					/>
+					<p>Or Upload an Image:</p>
+					
+					<Dropzone onDrop={droppedFiles => handleChange(droppedFiles, 'post')}>
+					{({getRootProps, getInputProps}) => (
+						<section>
+							<div {...getRootProps()}>
+								<input name='uploadedFile' {...getInputProps()} />
+								<p>Drag 'n' drop some files here, or click to select files</p>
+							</div>
+						</section>
+						)}
+					</Dropzone>
+					
 					<input
 						name='link'
 						type='url'

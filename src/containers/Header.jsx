@@ -12,6 +12,7 @@ export default class Header extends Component {
         post: {
             content: null,
             img: null,
+            uploadedFile: null,
             title: null,
             link: null,
             category: null

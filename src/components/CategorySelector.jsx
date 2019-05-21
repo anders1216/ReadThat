@@ -31,9 +31,7 @@ export default class CategorySelector extends Component {
 
 	render() {
 		const { handleChange, selectedCategories } = this.props;
-		const { data } = this.state;
-		console.log('prevProps:',this.state.prevProps)
-		console.log("data:", data)
+const { data } = this.state;
 		return (
 			<Select
 				closeMenuOnSelect={false}

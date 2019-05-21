@@ -17,15 +17,13 @@ export default class Feed extends Component {
 	handleSelect = async () => {
 		const { selectedCategories, posts } = this.state;
 		const{ token } = this.props;
-		console.log(this.props)
 		if (!selectedCategories && posts) {
 			fetch(API + 'posts', {
 				headers: {'Authorization': `Bearer ${token}`}
 			})
 				.then(res => res.json())
 				.then(res => this.setState({ posts: res }));
-		} else {
-			console.log(selectedCategories);
+} else {
 			await this.setState({ selectedPosts: [] });
 			selectedCategories.forEach(category => {
 				fetch(API + 'categories/' + `${category.value}`, {

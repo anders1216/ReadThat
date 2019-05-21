@@ -1,6 +1,7 @@
 import React from 'react';
 import defaultImage from '../images/logo.png';
 
+
 const Post = (props) => {
 
 		const { img, title, content, link } = props.post;
