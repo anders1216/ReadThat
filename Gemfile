@@ -28,7 +28,11 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
+# Javascript web token I beleive for security between back and front ends....heh heh.
 gem 'jwt'
+
+# Cloudinary is a cloud based image uplaoding and hosting service...one-stop image-storage-and-uplaod shop
+gem 'cloudinary', '~> 1.11', '>= 1.11.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
