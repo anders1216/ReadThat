@@ -64,7 +64,7 @@ export default class Feed extends Component {
 								return <Post key={ i } post={ post } />;
 						   } )
 						: posts.map( ( post, i ) => { 
-								return <Post key={ i } post={ post } />;
+								return <Post key={ i } post={ post }  />;
 						   } ) }
 				</div>
 			);
