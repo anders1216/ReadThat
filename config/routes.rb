@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :user_preferences
   get 'categories/:category', to: 'categories#category' 
+  get 'votes/:post_id', to: 'votes#post'
   resources :categories
   resources :posts
   resources :comments
