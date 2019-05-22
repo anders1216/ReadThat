@@ -5,7 +5,7 @@
         @user = User.find_by(username: user_login_params[:username])
         if @user && @user.authenticate(user_login_params[:password])
         token = encode_token({ user_id: @user.id })
-        render json: { user: @user.username, token: token }
+        render json: { user: @user, token: token }
         else
         render json: { message: 'Invalid username or password' }
         end
