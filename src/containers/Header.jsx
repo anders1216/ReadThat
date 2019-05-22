@@ -15,16 +15,19 @@ export default class Header extends Component {
             uploadedFile: null,
             title: null,
             link: null,
-            category: 'All'
+            category: 'All',
+            user_id: null
         },
         category: {
             category: null,
-            description: null
+            description: null,
+            user_id: null
         }
     }
 
     handleClick = (e) => {
         console.log('handleClick:', e.target.name)
+        this.setState({post: {...this.state.post, user_id: this.props.currentUser.user.id}, category: {...this.state.category, user_id: this.props.currentUser.id }})
         this.setState({[e.target.name]: !this.state[e.target.name]})
     }
 
@@ -51,14 +54,15 @@ export default class Header extends Component {
     
     handleSubmit = async (e, loc) => {
         e.preventDefault();
-        const { token, currentUser } = this.props
+        const { token } = this.props
         let stateHolder;
         loc === "post" ? stateHolder = 'newPost' : stateHolder = 'newCategory'
         await fetch(API + `${e.target.name}`, {
             method: 'POST',
             headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/json'},
-            body: JSON.stringify({[loc]: this.state[loc], user: currentUser })
-        }).then(this.setState({[stateHolder]: ![this.state.stateHolder] })).then(this.props.handleSelect())
+            body: JSON.stringify({[loc]: this.state[loc]})
+        }).then(this.setState({[stateHolder]: ![this.state.stateHolder] }))
+        this.props.handleSelect()
     }
 
     render () {

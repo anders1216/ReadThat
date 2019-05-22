@@ -23,9 +23,9 @@ export default class Login extends Component {
 						placeholder='password'
 					/>
 					<br/>
-					<button type='submit'>Submit</button>
+					<button className='login-btns' type='submit'>Submit</button>
 				</form>
-				<button onClick={this.props.onClick}>Create User</button>
+				<button className='login-btns' onClick={this.props.onClick}>Create User</button>
 			</div>
 		);
 	}

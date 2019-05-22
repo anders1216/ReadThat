@@ -2,7 +2,6 @@ import React from 'react';
 
 const NewPost = (props) => {
 		const { handleChange, handleWidget, handleImageUpload, onSubmit, categories } = props
-		console.log("Categories:", categories)
 
 		const widget = window.cloudinary.createUploadWidget({ cloud_name: 'readthat', upload_preset: 'mipbqbmk', sources: ["local", "url", 'camera', 'facebook'], singleUploadAutoClose: false, inlineContainer: 'DOM Element'}, 
 		function(errors, image) {handleImageUpload(errors, image)})

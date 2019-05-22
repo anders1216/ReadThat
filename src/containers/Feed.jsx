@@ -6,6 +6,8 @@ import Header from './Header'
 
 export default class Feed extends Component {
 	state = {
+		votes: [],
+		downVoteCount: 0,
 		posts: [],
 		selectedPosts: [],
 		selectedCategories: null,
@@ -18,13 +20,14 @@ export default class Feed extends Component {
 	handleSelect = async () => {
 		const { selectedCategories, posts } = this.state;
 		const{ token } = this.props;
+		console.log("here")
 		if (!selectedCategories && posts) {
 			fetch(API + 'posts', {
 				headers: {'Authorization': `Bearer ${token}`}
 			})
 				.then(res => res.json())
 				.then(res => this.setState({ posts: res }));
-} else {
+		} else {
 			await this.setState({ selectedPosts: [] });
 			selectedCategories.forEach(category => {
 				fetch(API + 'categories/' + `${category.value}`, {
@@ -36,42 +39,95 @@ export default class Feed extends Component {
 		}
 	};
 
+	updatePosts = () => {
+		fetch(API + 'posts', {
+			headers: {'Authorization': `Bearer ${this.props.token}`}
+		})
+			.then(res => res.json())
+			.then(res => this.setState({ posts: res })).then(console.log("update-posts:", this.state.posts));
+	}
+
 	handleChange = async newSelection => {
 		await this.setState( { selectedCategories: newSelection } );
 		await this.handleSelect();
 	};
 
-	componentDidMount() {
+	async componentDidMount() {
 		this.setState({prevState: this.state.posts})
-		fetch(API + 'categories', {
+		await fetch(API + 'categories', {
 			headers: {'Authorization': `Bearer ${this.props.token}`}
 		})
 			.then(res => res.json())
-			.then(res => this.setState({ categories: res })).then(this.handleSelect());
+			.then(res => this.setState({ categories: res }));
+		await this.handleSelect()
+		this.fetchVotes()
+		this.fetchComments()
+	}
+
+	fetchVotes = () => {
+		fetch(API + 'votes').then(res => res.json()).then(votes=>this.setState({votes: votes}))
+	}
+
+	fetchComments() {
+		console.log('fetch comments')
+	}
+	voteOnPost = (e, postID) => {
+		const { currentUser } = this.props
+		const { votes } = this.state
+		console.log('vote')
+		fetch(API + 'votes', {
+			method: 'POST',
+			headers: {'Authorization': `Bearer ${localStorage.getItem(currentUser)}`, 'Content-Type': 'application/json', Accept: 'application/json'},
+			body: JSON.stringify({vote: {post: postID, user_id: currentUser.user.id}})
+		}).then(res => res.json()).then(vote => { vote.errors ? alert(vote.errors) :
+			this.setState({votes: [...votes, vote]})})
+		// 
+	}
+
+	unvoteOnPost = (e, postID) => {
+		const { currentUser } = this.props
+		console.log('unvote')
+
+		fetch(API + 'votes/delete', {
+			method: 'POST',
+			headers: {'Authorization': `Bearer ${localStorage.getItem(currentUser)}`, 'Content-Type': 'application/json', Accept: 'application/json'},
+			body: JSON.stringify({vote: {post: postID, user_id: currentUser.user.id}})
+		}).then(res => res.json()).then(votes => this.setState({votes: votes})).then(this.countDownVotes())
+	}
+
+	countDownVotes = (postID) => {
+		const thisPostsVotes = this.state.votes.includes(postID)
+		if (thisPostsVotes.length > 0){
+			thisPostsVotes.forEach(vote => {
+				if (vote.is_down_vote){
+					this.setState({downVoteCount: this.state.downVoteCount++})
+				}
+			})
+		}
 	}
 
 
 	render() {
-		const { selectedCategories, posts, selectedPosts } = this.state;
+		const { selectedCategories, posts, selectedPosts, votes } = this.state;
 		const { token, currentUser } = this.props
 		if ( posts.length > 0 ) {
 			return (
 				<div>
-					<Header categories={this.state.categories} selectedCategories={selectedCategories} handleChange={this.handleChange} token={token} currentUser={currentUser} handleSelect={this.handleSelect}/>
+					<Header categories={this.state.categories} selectedCategories={selectedCategories} updatePosts={this.updatePosts} handleChange={this.handleChange} token={token} currentUser={currentUser} handleSelect={this.handleSelect}/>
 					<User currentUser={ currentUser } />
 					{ selectedPosts.length > 0
-						? selectedPosts.map((post, i) => {
-								return <Post key={ i } post={ post } currentUser={currentUser}/>;
+						? this.state.selectedPosts.map((post, i) => {
+								return <Post key={ i } post={ post } votes={votes} currentUser={currentUser} countDownVotes={this.countDownVotes} unvoteOnPost={this.unvoteOnPost} voteOnPost={this.voteOnPost}/>;
 						   } )
-						: posts.map( ( post, i ) => { 
-								return <Post key={ i } post={ post } currentUser={currentUser} />;
+						: this.state.posts.map( ( post, i ) => { 
+								return <Post key={ i } post={ post } votes={votes} currentUser={currentUser} countDownVotes={this.countDownVotes} unvoteOnPost={this.unvoteOnPost} voteOnPost={this.voteOnPost}/>;
 						   } ) }
 				</div>
 			);
 		 } else { 
 			return (
 				<div>
-					<Header handleSelect={this.handleSelect} categories={this.state.categories} selectedCategories={selectedCategories} handleChange={this.handleChange} token={token} currentUser={currentUser}/>
+					<Header handleSelect={this.handleSelect} updatePosts={this.updatePosts} categories={this.state.categories} selectedCategories={selectedCategories} handleChange={this.handleChange} token={token} currentUser={currentUser}/>
 					<User currentUser={ currentUser } />
 					<h1>NO POSTS</h1>
 				</div>

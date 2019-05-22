@@ -16,6 +16,7 @@ export default class MainPage extends Component {
 		token: '',
 		isLoggedIn: false,
 		isNewUser: false,
+		currentUser: null
 	};
 
 	handleChange = e => {
@@ -41,8 +42,8 @@ export default class MainPage extends Component {
 			.then(res => res.json())
 			.then(res => {
 				res.error
-					? console.log(res.error)
-					: this.setState({ username: res.user, isLoggedIn: true, token: res.token, password: '', passwordConfirmation: ''});
+					? alert(res.error)
+					: this.setState({ currentUser: res, username: res.user, isLoggedIn: true, token: res.token, password: '', passwordConfirmation: ''});
 			}).then(res => localStorage.setItem(username, this.state.token));
 	};
 
@@ -55,7 +56,7 @@ export default class MainPage extends Component {
 			body: JSON.stringify({ user: { username: username, password: password } })
 		})
 			.then(res => res.json())
-			.then(res => this.setState({ username: res.user, isLoggedIn: true, token: res.token, password: "", passwordConfirmation: ""}))
+			.then(res => this.setState({ currentUser: res, username: res.user, isLoggedIn: true, token: res.token, password: "", passwordConfirmation: ""}))
 			.then(res => localStorage.setItem(username, this.state));
 	};
 	//
@@ -67,7 +68,7 @@ export default class MainPage extends Component {
 	conditionalRender = () => {
 		console.log("Render")
 		let Component; 
-		const { isLoggedIn, isNewUser, username, token } = this.state
+		const { isLoggedIn, isNewUser, currentUser, token } = this.state
 			if (!isLoggedIn) {
 				if (isNewUser) {
 					history.push('/new-user')
@@ -84,7 +85,7 @@ export default class MainPage extends Component {
 			}else {
 			history.push('/feed')
 			Component = <Feed 
-			currentUser={username} 
+			currentUser={currentUser} 
 			token={token} />
 			}
 			return Component

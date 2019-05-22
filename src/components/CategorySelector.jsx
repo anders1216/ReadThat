@@ -10,7 +10,6 @@ export default class CategorySelector extends Component {
 
 	manageData = () => {
 		const { categories } = this.props;
-		console.log('categories:', categories)
 		if (this.props.categories.length > 0) {
 			const editedData = categories.map((category, i) => {
 				return { value: `${category.category}`, label: `${category.category}` };
