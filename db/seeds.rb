@@ -6,6 +6,10 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+user1 = User.create(username: "a", password:"a", password_confirmation:'a')
+user2 = User.create(username: "Guy", password:"a", password_confirmation:'a')
+user3 = User.create(username: "b", password:"a", password_confirmation:'a')
+
 funny = Category.find_or_create_by(category: "Funny", description: "Funny stuff")
 sad = Category.find_or_create_by(category: "Sad", description: "Sad stuff")
 biking = Category.find_or_create_by(category: "Biking", description: "Biking stuff")
