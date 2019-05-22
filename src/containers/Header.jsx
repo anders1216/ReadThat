@@ -34,7 +34,6 @@ export default class Header extends Component {
         let newState
             e.length > 0 ? newState = e : newState = e.target.value; 
         this.setState({ [loc]: {...this.state[loc], [key]: newState }});
-        console.log(this.state[loc])
     };
 
     handleWidget = (e, widget) => {

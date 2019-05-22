@@ -61,10 +61,10 @@ export default class Feed extends Component {
 					<User currentUser={ currentUser } />
 					{ selectedPosts.length > 0
 						? selectedPosts.map((post, i) => {
-								return <Post key={ i } post={ post } />;
+								return <Post key={ i } post={ post } currentUser={currentUser}/>;
 						   } )
 						: posts.map( ( post, i ) => { 
-								return <Post key={ i } post={ post }  />;
+								return <Post key={ i } post={ post } currentUser={currentUser} />;
 						   } ) }
 				</div>
 			);

@@ -6,7 +6,7 @@ import { API } from '../containers/MainPage';
 class Post extends Component {
 	state = {
 		votes: [],
-		voteOnPost: null
+		downVoteCount: 0
 	}
 	
 	componentDidMount(){
@@ -19,34 +19,47 @@ class Post extends Component {
 
 	voteOnPost = () => {
 		const { currentUser, post } = this.props
-
+		const { votes } = this.state
+		console.log('vote')
 		fetch(API + 'votes', {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-			body: JSON.stringify({post: post, user: currentUser})
-		})
+			headers: {'Authorization': `Bearer ${localStorage.getItem(currentUser)}`, 'Content-Type': 'application/json', Accept: 'application/json'},
+			body: JSON.stringify({vote: {post: post, user: currentUser}})
+		}).then(res => res.json()).then(vote => { vote.errors ? alert(vote.errors) :
+			this.setState({votes: [...votes, vote]})})
+		// 
 	}
 
-	unvoteOnPost = () => {
+	unvoteOnPost = (e) => {
 		const { currentUser, post } = this.props
+		console.log('unvote')
 
-		fetch(API + 'votes', {
-			method: 'DELETE',
-			headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-			body: JSON.stringify({post: post, user: currentUser})
-		})
+		fetch(API + 'votes/delete', {
+			method: 'POST',
+			headers: {'Authorization': `Bearer ${localStorage.getItem(currentUser)}`, 'Content-Type': 'application/json', Accept: 'application/json'},
+			body: JSON.stringify({vote: {post: post, user: currentUser}})
+		}).then(res => res.json()).then(votes => this.setState({votes: votes})).then(this.countDownVotes())
 	}
 
+	countDownVotes = () => {
+		if (this.state.votes.length > 0){
+			this.state.votes.forEach(vote => {
+				if (vote.is_down_vote){
+					this.setState({downVoteCount: this.state.downVoteCount++})
+				}
+			})
+		}
+	}
 
 	render(){
 		const { img, title, content, link } = this.props.post;
-		const { currentUser } = this.props
 		let image;
 		if(!img){
 			image = defaultImage
 		}else{
 			image = img
 		}
+		
 		return (
 			<div className='post-card'>
 				<div className='title-container'>
@@ -60,12 +73,11 @@ class Post extends Component {
 					<p>{link}</p>
 				</div>
 				<div>
-					<p>{this.state.votes.length > 0 ? this.state.votes.length : 0 }</p>
-					{this.state.votes.length > 0 && this.state.votes.includes(currentUser) ? 
-					<button onClick={ e => this.voteOnPost()}>▼</button>
-					:
-					<button onClick={e => this.unvoteOnPost()}>▲</button>
-					}
+					<p>{this.state.downVoteCount > 0 ? this.state.votes.length - this.state.downVoteCount : this.state.votes.length}</p>
+					<button onClick={ e => this.voteOnPost()}>▲</button>
+					
+					<button onClick={e => this.unvoteOnPost(e)}>▼</button>
+					
 				</div>
 			</div>
 		);
