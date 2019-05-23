@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'categories/:category', to: 'categories#category' 
   get 'votes/:post_id', to: 'votes#post'
   post 'votes/delete', to: 'votes#delete'
+  get 'comments/:post_id', to: 'comments#post'
   resources :categories
   resources :posts
   resources :comments

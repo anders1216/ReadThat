@@ -6,9 +6,8 @@ class VotesController < ApplicationController
     end
     
     def create
-        usersVotes = Vote.where(user_id: vote_params[:user_id])
-        usersVotesIncludesPost = usersVotes.where(post_id: vote_params[:post_id])
-        if usersVotesIncludesPost.length > 0
+        usersVotes = Vote.where(user_id: vote_params)
+        if usersVotes.length > 0
             render json: {errors:"You only get one vote per post"}
         else
         @vote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: false)
@@ -19,15 +18,16 @@ class VotesController < ApplicationController
     end
 
     def post
-        @votes = Vote.where(post_id: params[:post_id])
+        @votes = Vote.where(post_id == params[:post_id])
         render json: @votes
     end
 
     def delete
-        @vote = Vote.find_by(user_id: vote_params[:user_id])
+        @votes = Vote.where(user_id: vote_params[:user_id])
+        @vote = votes.where(post_id: vote_params[:post_id])
         if @vote
             @vote.destroy
-            @votes = Vote.where(post_id: params[:post_id])
+            @votes = Vote.where(post_id: vote_params[:post_id])
             render json: @votes
         else 
             @downVote = Vote.create(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
