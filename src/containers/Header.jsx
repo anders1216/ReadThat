@@ -69,8 +69,8 @@ export default class Header extends Component {
         const { token, currentUser, selectedCategories, handleChange, categories } = this.props
         const { newPost, newCategory } = this.state
         return (
-            <div>
-                <span>
+            <div className="header">
+                <span className="cat-selector">
                 <CategorySelector
                     handleChange={ handleChange }
                     selectedCategories={ selectedCategories }

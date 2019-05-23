@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class Comment extends Component {
-    render(){
+const Comment = (props) => {
         return(
             <div> 
-                Comment
+                <p>{props.comment.content}</p>
             </div>
         )
-    }
-}
+} 
+export default Comment;

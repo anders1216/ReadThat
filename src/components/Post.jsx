@@ -9,11 +9,13 @@ class Post extends Component {
 	state = {
 		newComment: "",
 		comments: [],
+		postsVotes: 0,
 		displayComments: false,
 		commenting: false
 	}
 	
 	componentDidMount(){
+		this.setState({postsVotes: this.props.votes.filter(vote => vote.post_id === this.props.post.id)})
 	}
 
 	// voteOnPost = () => {
@@ -87,41 +89,43 @@ class Post extends Component {
 		.then(comments => this.setState({comments: comments}))
 		this.setState({displayComments: !this.state.displayComments})
 	}
+
 	render(){
 		const { img, title, content, link } = this.props.post;
 		const { post, voteOnPost, unvoteOnPost } = this.props
-		const { commenting, displayComments, comments } = this.state
+		const { commenting, comments } = this.state
 		let image;
 		if(!img){
 			image = defaultImage
 		}else{
 			image = img
 		}
-		
 		return (
 			<div className='post-card'>
 				<div className='title-container'>
-					<p>{title}</p>
+					{title}
 				</div>
-				<div className='post-img-container'>
+				<span className='post-img-container'>
 					<img className='post-img' src={image} alt={title}/>
-				</div>
+				</span>
 				<div className="content-container">
-					<p>{content}</p>
-					<p>{link}</p>
+					<span>{content}</span>
+					<span>{link}</span>
 				</div>
 				<div>
-					<p>{this.props.downVoteCount > 0 ? this.props.votes.length - this.props.downVoteCount : this.props.votes.length}</p>
-					<button onClick={ e => voteOnPost(e, post.id)}>▲</button>
-					<button onClick={e => unvoteOnPost(e, post.id)}>▼</button>
+					<span>Doots: {this.props.downVoteCount > 0 ? this.props.votes.length - this.props.downVoteCount : this.state.postsVotes.length}</span>
+					<button onClick={ e => voteOnPost(post.id)}>▲</button>
+					<button onClick={e => unvoteOnPost(post.id)}>▼</button>
 					<button onClick={e => this.commentOnPost(e)}>Comment</button>
 					{commenting ? <NewComment handleChange={this.handleChange} handleSubmit={this.handleSubmit}/> : null}
 					<button onClick={e => this.displayComments(e)}>Display Comments</button>
-					{displayComments ? comments.forEach(comment => {
-						return <Comment/>
+					<ul>
+					{this.state.displayComments && comments.length > 0 ? comments.map(comment => {
+						return <li><Comment comment={comment}/></li>
 					})
 					:
 					null}
+					</ul>
 				</div>
 			</div>
 		);

@@ -61,19 +61,16 @@ export default class Feed extends Component {
 			.then(res => this.setState({ categories: res }));
 		await this.handleSelect()
 		this.fetchVotes()
-		this.fetchComments()
 	}
 
 	fetchVotes = () => {
 		fetch(API + 'votes').then(res => res.json()).then(votes=>this.setState({votes: votes}))
 	}
 
-	fetchComments() {
-		console.log('fetch comments')
-	}
-	voteOnPost = (e, postID) => {
+	voteOnPost = (postID) => {
 		const { currentUser } = this.props
 		const { votes } = this.state
+		console.log(postID)
 		console.log('vote')
 		fetch(API + 'votes', {
 			method: 'POST',
@@ -84,7 +81,7 @@ export default class Feed extends Component {
 		// 
 	}
 
-	unvoteOnPost = (e, postID) => {
+	unvoteOnPost = (postID) => {
 		const { currentUser } = this.props
 		console.log('unvote')
 
