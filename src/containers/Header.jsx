@@ -26,8 +26,7 @@ export default class Header extends Component {
     }
 
     handleClick = (e) => {
-        console.log('handleClick:', e.target.name)
-        this.setState({post: {...this.state.post, user_id: this.props.currentUser.user.id}, category: {...this.state.category, user_id: this.props.currentUser.id }})
+        this.setState({post: {...this.state.post, user_id: this.props.currentUser.user.id}, category: {...this.state.category, user_id: this.props.currentUser.user.id }})
         this.setState({[e.target.name]: !this.state[e.target.name]})
     }
 
@@ -79,10 +78,10 @@ export default class Header extends Component {
                 />
                 </span>
                 <span className="newPost">
-                    {newPost ? <NewPost handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} categories={categories} handleWidget={this.handleWidget} handleImageUpload={this.handleImageUpload}/> : <button name="newPost" onClick={e => this.handleClick(e)}>Create New Post</button>}
+                    {newPost ? <span><NewPost handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} categories={categories} handleWidget={this.handleWidget} handleImageUpload={this.handleImageUpload}/> <button name="newPost" onClick={e => this.handleClick(e)}>Close</button></span> : <button name="newPost" onClick={e => this.handleClick(e)}>Create New Post</button>}
                 </span>
                 <span className="newCategory">
-                    {newCategory ? <NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} /> : <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
+                    {newCategory ? <span><NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} /> <button name="newCategory" onClick={e => this.handleClick(e)}>Close</button> </span>: <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
                 </span>
             </div>
         )
