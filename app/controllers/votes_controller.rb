@@ -6,15 +6,30 @@ class VotesController < ApplicationController
     end
     
     def create
-        usersVotes = Vote.where(user_id: vote_params)
-        if usersVotes.length > 0
+        if vote_params[:comment_id].is_a? Integer
+            @usersVotes = Vote.where({user_id: vote_params[:user_id], comment_id: vote_params[:comment_id]})
+            
+        elsif vote_params[:post_id].is_a? Integer
+            @usersVotes = Vote.where({user_id: vote_params[:user_id], post_id: vote_params[:post_id]})
+        else
+            render json: {errors: "Something went wrong. Call your local ReadThat call center to report the porblem....lol"}
+        end
+
+        if @usersVotes.length < 1 
+            @vote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: false)
+            @vote.save!
+                render json: @vote
+        elsif @usersVotes[0]['is_down_vote']
+            @usersVotes[0].destroy
+            @votes = Vote.where(post_id: vote_params[:post_id])
+            render json: @votes
+        elsif !@usersVotes[0]['is_down_vote']
             render json: {errors:"You only get one vote per post"}
         else
-        @vote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: false)
-        if @vote.save!
-            render json: @vote
+            @vote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: false)
+            @vote.save!
+                render json: @vote
         end
-    end
     end
 
     def post
@@ -23,12 +38,23 @@ class VotesController < ApplicationController
     end
 
     def delete
-        @votes = Vote.where(user_id: vote_params[:user_id])
-        @vote = votes.where(post_id: vote_params[:post_id])
-        if @vote
-            @vote.destroy
+        if vote_params[:comment_id].is_a? Integer
+            @usersVotes = Vote.where({user_id: vote_params[:user_id], comment_id: vote_params[:comment_id]})
+            
+        elsif vote_params[:post_id].is_a? Integer
+            @usersVotes = Vote.where({user_id: vote_params[:user_id], post_id: vote_params[:post_id]})
+        else
+            render json: {errors: "Something went wrong. Call your local ReadThat call center to report the porblem....lol"}
+        end
+        if @usersVotes.length < 1
+            @downVote = Vote.create(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
+            render json: @downVote
+        elsif !@usersVotes[0]['is_down_vote']
+            @usersVotes[0].destroy
             @votes = Vote.where(post_id: vote_params[:post_id])
             render json: @votes
+        elsif @usersVotes[0]['is_down_vote']
+            render json: {errors:"You only get one vote per post"}
         else 
             @downVote = Vote.create(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
             render json: @downVote

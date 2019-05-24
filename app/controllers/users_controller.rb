@@ -8,7 +8,8 @@ class UsersController < ApplicationController
 
     def create
         if user_params[:password] == user_params[:password_confirmation]
-            @user = User.create(user_params)
+            @user = User.new(user_params)
+            @user.save!
             if @user.valid?
                 @token = encode_token(user_id: @user.id)
                 render json: {user: @user, token: @token}
