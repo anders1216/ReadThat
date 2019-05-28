@@ -6,9 +6,9 @@ class PostsController < ApplicationController
         render json: @posts
     end
 
-    def image_upload
+    # def image_upload
 
-    end
+    # end
 
     def create
         category = Category.find_by(category: post_params[:category])

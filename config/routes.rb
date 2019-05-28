@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'votes/:post_id', to: 'votes#post'
   post 'votes/delete', to: 'votes#delete'
   get 'comments/:post_id', to: 'comments#post'
+  get 'comments/:post_id/:comment_id', to: 'comments#comments_comments'
   resources :categories
   resources :posts
   resources :comments

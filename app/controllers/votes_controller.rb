@@ -1,5 +1,5 @@
 class VotesController < ApplicationController
-    skip_before_action :authorized, only: [:create, :index, :post, :update, :delete]
+    skip_before_action :authorized, only: [:post, :index]
     def index 
         @votes = Vote.all
         render json: @votes
@@ -24,7 +24,7 @@ class VotesController < ApplicationController
             @votes = Vote.where(post_id: vote_params[:post_id])
             render json: @votes
         elsif !@usersVotes[0]['is_down_vote']
-            render json: {errors:"You only get one vote per post"}
+            render json: {errors:"You only get one net vote per post"}
         else
             @vote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: false)
             @vote.save!
@@ -54,7 +54,7 @@ class VotesController < ApplicationController
             @votes = Vote.where(post_id: vote_params[:post_id])
             render json: @votes
         elsif @usersVotes[0]['is_down_vote']
-            render json: {errors:"You only get one vote per post"}
+            render json: {errors:"You only get one net vote per post"}
         else 
             @downVote = Vote.create(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
             render json: @downVote
