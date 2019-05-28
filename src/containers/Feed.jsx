@@ -60,7 +60,6 @@ export default class Feed extends Component {
 		})
 			.then(res => res.json())
 			.then(res => this.setState({ categories: res }));
-		console.log('fetchVotes');
 		await fetch(API + 'votes')
 			.then(res => res.json())
 			.then(votes => this.setState({ votes: votes }));
@@ -68,15 +67,14 @@ export default class Feed extends Component {
 	}
 
 	voteOnPost = (postID, e) => {
-		const { currentUser } = this.props;
+		const { currentUser, token} = this.props;
 		const { votes } = this.state;
-		console.log(votes)
 		e.target.name === 'up'
 			? 
 			fetch(API + 'votes', {
 					method: 'POST',
 					headers: {
-						Authorization: `Bearer ${localStorage.getItem(currentUser)}`,
+						Authorization: `Bearer ${token}`,
 						'Content-Type': 'application/json',
 						Accept: 'application/json'
 					},
@@ -89,7 +87,7 @@ export default class Feed extends Component {
 			: fetch(API + 'votes/delete', {
 					method: 'POST',
 					headers: {
-						Authorization: `Bearer ${localStorage.getItem(currentUser)}`,
+						Authorization: `Bearer ${token}`,
 						'Content-Type': 'application/json',
 						Accept: 'application/json'
 					},

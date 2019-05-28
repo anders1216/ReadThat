@@ -4,7 +4,7 @@ import React from 'react';
 	 const { handleChange, handleSubmit } = props
 	return (
 		<div>
-			<form onSubmit={e => handleSubmit(e)}>
+			<form onSubmit={e => handleSubmit(e, props.variableKey, props.value)}>
 				<input
 					name='content'
 					type='text-field'

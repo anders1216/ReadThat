@@ -43,8 +43,16 @@ export default class MainPage extends Component {
 			.then(res => {
 				res.error
 					? alert(res.error)
-					: this.setState({ currentUser: res, username: res.user, isLoggedIn: true, token: res.token, password: '', passwordConfirmation: ''});
-			}).then(res => localStorage.setItem(username, this.state.token));
+					: this.setState({
+							currentUser: res,
+							username: res.user,
+							isLoggedIn: true,
+							token: res.token,
+							password: '',
+							passwordConfirmation: ''
+					  });
+			})
+			.then(res => localStorage.setItem(username, this.state.token));
 	};
 
 	onLoginSubmit = e => {
@@ -56,8 +64,17 @@ export default class MainPage extends Component {
 			body: JSON.stringify({ user: { username: username, password: password } })
 		})
 			.then(res => res.json())
-			.then(res => this.setState({ currentUser: res, username: res.user, isLoggedIn: true, token: res.token, password: "", passwordConfirmation: ""}))
-			.then(res => localStorage.setItem(username, this.state));
+			.then(res =>
+				this.setState({
+					currentUser: res,
+					username: res.user,
+					isLoggedIn: true,
+					token: res.token,
+					password: '',
+					passwordConfirmation: ''
+				})
+			)
+			.then(res => localStorage.setItem(username, this.state.token));
 	};
 	//
 
@@ -66,38 +83,33 @@ export default class MainPage extends Component {
 	};
 
 	conditionalRender = () => {
-		console.log("Render")
-		let Component; 
-		const { isLoggedIn, isNewUser, currentUser, token } = this.state
-			if (!isLoggedIn) {
-				if (isNewUser) {
-					history.push('/new-user')
-					Component = <NewUser 
-					handleChange={this.handleChange} 
-					onSubmit={this.onNewUserSubmit} />
-				} else {
-					history.push('/login')
-					Component = <Login
-					handleChange={this.handleChange}
-					onClick={this.newUserClickHandler}
-					onSubmit={this.onLoginSubmit}/>
-				}
-			}else {
-			history.push('/feed')
-			Component = <Feed 
-			currentUser={currentUser} 
-			token={token} />
+		console.log('Render');
+		let Component;
+		const { isLoggedIn, isNewUser, currentUser, token } = this.state;
+		if (!isLoggedIn) {
+			if (isNewUser) {
+				history.push('/new-user');
+				Component = <NewUser handleChange={this.handleChange} onSubmit={this.onNewUserSubmit} />;
+			} else {
+				history.push('/login');
+				Component = (
+					<Login
+						handleChange={this.handleChange}
+						onClick={this.newUserClickHandler}
+						onSubmit={this.onLoginSubmit}
+					/>
+				);
 			}
-			return Component
+		} else {
+			history.push('/feed');
+			Component = <Feed currentUser={currentUser} token={token} />;
 		}
+		return Component;
+	};
 
 	render() {
-		return(
-			<div className="main-container">
-				{this.conditionalRender()}
-			</div>
-		)	
+		return <div className='main-container'>{this.conditionalRender()}</div>;
 	}
 }
 
-// =================== ROUTER STUFF :( ========================= // 
+// =================== ROUTER STUFF :( ========================= //
