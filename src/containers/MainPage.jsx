@@ -19,6 +19,21 @@ export default class MainPage extends Component {
 		currentUser: null
 	};
 
+	componentDidMount(){
+		if(localStorage.getItem('user-token')) {
+			fetch(`${API}users/current_user`, {
+				headers: {'Authorization': `Bearer ${localStorage.getItem('user-token')}`, 'Content-Type': 'application/json', Accept: 'application/json'}
+			})
+			.then(res => res.json())
+			.then(res => this.setState({currentUser: {user: res}, isLoggedIn: true}))
+		}
+	}
+
+	logOut = () => {
+		localStorage.clear()
+		this.setState({isLoggedIn: false})
+	}
+
 	handleChange = e => {
 		let key = e.target.name;
 		let newState = e.target.value;
@@ -52,7 +67,7 @@ export default class MainPage extends Component {
 							passwordConfirmation: ''
 					  });
 			})
-			.then(res => localStorage.setItem(username, this.state.token));
+			.then(res => localStorage.setItem('user-token', this.state.token));
 	};
 
 	onLoginSubmit = e => {
@@ -74,7 +89,7 @@ export default class MainPage extends Component {
 					passwordConfirmation: ''
 				})
 			)
-			.then(res => localStorage.setItem(username, this.state.token));
+			.then(res => localStorage.setItem('user-token', this.state.token));
 	};
 	//
 
@@ -83,7 +98,7 @@ export default class MainPage extends Component {
 	};
 
 	conditionalRender = () => {
-		console.log('Render');
+		console.log('MainPage');
 		let Component;
 		const { isLoggedIn, isNewUser, currentUser, token } = this.state;
 		if (!isLoggedIn) {
@@ -102,7 +117,7 @@ export default class MainPage extends Component {
 			}
 		} else {
 			history.push('/feed');
-			Component = <Feed currentUser={currentUser} token={token} />;
+			Component = <Feed currentUser={currentUser} token={token} logOut={this.logOut} />;
 		}
 		return Component;
 	};

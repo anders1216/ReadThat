@@ -25,6 +25,7 @@ export default class Header extends Component {
         }
     }
 
+
     handleClick = (e) => {
         this.setState({post: {...this.state.post, user_id: this.props.currentUser.user.id}, category: {...this.state.category, user_id: this.props.currentUser.user.id }})
         this.setState({[e.target.name]: !this.state[e.target.name]})
@@ -65,7 +66,7 @@ export default class Header extends Component {
     }
 
     render () {
-        const { token, currentUser, selectedCategories, handleChange, categories, howToFilterBool } = this.props
+        const { token, currentUser, selectedCategories, handleChange, categories, howToFilterBool, filterPosts, logOut } = this.props
         const { newPost, newCategory } = this.state
         return (
             <div className="header">
@@ -74,7 +75,7 @@ export default class Header extends Component {
                     handleChange={ handleChange }
                     selectedCategories={ selectedCategories }
                     token={token}
-                    categories={this.props.categories}
+                    categories={categories}
                 />
                 </span>
                 <span className="newPost">
@@ -84,7 +85,10 @@ export default class Header extends Component {
                     {newCategory ? <span><NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} /> <button name="newCategory" onClick={e => this.handleClick(e)}>Close</button> </span>: <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
                 </span>
                 <span>
-                    {howToFilterBool ? <button onClick={e => this.props.filterPosts(true)}> Posts Low -> High </button> : <button onClick={e => this.props.filterPosts()}> Posts High -> Low </button>}
+                    {howToFilterBool ? <button onClick={e => filterPosts(true)}> Posts Low -> High </button> : <button onClick={e => filterPosts()}> Posts High -> Low </button>}
+                </span>
+                <span>  
+                    <button onClick={e => logOut()}>Logout</button>
                 </span>
             </div>
         )

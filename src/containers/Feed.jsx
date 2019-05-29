@@ -160,7 +160,7 @@ export default class Feed extends Component {
 
 	render() {
 		const { selectedCategories, selectedPosts, votes, howToFilterBool } = this.state;
-		const { token, currentUser } = this.props;
+		const { token, currentUser, logOut } = this.props;
 		if (this.state.posts.length > 0) {
 			return (
 				<div>
@@ -173,6 +173,7 @@ export default class Feed extends Component {
 						handleSelect={this.handleSelect}
 						filterPosts={this.filterPosts}
 						howToFilterBool={howToFilterBool}
+						logOut={logOut}
 					/>
 					<User currentUser={currentUser} />
 					<div className='posts-container'>
@@ -219,6 +220,7 @@ export default class Feed extends Component {
 						handleChange={this.handleChange}
 						token={token}
 						currentUser={currentUser}
+						logOut={logOut}
 					/> 
 					<br/>
 					<h1>Loading Posts...</h1>
