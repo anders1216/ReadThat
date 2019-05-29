@@ -134,11 +134,16 @@ export default class Feed extends Component {
 			}
 			return comparison;
 		  })
-
+		if (this.state.selectedPosts.length > 0){
+			let filteredPosts = await postsFilter.map((post1, i) => {
+				return this.state.selectedPosts.filter(post => post.id === post1[0])
+			}).flat()
+			await this.setState({selectedPosts: filteredPosts, filterBool: true, howToFilterBool: !this.state.howToFilterBool})
+		} else {
 		let filteredPosts = await postsFilter.map((post1, i) => {
 			return this.state.posts.filter(post => post.id === post1[0])
 		}).flat()
-		await this.setState({posts: filteredPosts, filterBool: true, howToFilterBool: !this.state.howToFilterBool})
+		await this.setState({posts: filteredPosts, filterBool: true, howToFilterBool: !this.state.howToFilterBool})}
 	}
 
 	resetFilterBool = async () => {

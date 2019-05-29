@@ -23,7 +23,7 @@ class Post extends Component {
 
 	 async componentDidUpdate() {
 		if (this.props.filterBool){
-		 await this.votesThings()
+		 await this.updatePostsVotes()
 		}
 	}
 
@@ -45,6 +45,7 @@ class Post extends Component {
 		){ 
 			 this.setState({ hasDownVoted: true });
 		}
+		this.props.resetFilterBool()
 	}
 
 	votesThings = () => {
@@ -67,7 +68,6 @@ class Post extends Component {
 			)
 		)
 			this.setState({ hasDownVoted: true });
-			this.props.resetFilterBool()
 	}
 
 	commentOnPost = () => {
