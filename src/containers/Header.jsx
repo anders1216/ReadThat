@@ -65,7 +65,7 @@ export default class Header extends Component {
     }
 
     render () {
-        const { token, currentUser, selectedCategories, handleChange, categories } = this.props
+        const { token, currentUser, selectedCategories, handleChange, categories, howToFilterBool } = this.props
         const { newPost, newCategory } = this.state
         return (
             <div className="header">
@@ -82,6 +82,9 @@ export default class Header extends Component {
                 </span>
                 <span className="newCategory">
                     {newCategory ? <span><NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} /> <button name="newCategory" onClick={e => this.handleClick(e)}>Close</button> </span>: <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
+                </span>
+                <span>
+                    {howToFilterBool ? <button onClick={e => this.props.filterPosts(true)}> Posts Low -> High </button> : <button onClick={e => this.props.filterPosts()}> Posts High -> Low </button>}
                 </span>
             </div>
         )

@@ -12,17 +12,48 @@ class Post extends Component {
 		voteCount: 0,
 		displayComments: false,
 		commenting: false,
-		prevState: null,
+		prevState: [],
 		hasUpVoted: false,
 		hasDownVoted: false
 	};
 
-	componentDidMount() {
+	async componentDidMount() {
+		await this.votesThings()
+	}
+
+	 async componentDidUpdate() {
+		if (this.props.filterBool){
+		 await this.votesThings()
+		}
+	}
+
+	updatePostsVotes = () => {
+		let postsVotesVar =  this.props.votes.filter(vote => vote.post_id === this.props.post.id);
+		let upVotes = postsVotesVar.filter(vote => vote.is_down_vote === false);
+		let downVotes =  postsVotesVar.filter(vote => vote.is_down_vote === true);
+		let calculatedVoteCount =  upVotes.length - downVotes.length;
+	 	this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
+		if ( postsVotesVar.some(
+				vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === false
+			)
+		){ 
+		 this.setState({ hasUpVoted: true });
+		} else if (
+		 postsVotesVar.some(
+				vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === true
+			)
+		){ 
+			 this.setState({ hasDownVoted: true });
+		}
+	}
+
+	votesThings = () => {
 		const { votes, post, currentUser } = this.props;
 		let postsVotesVar = votes.filter(vote => vote.post_id === post.id);
 		let upVotes = postsVotesVar.filter(vote => vote.is_down_vote === false);
 		let downVotes = postsVotesVar.filter(vote => vote.is_down_vote === true);
 		let calculatedVoteCount = upVotes.length - downVotes.length;
+		this.props.postsFilter(post.id, calculatedVoteCount)
 		this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
 		if (
 			postsVotesVar.some(
@@ -31,11 +62,12 @@ class Post extends Component {
 		) {
 			this.setState({ hasUpVoted: true });
 		} else if (
-			postsVotesVar.some(
+			downVotes.some(
 				vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === true
 			)
 		)
 			this.setState({ hasDownVoted: true });
+			this.props.resetFilterBool()
 	}
 
 	commentOnPost = () => {
@@ -88,26 +120,29 @@ class Post extends Component {
 
 	rapidVoteIncrement = async e => {
 		const { voteOnPost, post } = this.props;
-		voteOnPost(post.id, e);
+		voteOnPost(post.id, e)
 		if (e.target.name === 'up' && !this.state.hasUpVoted && !this.state.hasDownVoted) {
 			await this.setState({ voteCount: this.state.voteCount + 1, hasUpVoted: true });
-		} else if (e.target.name === 'up' && this.state.hasDownVoted) {
+		} else if (e.target.name === 'up' && this.state.hasDownVoted && !this.state.hasUpVoted) {
 			await this.setState({ voteCount: this.state.voteCount + 1, hasDownVoted: false });
 		} else if (e.target.name === 'down' && !this.state.hasDownVoted && !this.state.hasUpVoted) {
 			await this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: true });
-		} else if (e.target.name === 'down' && this.state.hasUpVoted) {
+		} else if (e.target.name === 'down' && this.state.hasUpVoted && !this.state.hasDownVoted) {
 			await this.setState({ voteCount: this.state.voteCount - 1, hasUpVoted: false });
 		}
+		;
 	};
 
 	render() {
-		const { img, title, content, link, id } = this.props.post;
+		const { img, title, content, link, uploadedFile, id } = this.props.post;
 		const { commenting, comments } = this.state;
 		let image;
-		if (!img) {
+		if (!img && !uploadedFile) {
 			image = defaultImage;
+		} else if(!img && uploadedFile) {
+			image = uploadedFile;
 		} else {
-			image = img;
+			image = defaultImage
 		}
 		return (
 			<div className='post-card'>
