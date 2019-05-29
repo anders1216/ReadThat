@@ -21,14 +21,11 @@ class VotesController < ApplicationController
                 render json: @vote
         elsif @usersVotes[0]['is_down_vote']
             @usersVotes[0].destroy
-            @votes = Vote.where(post_id: vote_params[:post_id])
-            render json: @votes
-        elsif !@usersVotes[0]['is_down_vote']
-            render json: {errors:"You only get one net vote per post"}
-        else
             @vote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: false)
             @vote.save!
                 render json: @vote
+        elsif !@usersVotes[0]['is_down_vote']
+            render json: {errors:"You only get one net vote per post"}
         end
     end
 
@@ -51,20 +48,12 @@ class VotesController < ApplicationController
             render json: @downVote
         elsif !@usersVotes[0]['is_down_vote']
             @usersVotes[0].destroy
-            @votes = Vote.where(post_id: vote_params[:post_id])
-            render json: @votes
-        elsif @usersVotes[0]['is_down_vote']
-            render json: {errors:"You only get one net vote per post"}
-        else 
             @downVote = Vote.create(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
             render json: @downVote
+                render json: @downVote
+        elsif @usersVotes[0]['is_down_vote']
+            render json: {errors:"You only get one net vote per post"}           
         end
-    end
-
-    def update
-        @vote = Vote.find(params[:id])
-        @vote.update
-        render json: @vote
     end
 
  private
