@@ -27,47 +27,46 @@ class Post extends Component {
 		}
 	}
 
-	updatePostsVotes = () => {
-		let postsVotesVar =  this.props.votes.filter(vote => vote.post_id === this.props.post.id);
-		let upVotes = postsVotesVar.filter(vote => vote.is_down_vote === false);
-		let downVotes =  postsVotesVar.filter(vote => vote.is_down_vote === true);
-		let calculatedVoteCount =  upVotes.length - downVotes.length;
-	 	this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
-		if ( postsVotesVar.some(
+	updatePostsVotes = async () => {
+		console.log('updatePosts')
+		let postsVotesVar =  await this.props.votes.filter(vote => vote.post_id === this.props.post.id);
+		let upVotes = await postsVotesVar.filter(vote => vote.is_down_vote === false);
+		let downVotes =  await postsVotesVar.filter(vote => vote.is_down_vote === true);
+		let calculatedVoteCount =  await upVotes.length - downVotes.length;
+	 		await this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
+		if ( upVotes.some(
 				vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === false
 			)
 		){ 
-		 this.setState({ hasUpVoted: true });
-		} else if (
-		 postsVotesVar.some(
+			await this.setState({ hasUpVoted: true });
+		} else if ( downVotes.some(
 				vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === true
 			)
 		){ 
-			 this.setState({ hasDownVoted: true });
+			await this.setState({ hasDownVoted: true });
 		}
 		this.props.resetFilterBool()
 	}
 
-	votesThings = () => {
+	votesThings = async () => {
+		console.log('votesthings')
 		const { votes, post, currentUser } = this.props;
-		let postsVotesVar = votes.filter(vote => vote.post_id === post.id);
-		let upVotes = postsVotesVar.filter(vote => vote.is_down_vote === false);
-		let downVotes = postsVotesVar.filter(vote => vote.is_down_vote === true);
-		let calculatedVoteCount = upVotes.length - downVotes.length;
-		this.props.postsFilter(post.id, calculatedVoteCount)
-		this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
-		if (
-			postsVotesVar.some(
+		let postsVotesVar = await votes.filter(vote => vote.post_id === post.id);
+		let upVotes = await postsVotesVar.filter(vote => vote.is_down_vote === false);
+		let downVotes = await postsVotesVar.filter(vote => vote.is_down_vote === true);
+		let calculatedVoteCount = await upVotes.length - downVotes.length;
+		await this.props.postsFilter(post.id, calculatedVoteCount)
+		await this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
+		if ( upVotes.some(
 				vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === false
 			)
 		) {
-			this.setState({ hasUpVoted: true });
-		} else if (
-			downVotes.some(
+			await this.setState({ hasUpVoted: true });
+		} else if ( downVotes.some(
 				vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === true
 			)
 		)
-			this.setState({ hasDownVoted: true });
+			await this.setState({ hasDownVoted: true });
 	}
 
 	commentOnPost = () => {
@@ -118,18 +117,24 @@ class Post extends Component {
 		this.setState({ displayComments: !this.state.displayComments });
 	};
 
-	rapidVoteIncrement = async e => {
+	rapidVoteIncrement = e => {
+		console.log('rapidVoteIncrement')
 		const { voteOnPost, post } = this.props;
-		voteOnPost(post.id, e)
+		
 		if (e.target.name === 'up' && !this.state.hasUpVoted && !this.state.hasDownVoted) {
-			await this.setState({ voteCount: this.state.voteCount + 1, hasUpVoted: true });
+			this.setState({ voteCount: this.state.voteCount + 1, hasUpVoted: true });
+			console.log('up1')
 		} else if (e.target.name === 'up' && this.state.hasDownVoted && !this.state.hasUpVoted) {
-			await this.setState({ voteCount: this.state.voteCount + 1, hasDownVoted: false });
+			this.setState({ voteCount: this.state.voteCount + 1, hasDownVoted: false });
+			console.log('up2')
 		} else if (e.target.name === 'down' && !this.state.hasDownVoted && !this.state.hasUpVoted) {
-			await this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: true });
+			this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: true });
+			console.log('down1')
 		} else if (e.target.name === 'down' && this.state.hasUpVoted && !this.state.hasDownVoted) {
-			await this.setState({ voteCount: this.state.voteCount - 1, hasUpVoted: false });
+			this.setState({ voteCount: this.state.voteCount - 1, hasUpVoted: false });
+			console.log('down2')
 		}
+		voteOnPost(post.id, e)
 		;
 	};
 

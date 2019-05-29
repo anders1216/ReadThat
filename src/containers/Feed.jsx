@@ -20,33 +20,6 @@ export default class Feed extends Component {
 		howToFilterBool: false
 	};
 
-	handleSelect = async () => {
-		const { selectedCategories, posts } = this.state;
-		const { token } = this.props;
-		if (!selectedCategories && posts) {
-			fetch(API + 'posts', {
-				headers: { Authorization: `Bearer ${token}` }
-			})
-				.then(res => res.json())
-				.then(res => this.setState({ posts: res }));
-		} else {
-			await this.setState({ selectedPosts: [] });
-			selectedCategories.forEach(category => {
-				fetch(API + 'categories/' + `${category.value}`, {
-					headers: { Authorization: `Bearer ${token}` }
-				})
-					.then(res => res.json())
-					.then(res => this.setState({ selectedPosts: [...this.state.selectedPosts, res].flat() }))
-			});
-		}
-	};
-
-
-	handleChange = async newSelection => {
-		await this.setState({ selectedCategories: newSelection });
-		await this.handleSelect();
-	};
-
 	async componentDidMount() {
 		this.setState({ prevState: this.state.posts });
 		await fetch(API + 'categories', {
@@ -59,6 +32,33 @@ export default class Feed extends Component {
 			.then(votes => this.setState({ votes: votes }));
 		await this.handleSelect();
 	}
+
+	handleChange = async newSelection => {
+		await this.setState({ selectedCategories: newSelection });
+		await this.handleSelect();
+	};
+
+	handleSelect = async () => {
+		console.log('handleSelect')
+		const { selectedCategories, posts } = this.state;
+		const { token } = this.props;
+		if (!selectedCategories && posts) {
+			fetch(API + 'posts', {
+				headers: { Authorization: `Bearer ${token}` }
+			})
+				.then(res => res.json())
+				.then(res => this.setState({ posts: res }));
+		} else {
+			await this.setState({ selectedPosts: [] }); 
+			selectedCategories.forEach(category => {
+				fetch(API + 'categories/' + `${category.value}`, {
+					headers: { Authorization: `Bearer ${token}` }
+				})
+					.then(res => res.json())
+					.then(res => this.setState({ selectedPosts: [...this.state.selectedPosts, res].flat(), filterBool: true }))
+			});
+		}
+	};
 
 	voteOnPost = (postID, e) => {
 		const { currentUser, token} = this.props;
@@ -93,6 +93,8 @@ export default class Feed extends Component {
 	};
 
 	postsFilter = async (postId, voteCount) => {
+		const { postsFilter, posts } = this.state
+		if (postsFilter.length !== posts.length) {
 		let placeHolder = this.state.postsFilter
 		await placeHolder.push([postId, voteCount])
 		placeHolder.sort((a, b) => {
@@ -108,10 +110,12 @@ export default class Feed extends Component {
 			return comparison;
 		  })
 		this.setState({postsFilter: placeHolder})
+		}
 	}
 
 	filterPosts = async () => {
-		let postsFilter = await this.state.howToFilterBool ? this.state.postsFilter.sort((a, b) => {
+		const { postsFilter, howToFilterBool, selectedPosts, posts  } = this.state
+		let postsFiltered = await howToFilterBool ? postsFilter.sort((a, b) => {
 			const post1 = a[1]
 			const post2 = b[1]
 
@@ -122,7 +126,7 @@ export default class Feed extends Component {
 			  comparison = -1
 			}
 			return comparison;
-		  }) : this.state.postsFilter.sort((a, b) => {
+		  }) : postsFilter.sort((a, b) => {
 			const post1 = a[1]
 			const post2 = b[1]
 
@@ -134,19 +138,22 @@ export default class Feed extends Component {
 			}
 			return comparison;
 		  })
-		if (this.state.selectedPosts.length > 0){
-			let filteredPosts = await postsFilter.map((post1, i) => {
-				return this.state.selectedPosts.filter(post => post.id === post1[0])
+		if (selectedPosts.length !== 0){
+		console.log('if')
+			let filteredPosts = await postsFiltered.map((post1, i) => {
+				return selectedPosts.filter(post => post.id === post1[0])
 			}).flat()
-			await this.setState({selectedPosts: filteredPosts, filterBool: true, howToFilterBool: !this.state.howToFilterBool})
+			await this.setState({selectedPosts: filteredPosts, filterBool: true, howToFilterBool: !howToFilterBool})
 		} else {
-		let filteredPosts = await postsFilter.map((post1, i) => {
-			return this.state.posts.filter(post => post.id === post1[0])
+		console.log("else")
+		let filteredPosts = await postsFiltered.map((post1, i) => {
+			return posts.filter(post => post.id === post1[0])
 		}).flat()
-		await this.setState({posts: filteredPosts, filterBool: true, howToFilterBool: !this.state.howToFilterBool})}
+		await this.setState({posts: filteredPosts, filterBool: true, howToFilterBool: !howToFilterBool})}
 	}
 
 	resetFilterBool = async () => {
+		console.log('here')
 		await this.setState({filterBool: false})
 	}
 
