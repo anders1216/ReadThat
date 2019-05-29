@@ -8,7 +8,8 @@ class UsersController < ApplicationController
 
     def find_current_user
         if current_user
-            render json: @user
+            @token = encode_token({ user_id: @user.id })
+            render json: {user: @user, token: @token}
         end
     end
 
