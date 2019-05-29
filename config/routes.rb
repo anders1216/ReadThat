@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post 'votes/delete', to: 'votes#delete'
   get 'comments/:post_id', to: 'comments#post'
   get 'comments/:post_id/:comment_id', to: 'comments#comments_comments'
+  get 'users/current_user', to: 'users#find_current_user'
   resources :categories
   resources :posts
   resources :comments

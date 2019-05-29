@@ -6,6 +6,12 @@ class UsersController < ApplicationController
         render json: @users
     end
 
+    def find_current_user
+        if current_user
+            render json: @user
+        end
+    end
+
     def create
         if user_params[:password] == user_params[:password_confirmation]
             @user = User.new(user_params)
