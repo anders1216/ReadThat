@@ -25,7 +25,7 @@ export default class MainPage extends Component {
 				headers: {'Authorization': `Bearer ${localStorage.getItem('user-token')}`, 'Content-Type': 'application/json', Accept: 'application/json'}
 			})
 			.then(res => res.json())
-			.then(res => this.setState({currentUser: {user: res}, isLoggedIn: true}))
+			.then(res => this.setState({currentUser: res, isLoggedIn: true, token: res.token}))
 		}
 	}
 
@@ -60,7 +60,6 @@ export default class MainPage extends Component {
 					? alert(res.error)
 					: this.setState({
 							currentUser: res,
-							username: res.user,
 							isLoggedIn: true,
 							token: res.token,
 							password: '',
@@ -82,7 +81,6 @@ export default class MainPage extends Component {
 			.then(res =>
 				this.setState({
 					currentUser: res,
-					username: res.user,
 					isLoggedIn: true,
 					token: res.token,
 					password: '',

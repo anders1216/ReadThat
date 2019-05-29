@@ -37,12 +37,12 @@ export default class Comment extends Component {
 	};
 
 	postComment = (key, value) => {
-		const { commentsComments, newComment, commenting } = this.state;
+		const { commentsComments, newComment, commenting, displayComments } = this.state;
 		const { currentUser } = this.props;
 		fetch(API + 'comments', {
 			method: 'POST',
 			headers: {
-				Authorization: `Bearer ${localStorage.getItem(currentUser.user.id)}`,
+				Authorization: `Bearer ${localStorage.getItem('user-token')}`,
 				'Content-Type': 'application/json',
 				'Accept': 'application/json'
 			},
@@ -56,23 +56,25 @@ export default class Comment extends Component {
 					? alert(comment.errors)
 					: this.setState({ commentsComments: [...commentsComments, comment] });
 			})
-			.then(this.setState({ commenting: !commenting }));
+			.then(this.setState({ commenting: !commenting }))
+			.then(this.setState({displayComments: !displayComments}));
 	};
 
 	displayComments = async () => {
-		const { post, comment, currentUser } = this.props;
+		const { post, comment, displayComments } = this.props;
 
 		await fetch(`${API}comments/${post.id}/${comment.id}`,{
-			headers: {Authorization: `Bearer ${localStorage.getItem(currentUser.user.id)}`}})
+			headers: {Authorization: `Bearer ${localStorage.getItem('user-token')}`}})
 			.then(res => res.json())
 			.then(comments => this.setState({ commentsComments: comments }));
-		this.setState({ displayComments: !this.state.displayComments });
+		await this.setState({ displayComments: !displayComments });
 	};
 
 	render(){
-		const { comment, comments} = this.props
+		const { comment, comments, currentUser, post } = this.props
+		const { displayComments, commentsComments } = this.state
 		return (
-		<div>
+		<div className='comment-card'>
 			<p>{comment.content}</p>
 			<button onClick={e => this.commentOnPost(e)}>Comment</button>
 			{this.state.commenting ? (
@@ -84,18 +86,18 @@ export default class Comment extends Component {
 				/>
 			) : null}
 			<button onClick={e => this.displayComments(e)}>Display Comments</button>
-			<ul>
-				{this.state.displayComments && this.state.commentsComments.length > 0
-					? this.state.commentsComments.map(comment => {
+			<ul className='comment-ul'>
+				{displayComments && commentsComments.length > 0
+					? commentsComments.map(comment => {
 							return (
 								<li>
-                                    <Comment
-                                    comment={comment}
-                                    comments={comments}
-                                    displayComments={this.displayComments}
-									commentOnPost={this.commentOnPost}
-									post={this.props.post}
-									currentUser={this.props.currentUser}/>
+									<Comment
+										comment={comment}
+										comments={comments}
+										displayComments={this.displayComments}
+										commentOnPost={this.commentOnPost}
+										post={post}
+										currentUser={currentUser}/>
 								</li>
 							);
 					  })

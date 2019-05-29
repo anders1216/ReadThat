@@ -28,12 +28,11 @@ class Post extends Component {
 	}
 
 	updatePostsVotes = async () => {
-		console.log('updatePosts')
 		let postsVotesVar =  await this.props.votes.filter(vote => vote.post_id === this.props.post.id);
 		let upVotes = await postsVotesVar.filter(vote => vote.is_down_vote === false);
 		let downVotes =  await postsVotesVar.filter(vote => vote.is_down_vote === true);
 		let calculatedVoteCount =  await upVotes.length - downVotes.length;
-	 		await this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
+	 	await this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
 		if ( upVotes.some(
 				vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === false
 			)
@@ -140,7 +139,8 @@ class Post extends Component {
 
 	render() {
 		const { img, title, content, link, uploadedFile, id } = this.props.post;
-		const { commenting, comments } = this.state;
+		const { post, currentUser } = this.props
+		const { commenting, comments, voteCount } = this.state;
 		let image;
 		if (!img && !uploadedFile) {
 			image = defaultImage;
@@ -152,22 +152,24 @@ class Post extends Component {
 		return (
 			<div className='post-card'>
 				<div className='title-container'>{title}</div>
-				<span className='post-img-container'>
+				<div className='contents-container'>
+				<div className='post-img-container'>
 					<img className='post-img' src={image} alt={title} />
-				</span>
-				<div className='content-container'>
-					<span>{content}</span>
-					<span>{link}</span>
 				</div>
-				<div>
-					<span>Doots: {this.state.voteCount}</span>
+				<div className='content-container'>
+					{content}
+					{link}
+				</div>
+				</div>
+				<div className='button-container'>
+					<span>Doots: {voteCount}</span>
 					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
 						▲
 					</button>
 					<button name='down' onClick={e => this.rapidVoteIncrement(e)}>
 						▼
 					</button>
-					<button onClick={e => this.commentOnPost(e)}>Comment</button>
+					<button onClick={e => this.commentOnPost(e)}>Reply</button>
 					{commenting ? (
 						<NewComment
 							variableKey={'post_id'}
@@ -177,7 +179,7 @@ class Post extends Component {
 						/>
 					) : null}
 					<button onClick={e => this.displayComments(e)}>Display Comments</button>
-					<ul>
+					<ul className='post-ul'>
 						{this.state.displayComments && comments.length > 0
 							? comments.map(comment => {
 									return (
@@ -190,8 +192,8 @@ class Post extends Component {
 												handleSubmit={this.handleSubmit}
 												displayComments={this.displayComments}
 												commentOnPost={this.commentOnPost}
-												currentUser={this.props.currentUser}
-												post={this.props.post}
+												currentUser={currentUser}
+												post={post}
 											/>
 										</li>
 									);

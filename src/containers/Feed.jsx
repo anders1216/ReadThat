@@ -68,7 +68,7 @@ export default class Feed extends Component {
 			fetch(API + 'votes', {
 					method: 'POST',
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${localStorage.getItem('user-token')}`,
 						'Content-Type': 'application/json',
 						Accept: 'application/json'
 					},

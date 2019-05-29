@@ -79,7 +79,7 @@ export default class Header extends Component {
                 />
                 </span>
                 <span className="newPost">
-                    {newPost ? <span><NewPost handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} categories={categories} handleWidget={this.handleWidget} handleImageUpload={this.handleImageUpload}/> <button name="newPost" onClick={e => this.handleClick(e)}>Close</button></span> : <button name="newPost" onClick={e => this.handleClick(e)}>Create New Post</button>}
+                    {newPost ? <span><NewPost handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} categories={categories} handleWidget={this.handleWidget} handleImageUpload={this.handleImageUpload} handleClick={this.handleClick}/></span> : <button name="newPost" onClick={e => this.handleClick(e)}>Create New Post</button>}
                 </span>
                 <span className="newCategory">
                     {newCategory ? <span><NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} /> <button name="newCategory" onClick={e => this.handleClick(e)}>Close</button> </span>: <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
