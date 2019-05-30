@@ -25,7 +25,9 @@ class VotesController < ApplicationController
             @vote.save!
                 render json: @vote
         elsif !@usersVotes[0]['is_down_vote']
-            render json: {errors:"You only get one net vote per post"}
+            @usersVotes[0].destroy
+            @votes = Vote.all
+            render json: {message: "Vote Deleted", votes: @votes } 
         end
     end
 
@@ -45,14 +47,15 @@ class VotesController < ApplicationController
         end
         if @usersVotes.length < 1
             @downVote = Vote.create(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
-            render json: @downVote
+                render json: @downVote
         elsif !@usersVotes[0]['is_down_vote']
             @usersVotes[0].destroy
             @downVote = Vote.create(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
-            render json: @downVote
                 render json: @downVote
         elsif @usersVotes[0]['is_down_vote']
-            render json: {errors:"You only get one net vote per post"}           
+            @usersVotes[0].destroy
+            @votes = Vote.all
+                render json: {message: "Vote Deleted", votes: @votes }          
         end
     end
 
