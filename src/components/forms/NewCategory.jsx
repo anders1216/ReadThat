@@ -1,9 +1,11 @@
 import React from 'react';
 
 const NewCategory = (props) => {
-		const { handleChange, onSubmit } = props
+		const { handleChange, onSubmit, handleClick } = props
 		return (
-			<div>
+			<div className='modal'>
+				<div className='modal-content'>
+				<button name="newCategory" onClick={e => handleClick(e)}>X</button>
 				<form name="categories" onSubmit={e => onSubmit(e, "category")}>
                     <input
 						name='category'
@@ -19,6 +21,7 @@ const NewCategory = (props) => {
 					/>
 					<button type='submit'>Submit</button>
 				</form>
+			</div>
 			</div>
 		);
 	}

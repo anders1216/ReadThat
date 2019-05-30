@@ -14,7 +14,8 @@ class Post extends Component {
 		commenting: false,
 		prevState: [],
 		hasUpVoted: false,
-		hasDownVoted: false
+		hasDownVoted: false,
+		renderModalBool: false
 	};
 
 	async componentDidMount() {
@@ -114,28 +115,42 @@ class Post extends Component {
 			.then(res => res.json())
 			.then(comments => this.setState({ comments: comments }));
 		this.setState({ displayComments: !this.state.displayComments });
+		if (this.state.comments.length === 0){
+			alert("Currently No Comments...Be the First to Write One!")
+		} 
 	};
 
 	rapidVoteIncrement = e => {
 		console.log('rapidVoteIncrement')
 		const { voteOnPost, post } = this.props;
 		
-		if (e.target.name === 'up' && !this.state.hasUpVoted && !this.state.hasDownVoted) {
+		if (e.target.name === 'up' && !this.state.hasDownVoted && !this.state.hasUpVoted ) {
 			this.setState({ voteCount: this.state.voteCount + 1, hasUpVoted: true });
 			console.log('up1')
 		} else if (e.target.name === 'up' && this.state.hasDownVoted && !this.state.hasUpVoted) {
-			this.setState({ voteCount: this.state.voteCount + 1, hasDownVoted: false });
+			this.setState({ voteCount: this.state.voteCount + 2, hasDownVoted: false, hasUpVoted: true });
 			console.log('up2')
+		} else if (e.target.name === 'up' && !this.state.hasDownVoted && this.state.hasUpVoted) {
+			this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: false, hasUpVoted: false });
+			console.log('up3')
 		} else if (e.target.name === 'down' && !this.state.hasDownVoted && !this.state.hasUpVoted) {
 			this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: true });
 			console.log('down1')
-		} else if (e.target.name === 'down' && this.state.hasUpVoted && !this.state.hasDownVoted) {
-			this.setState({ voteCount: this.state.voteCount - 1, hasUpVoted: false });
+		} else if (e.target.name === 'down'&& !this.state.hasDownVoted  && this.state.hasUpVoted ) {
+			this.setState({ voteCount: this.state.voteCount - 2, hasUpVoted: false, hasDownVoted: true });
 			console.log('down2')
+		} else if (e.target.name === 'down' && this.state.hasDownVoted && !this.state.hasUpVoted) {
+			this.setState({ voteCount: this.state.voteCount + 1, hasDownVoted: false, hasUpVoted: false });
+			console.log('down3')
 		}
 		voteOnPost(post.id, e)
 		;
 	};
+
+	renderModal = () => {
+		console.log(this.state.renderModalBool)
+		this.setState({renderModalBool: !this.state.renderModalBool})
+	}
 
 	render() {
 		const { img, title, content, link, uploadedFile, id } = this.props.post;
@@ -150,7 +165,65 @@ class Post extends Component {
 			image = defaultImage
 		}
 		return (
-			<div className='post-card'>
+			this.state.renderModalBool ? 
+			<div className="modal">
+				<div className='modal-content-post'>
+				<div className='title-container'>{title}</div>
+				<div className='contents-container'>
+				<div className='modal-post-img-container'>
+					<img className='modal-post-img' src={image} alt={title} />
+				</div>
+				<div className='content-container'>
+					{content}
+					{link}
+				</div>
+				</div>
+				<div className='button-container'>
+					<span>Doots: {voteCount}</span>
+					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
+						▲
+					</button>
+					<button name='down' onClick={e => this.rapidVoteIncrement(e)}>
+						▼
+					</button>
+					<button onClick={e => this.commentOnPost(e)}>Comment</button>
+					{commenting ? (
+						<NewComment
+							variableKey={'post_id'}
+							value={id}
+							handleChange={this.handleChange}
+							handleSubmit={this.handleSubmit}
+							commentOnPost={this.commentOnPost}
+						/>
+					) : null}
+					<button onClick={e => this.displayComments(e)}>Display Comments</button>
+					<button onClick={e => this.renderModal()}>Close Post</button>
+					<ul className='post-ul'>
+						{this.state.displayComments && comments.length > 0
+							? comments.map(comment => {
+									return (
+										<li>
+											<Comment
+												comment={comment}
+												comments={comments}
+												commenting={commenting}
+												handleChange={this.handleChange}
+												handleSubmit={this.handleSubmit}
+												displayComments={this.displayComments}
+												commentOnPost={this.commentOnPost}
+												currentUser={currentUser}
+												post={post}
+											/>
+										</li>
+									);
+							})
+							: null}
+					</ul>
+				</div>
+			</div>
+		</div>
+		:	
+		<div className='post-card'>
 				<div className='title-container'>{title}</div>
 				<div className='contents-container'>
 				<div className='post-img-container'>
@@ -169,16 +242,18 @@ class Post extends Component {
 					<button name='down' onClick={e => this.rapidVoteIncrement(e)}>
 						▼
 					</button>
-					<button onClick={e => this.commentOnPost(e)}>Reply</button>
+					<button onClick={e => this.commentOnPost(e)}>Comment</button>
 					{commenting ? (
 						<NewComment
 							variableKey={'post_id'}
 							value={id}
 							handleChange={this.handleChange}
 							handleSubmit={this.handleSubmit}
+							commentOnPost={this.commentOnPost}
 						/>
 					) : null}
 					<button onClick={e => this.displayComments(e)}>Display Comments</button>
+					<button onClick={e => this.renderModal()}>Enlarge Post</button>
 					<ul className='post-ul'>
 						{this.state.displayComments && comments.length > 0
 							? comments.map(comment => {

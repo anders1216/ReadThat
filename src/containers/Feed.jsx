@@ -21,7 +21,7 @@ export default class Feed extends Component {
 	};
 
 	async componentDidMount() {
-		this.setState({ prevState: this.state.posts });
+		this.setState({ prevState: {posts: this.state.posts, categories: this.state.categories, votes: this.state.votes}});
 		await fetch(API + 'categories', {
 			headers: { Authorization: `Bearer ${this.props.token}` }
 		})
@@ -30,8 +30,16 @@ export default class Feed extends Component {
 		await fetch(API + 'votes')
 			.then(res => res.json())
 			.then(votes => this.setState({ votes: votes }));
+		await this.setState({ prevState: {posts: this.state.posts, categories: this.state.categories, votes: this.state.votes}});
 		await this.handleSelect();
 	}
+
+	// componentDidUpdate(){
+	// 	const { prevState, votes, posts, categories } = this.state
+	// 	if (prevState.votes === votes || prevState.posts === posts || prevState.categories === categories){
+			
+	// 	}
+	// }
 
 	handleChange = async newSelection => {
 		await this.setState({ selectedCategories: newSelection });
@@ -65,18 +73,18 @@ export default class Feed extends Component {
 		const { votes } = this.state;
 		e.target.name === 'up'
 			? 
-			fetch(API + 'votes', {
+		 fetch(API + 'votes', {
 					method: 'POST',
 					headers: {
 						Authorization: `Bearer ${localStorage.getItem('user-token')}`,
-						'Content-Type': 'application/json',
+						'Content-Type': 'application/json',	
 						Accept: 'application/json'
 					},
 					body: JSON.stringify({ vote: { post_id: postID, user_id: currentUser.user.id, is_down_vote: false } })
 			  })
 					.then(res => res.json())
 					.then(vote => {
-						vote.errors ? alert(vote.errors) : this.setState({ votes: [...votes, vote] });
+						vote.message ? this.setState({ votes: vote.votes}) : this.setState({ votes: [...votes, vote] });
 					})
 			: fetch(API + 'votes/delete', {
 					method: 'POST',
@@ -88,8 +96,7 @@ export default class Feed extends Component {
 					body: JSON.stringify({ vote: { post_id: postID, user_id: currentUser.user.id, is_down_vote: true } })
 			  })
 					.then(res => res.json())
-					.then(vote => 
-						vote.errors ? alert(vote.errors) : this.setState({ votes: [...votes, vote]}));
+					.then(vote => vote.messages ? this.setState({ votes: vote.votes}) : this.setState({ votes: [...votes, vote]}));
 	};
 
 	postsFilter = async (postId, voteCount) => {
@@ -157,9 +164,8 @@ export default class Feed extends Component {
 		await this.setState({filterBool: false})
 	}
 
-
 	render() {
-		const { selectedCategories, selectedPosts, votes, howToFilterBool } = this.state;
+		const { selectedCategories, selectedPosts, votes, howToFilterBool, posts, categories, renderModalBool } = this.state;
 		const { token, currentUser, logOut } = this.props;
 		if (this.state.posts.length > 0) {
 			return (
@@ -175,7 +181,7 @@ export default class Feed extends Component {
 						howToFilterBool={howToFilterBool}
 						logOut={logOut}
 					/>
-					<User currentUser={currentUser} />
+					<User currentUser={currentUser} posts={posts} votes={votes} categories={categories}/>
 					<div className='posts-container'>
 					{selectedPosts.length > 0
 						? this.state.selectedPosts.map((post, i) => {
@@ -188,7 +194,6 @@ export default class Feed extends Component {
 										voteOnPost={this.voteOnPost}
 										postsFilter={this.postsFilter}
 										filterBool={this.state.filterBool}
-										resetFilterBool={this.resetFilterBool}
 									/>
 								);
 						  })
@@ -224,7 +229,6 @@ export default class Feed extends Component {
 					/> 
 					<br/>
 					<h1>Loading Posts...</h1>
-					<User currentUser={currentUser} />
 					
 				</div>
 			);

@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
+import { API } from '../containers/MainPage';
 
 export default class CategorySelector extends Component {
 	state = {
 		data: [],
-		prevProps: null
+		prevProps: null,
+		categories: []
 	};
 	
 
 	manageData = () => {
-		const { categories } = this.props;
-		if (this.props.categories.length > 0) {
+		const { categories } = this.state;
+		if (categories.length > 0) {
 			const editedData = categories.map((category, i) => {
 				return { value: `${category.category}`, label: `${category.category}` };
 			});
@@ -19,13 +21,19 @@ export default class CategorySelector extends Component {
 	};
 
 	componentDidMount(){
-		this.setState({prevProps: this.state.data})
-		
+		this.setState({prevProps: {data: this.state.data, categories: this.state.categories}})
 	}
 
-	componentDidUpdate(){
-		if(this.state.prevProps === this.state.data)
+	fetchCats = () => {
+	fetch(API + 'categories')
+		.then(res => res.json())
+		.then(res => this.setState({categories: res}))
 		this.manageData()
+	}
+	 
+	componentDidUpdate(){
+		if(this.props.updateNow)
+		this.fetchCats()
 	}
 
 	render() {

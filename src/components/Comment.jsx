@@ -61,13 +61,13 @@ export default class Comment extends Component {
 	};
 
 	displayComments = async () => {
-		const { post, comment, displayComments } = this.props;
+		const { post, comment } = this.props;
 
 		await fetch(`${API}comments/${post.id}/${comment.id}`,{
 			headers: {Authorization: `Bearer ${localStorage.getItem('user-token')}`}})
 			.then(res => res.json())
 			.then(comments => this.setState({ commentsComments: comments }));
-		await this.setState({ displayComments: !displayComments });
+		await this.setState({ displayComments: !this.state.displayComments });
 	};
 
 	render(){
@@ -76,7 +76,7 @@ export default class Comment extends Component {
 		return (
 		<div className='comment-card'>
 			<p>{comment.content}</p>
-			<button onClick={e => this.commentOnPost(e)}>Comment</button>
+			<button onClick={e => this.commentOnPost(e)}>Reply</button>
 			{this.state.commenting ? (
 				<NewComment
 					variableKey={'comment_id'}

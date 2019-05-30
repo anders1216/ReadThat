@@ -21,13 +21,17 @@ export default class Header extends Component {
         category: {
             category: null,
             description: null,
-            user_id: null
-        }
+        },
+        prevProps: null
     }
+
+        componentDidMount(){
+            this.setState({prevProps: this.props.categories})
+        }
 
 
     handleClick = (e) => {
-        this.setState({post: {...this.state.post, user_id: this.props.currentUser.user.id}, category: {...this.state.category, user_id: this.props.currentUser.user.id }})
+        this.setState({post: {...this.state.post, user_id: this.props.currentUser.user.id}, category: {...this.state.category}})
         this.setState({[e.target.name]: !this.state[e.target.name]})
     }
 
@@ -62,7 +66,7 @@ export default class Header extends Component {
             headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/json'},
             body: JSON.stringify({[loc]: this.state[loc]})
         }).then(this.setState({[stateHolder]: ![this.state.stateHolder] }))
-        this.props.handleSelect()
+        await this.props.handleSelect()
     }
 
     render () {
@@ -75,20 +79,19 @@ export default class Header extends Component {
                     handleChange={ handleChange }
                     selectedCategories={ selectedCategories }
                     token={token}
-                    categories={categories}
                 />
                 </span>
                 <span className="newPost">
                     {newPost ? <span><NewPost handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} categories={categories} handleWidget={this.handleWidget} handleImageUpload={this.handleImageUpload} handleClick={this.handleClick}/></span> : <button name="newPost" onClick={e => this.handleClick(e)}>Create New Post</button>}
                 </span>
                 <span className="newCategory">
-                    {newCategory ? <span><NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} /> <button name="newCategory" onClick={e => this.handleClick(e)}>Close</button> </span>: <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
+                    {newCategory ? <span><NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} handleClick={this.handleClick}/> </span>: <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
                 </span>
                 <span>
                     {howToFilterBool ? <button onClick={e => filterPosts(true)}> Posts Low -> High </button> : <button onClick={e => filterPosts()}> Posts High -> Low </button>}
                 </span>
                 <span>  
-                    <button onClick={e => logOut()}>Logout</button>
+                    <button className='logout' onClick={e => logOut()}>Logout</button>
                 </span>
             </div>
         )

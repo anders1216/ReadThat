@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import Select from 'react-select';
+import Selector from 'react-select';
 
 export default class NewUser extends Component {
 	render() {
 		return (
-			<div>
+			<div className='modal'>
+				<div className='modal-content'>
 				<form onSubmit={this.props.onSubmit}>
 					<input
 						name='username'
@@ -26,6 +27,7 @@ export default class NewUser extends Component {
 					/>
 					<button type='submit'>Submit</button>
 				</form>
+			</div>
 			</div>
 		);
 	}

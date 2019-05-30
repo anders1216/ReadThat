@@ -39,6 +39,11 @@ button{
   width: 98%;
 }
 
+.logout{
+  float: right;
+  background: transparent;
+}
+
 /*===================POST=================== */
 .posts-container{
   padding: 1%;
@@ -142,6 +147,7 @@ button{
   margin-top: 2%;
   padding: 1%;
   position: fixed;
+  z-index: 0;
   border-radius: 10px;
   right: 1%;
   background-color: grey;
@@ -192,11 +198,41 @@ button{
 .modal-content {
   background-color: #fefefe;
   margin: 10% 10%; /* 15% from the top and centered */
+  z-index: 1;
   padding: 10px;
   border: 1px solid #888;
-  width: 30%;
+  border-radius: 2%;
+  width: auto;
+  max-width: 55%;
   height: auto; /* Could be more or less, depending on screen size */
 }
+
+.modal-content-post {
+  background-color: #fefefe;
+  margin: 10% 10%; /* 15% from the top and centered */
+  padding: 10px;
+  border: 1px solid #888;
+  border-radius: 5px;
+  width: auto;
+  height: auto; /* Could be more or less, depending on screen size */
+}
+
+.modal-post-img {
+  max-width: auto;
+  max-height: auto;
+}
+
+.modal-post-img-container{
+  display: inline-block;
+  align-items: center;
+  border: 1px;
+  border-style: solid;
+  border-color: black;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  background-color: beige;
+  padding: .5%;
+}
+
 .modal-content button{
   margin:1%;
 }
@@ -208,7 +244,6 @@ button{
 .close {
   color: #aaa;
   float: right;
-  font-size: 28px;
   font-weight: bold;
 }
 
