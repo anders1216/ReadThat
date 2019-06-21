@@ -16,6 +16,7 @@ export default class Login extends Component {
 						onChange={e => this.props.handleChange(e)}
 						placeholder='username'
 					/>
+					<br/>
 					<input
 						name='password'
 						type='password'

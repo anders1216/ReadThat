@@ -5,7 +5,7 @@ export default class NewUser extends Component {
 	render() {
 		return (
 			<div className='modal'>
-				<div className='modal-content'>
+				<div className='new-user-modal-content'>
 				<form onSubmit={this.props.onSubmit}>
 					<input
 						name='username'
@@ -13,12 +13,14 @@ export default class NewUser extends Component {
 						onChange={e => this.props.handleChange(e)}
 						placeholder='desired username'
 					/>
+					<br/>
 					<input
 						name='password'
 						type='password'
 						onChange={e => this.props.handleChange(e)}
 						placeholder='desired password'
 					/>
+					<br/>
 					<input
 						name='passwordConfirmation'
 						type='password'

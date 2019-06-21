@@ -25,10 +25,6 @@ export default class Header extends Component {
         prevProps: null
     }
 
-        componentDidMount(){
-            this.setState({prevProps: this.props.categories})
-        }
-
 
     handleClick = (e) => {
         this.setState({post: {...this.state.post, user_id: this.props.currentUser.user.id}, category: {...this.state.category}})
@@ -79,6 +75,7 @@ export default class Header extends Component {
                     handleChange={ handleChange }
                     selectedCategories={ selectedCategories }
                     token={token}
+                    categories={categories}
                 />
                 </span>
                 <span className="newPost">

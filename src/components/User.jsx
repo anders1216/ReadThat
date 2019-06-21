@@ -7,7 +7,8 @@ export default class User extends Component {
         usersPosts: [],
         votesOnUsers: [],
         usersComments: [],
-        comments: []
+        comments: [],
+        prevState: []
     }
   
     fetchComments = () => {
@@ -16,8 +17,14 @@ export default class User extends Component {
             .then(res => this.usersComments(res))
     }
  
+    // async componentDidUpdate(){
+    //     if (this.state.prevState === this.props.votes)
+    //     this.usersVotes(this.props.votes)
+    // }
+
     async componentDidMount(){
         const { posts, votes } = this.props
+        await this.setState({prevState: this.props.votes})
         await this.fetchComments()
         await this.usersPosts(posts)
         await this.usersVotes(votes)
@@ -38,18 +45,22 @@ export default class User extends Component {
 
     render(){
         const { posts, votes, categories } = this.props
-        const { usersComments, usersPosts, usersVotes, comments } = this.state
+        // const { usersComments, usersPosts, usersVotes, comments } = this.state
         return(
-            <div className='user-card-container'> 
-                <h1>{this.props.currentUser.user.username}</h1>
-                    <p>Total Posts: {usersPosts.length}</p>
-                    <p>Total Votes: {usersVotes.length}</p>
-                    <p>Total Commentss: {usersComments.length}</p>
-                <h2> ReadThat General info </h2>
+            <div className='user-card-container'>
+                <div className='user-card-div'>
+                    <h1 className='user-heading'>{this.props.currentUser.user.username}</h1>
+                        <p>Total Posts: {this.state.usersPosts.length}</p>
+                        <p>Total Votes: {this.state.usersVotes.length}</p>
+                        <p>Total Commentss: {this.state.usersComments.length}</p>
+                </div>
+                <div className='general-info-card-div'>
+                <h2 className='general-info-heading'> ReadThat General info </h2>
                     <p>Total Posts: {posts.length}</p>
                     <p>Total Votes: {votes.length}</p>
-                    <p>Total Commentss: {comments.length}</p>
+                    <p>Total Commentss: {this.state.comments.length}</p>
                     <p>Total Categories: {categories.length}</p>
+                </div>
             </div>
         )
     }

@@ -14,14 +14,14 @@ export default class Feed extends Component {
 		isPoster: false,
 		isMod: false,
 		categories: [],
-		prevState: null,
 		postsFilter: [],
 		filterBool: false,
-		howToFilterBool: false
+		howToFilterBool: false,
+		updateBool:false,
+		rapidVoteCount: null,
 	};
 
 	async componentDidMount() {
-		this.setState({ prevState: {posts: this.state.posts, categories: this.state.categories, votes: this.state.votes}});
 		await fetch(API + 'categories', {
 			headers: { Authorization: `Bearer ${this.props.token}` }
 		})
@@ -30,15 +30,15 @@ export default class Feed extends Component {
 		await fetch(API + 'votes')
 			.then(res => res.json())
 			.then(votes => this.setState({ votes: votes }));
-		await this.setState({ prevState: {posts: this.state.posts, categories: this.state.categories, votes: this.state.votes}});
 		await this.handleSelect();
 	}
 
-	// componentDidUpdate(){
-	// 	const { prevState, votes, posts, categories } = this.state
-	// 	if (prevState.votes === votes || prevState.posts === posts || prevState.categories === categories){
-			
-	// 	}
+	// async componentDidUpdate(){
+	// 		if (this.state.filterBool){
+	// 		await fetch(API + 'votes')
+	// 		.then(res => res.json())
+	// 		.then(votes => this.setState({ votes: votes, filterBool:false }));
+	// 		}
 	// }
 
 	handleChange = async newSelection => {
@@ -63,17 +63,18 @@ export default class Feed extends Component {
 					headers: { Authorization: `Bearer ${token}` }
 				})
 					.then(res => res.json())
-					.then(res => this.setState({ selectedPosts: [...this.state.selectedPosts, res].flat(), filterBool: true }))
+					.then(res => this.setState({ selectedPosts: [...this.state.selectedPosts, res].flat()}))
 			});
 		}
 	};
 
-	voteOnPost = (postID, e) => {
-		const { currentUser, token} = this.props;
-		const { votes } = this.state;
-		e.target.name === 'up'
+	voteOnPost = async (postID, e) => {
+		console.log('voteOnPost')
+		const { currentUser } = this.props;
+		let placeHolder;
+		e === 'up'
 			? 
-		 fetch(API + 'votes', {
+			await fetch(API + 'votes', {
 					method: 'POST',
 					headers: {
 						Authorization: `Bearer ${localStorage.getItem('user-token')}`,
@@ -84,22 +85,36 @@ export default class Feed extends Component {
 			  })
 					.then(res => res.json())
 					.then(vote => {
-						vote.message ? this.setState({ votes: vote.votes}) : this.setState({ votes: [...votes, vote] });
+						vote.message ? 
+						placeHolder = vote.votes
+						: 
+						placeHolder = vote;
 					})
-			: fetch(API + 'votes/delete', {
+			: 
+			await fetch(API + 'votes/delete', {
 					method: 'POST',
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${localStorage.getItem('user-token')}`,
 						'Content-Type': 'application/json',
 						Accept: 'application/json'
 					},
 					body: JSON.stringify({ vote: { post_id: postID, user_id: currentUser.user.id, is_down_vote: true } })
 			  })
 					.then(res => res.json())
-					.then(vote => vote.messages ? this.setState({ votes: vote.votes}) : this.setState({ votes: [...votes, vote]}));
+					.then( vote =>
+						{
+						vote.message ? 
+						placeHolder = vote.votes
+						:
+						placeHolder = vote
+					}
+					)
+				await this.setState({ votes: placeHolder, updateBool:true})
 	};
 
 	postsFilter = async (postId, voteCount) => {
+		console.log("postsFilter")
+		let placeHolder = [];
 		const { postsFilter, posts } = this.state
 		if (postsFilter.length !== posts.length) {
 		let placeHolder = this.state.postsFilter
@@ -117,7 +132,23 @@ export default class Feed extends Component {
 			return comparison;
 		  })
 		this.setState({postsFilter: placeHolder})
+		} else if (this.state.updateBool){
+			await placeHolder.push([postId, voteCount])
+		placeHolder.sort((a, b) => {
+			const post1 = a[1]
+			const post2 = b[1]
+
+			let comparison = 0;
+			if (post1 > post2) {
+			  comparison = -1
+			} else if (post1 < post2) {
+			  comparison = 1
+			}
+			return comparison;
+		  })
+		//   this.setState({filterBool: true})
 		}
+		this.setState({postsFilter: placeHolder, updateBool:false})
 	}
 
 	filterPosts = async () => {
@@ -159,13 +190,14 @@ export default class Feed extends Component {
 		await this.setState({posts: filteredPosts, filterBool: true, howToFilterBool: !howToFilterBool})}
 	}
 
+
 	resetFilterBool = async () => {
-		console.log('here')
+		console.log("resetFilterBool")
 		await this.setState({filterBool: false})
 	}
 
 	render() {
-		const { selectedCategories, selectedPosts, votes, howToFilterBool, posts, categories, renderModalBool } = this.state;
+		const { selectedCategories, selectedPosts, votes, howToFilterBool, posts, categories } = this.state;
 		const { token, currentUser, logOut } = this.props;
 		if (this.state.posts.length > 0) {
 			return (
@@ -194,6 +226,8 @@ export default class Feed extends Component {
 										voteOnPost={this.voteOnPost}
 										postsFilter={this.postsFilter}
 										filterBool={this.state.filterBool}
+										updateBool={this.state.updateBool}
+										resetFilterBool={this.resetFilterBool}
 									/>
 								);
 						  })
@@ -207,6 +241,7 @@ export default class Feed extends Component {
 										voteOnPost={this.voteOnPost}
 										postsFilter={this.postsFilter}
 										filterBool={this.state.filterBool}
+										updateBool={this.state.updateBool}
 										resetFilterBool={this.resetFilterBool}
 									/>
 								);
@@ -228,7 +263,7 @@ export default class Feed extends Component {
 						logOut={logOut}
 					/> 
 					<br/>
-					<h1>Loading Posts...</h1>
+					<h1 className="lodaing">Loading Posts...</h1>
 					
 				</div>
 			);

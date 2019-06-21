@@ -13,14 +13,14 @@ export default class MainPage extends Component {
 		password: '',
 		passwordConfirmation: '',
 		username: '',
-		token: '',
+		token: null,
 		isLoggedIn: false,
 		isNewUser: false,
 		currentUser: null
 	};
 
 	componentDidMount(){
-		if(localStorage.getItem('user-token')) {
+		if(localStorage.getItem('user-token') !== "undefined" && localStorage.getItem('user-token') !== null) {
 			fetch(`${API}users/current_user`, {
 				headers: {'Authorization': `Bearer ${localStorage.getItem('user-token')}`, 'Content-Type': 'application/json', Accept: 'application/json'}
 			})
@@ -69,16 +69,19 @@ export default class MainPage extends Component {
 			.then(res => localStorage.setItem('user-token', this.state.token));
 	};
 
-	onLoginSubmit = e => {
+	onLoginSubmit = async (e) => {
 		const { username, password } = this.state;
 		e.preventDefault();
-		fetch(API + 'login', {
+		await fetch(API + 'login', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
 			body: JSON.stringify({ user: { username: username, password: password } })
 		})
 			.then(res => res.json())
-			.then(res =>
+			.then(res => {
+				res.errors ? 
+				alert(res.errors)
+				:
 				this.setState({
 					currentUser: res,
 					isLoggedIn: true,
@@ -86,8 +89,12 @@ export default class MainPage extends Component {
 					password: '',
 					passwordConfirmation: ''
 				})
+			}
 			)
-			.then(res => localStorage.setItem('user-token', this.state.token));
+			if(this.state.token !== null){
+				debugger
+				localStorage.setItem('user-token', this.state.token);
+			}
 	};
 	//
 
@@ -113,10 +120,18 @@ export default class MainPage extends Component {
 					/>
 				);
 			}
-		} else {
+		} else if (isLoggedIn){
 			history.push('/feed');
 			Component = <Feed currentUser={currentUser} token={token} logOut={this.logOut} />;
-		}
+		} else {
+			history.push('/login');
+				Component = (
+					<Login
+						handleChange={this.handleChange}
+						onClick={this.newUserClickHandler}
+						onSubmit={this.onLoginSubmit}
+					/>
+				)}
 		return Component;
 	};
 

@@ -3,7 +3,7 @@ import React from 'react';
 const NewPost = (props) => {
 		const { handleChange, handleClick, handleWidget, handleImageUpload, onSubmit, categories } = props
 
-		const widget = window.cloudinary.createUploadWidget({ cloud_name: 'readthat', upload_preset: 'mipbqbmk', sources: ["local", "url", 'camera', 'facebook'], singleUploadAutoClose: false, inlineContainer: 'DOM Element'}, 
+		const widget = window.cloudinary.createUploadWidget({ cloud_name: 'readthat', upload_preset: 'mipbqbmk', sources: ["local", "url", "camera"], singleUploadAutoClose: false, inlineContainer: 'DOM Element'}, 
 		function(errors, image) {handleImageUpload(errors, image)})
 		
 
@@ -34,7 +34,7 @@ const NewPost = (props) => {
 					<p>Or Upload an Image:</p>
 					<button className="upload-img-btn" onClick={e => handleWidget(e, widget)}>Upload Image</button>
 					<br/>
-					<select name="category" defaultValue="All" onClick={ e => handleChange(e, 'post')}> 
+					<select name="category" defaultValue="All" onChange={ e => handleChange(e, 'post')}> 
 						{categories.map(category => {
 							return <option value={category.category}>{category.category}</option>
 						})}

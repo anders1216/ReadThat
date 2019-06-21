@@ -26,6 +26,9 @@ class Post extends Component {
 		if (this.props.filterBool){
 		 await this.updatePostsVotes()
 		}
+		else if(this.props.updateBool){
+		await this.votesThings
+		}
 	}
 
 	updatePostsVotes = async () => {
@@ -33,9 +36,9 @@ class Post extends Component {
 		let upVotes = await postsVotesVar.filter(vote => vote.is_down_vote === false);
 		let downVotes =  await postsVotesVar.filter(vote => vote.is_down_vote === true);
 		let calculatedVoteCount =  await upVotes.length - downVotes.length;
-	 	await this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
+		this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
 		if ( upVotes.some(
-				vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === false
+			vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === false
 			)
 		){ 
 			await this.setState({ hasUpVoted: true });
@@ -45,7 +48,7 @@ class Post extends Component {
 		){ 
 			await this.setState({ hasDownVoted: true });
 		}
-		this.props.resetFilterBool()
+		await this.props.resetFilterBool()
 	}
 
 	votesThings = async () => {
@@ -56,7 +59,7 @@ class Post extends Component {
 		let downVotes = await postsVotesVar.filter(vote => vote.is_down_vote === true);
 		let calculatedVoteCount = await upVotes.length - downVotes.length;
 		await this.props.postsFilter(post.id, calculatedVoteCount)
-		await this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
+		this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
 		if ( upVotes.some(
 				vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === false
 			)
@@ -120,35 +123,31 @@ class Post extends Component {
 		} 
 	};
 
-	rapidVoteIncrement = e => {
-		console.log('rapidVoteIncrement')
+	rapidVoteIncrement = async (e) => {
 		const { voteOnPost, post } = this.props;
-		
+		voteOnPost(post.id, e.target.name)
 		if (e.target.name === 'up' && !this.state.hasDownVoted && !this.state.hasUpVoted ) {
-			this.setState({ voteCount: this.state.voteCount + 1, hasUpVoted: true });
+			await this.setState({ voteCount: this.state.voteCount + 1, hasUpVoted: true });
 			console.log('up1')
 		} else if (e.target.name === 'up' && this.state.hasDownVoted && !this.state.hasUpVoted) {
-			this.setState({ voteCount: this.state.voteCount + 2, hasDownVoted: false, hasUpVoted: true });
+			await this.setState({ voteCount: this.state.voteCount + 2, hasDownVoted: false, hasUpVoted: true });
 			console.log('up2')
 		} else if (e.target.name === 'up' && !this.state.hasDownVoted && this.state.hasUpVoted) {
-			this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: false, hasUpVoted: false });
+			await this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: false, hasUpVoted: false });
 			console.log('up3')
 		} else if (e.target.name === 'down' && !this.state.hasDownVoted && !this.state.hasUpVoted) {
-			this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: true });
+			await this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: true });
 			console.log('down1')
 		} else if (e.target.name === 'down'&& !this.state.hasDownVoted  && this.state.hasUpVoted ) {
-			this.setState({ voteCount: this.state.voteCount - 2, hasUpVoted: false, hasDownVoted: true });
+			await this.setState({ voteCount: this.state.voteCount - 2, hasUpVoted: false, hasDownVoted: true });
 			console.log('down2')
 		} else if (e.target.name === 'down' && this.state.hasDownVoted && !this.state.hasUpVoted) {
-			this.setState({ voteCount: this.state.voteCount + 1, hasDownVoted: false, hasUpVoted: false });
+			await this.setState({ voteCount: this.state.voteCount + 1, hasDownVoted: false, hasUpVoted: false });
 			console.log('down3')
 		}
-		voteOnPost(post.id, e)
-		;
 	};
 
 	renderModal = () => {
-		console.log(this.state.renderModalBool)
 		this.setState({renderModalBool: !this.state.renderModalBool})
 	}
 

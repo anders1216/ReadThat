@@ -24,8 +24,16 @@ textarea{
   max-width: relative;
 }
 
+
 button{
+  background-color: rgb(245, 120, 89, 0.5);
+  box-shadow: 0 4px 8px 0 rgba(230, 126, 174, 0.5);
   margin: 3px;
+}
+
+button:hover{
+  border-radius: 10%;
+  box-shadow: 0 8px 16px 0;
 }
 
 .header{
@@ -115,8 +123,9 @@ button{
   margin: auto;
   margin-top: 5%;
   text-align: center;
-  background-color: lightcoral;
+  background-color: rgb(194, 95, 2);
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  border-radius: 5%;
   height: 40%;
   width: 20%;
 }
@@ -126,9 +135,10 @@ button{
   border: 2px;
   background-color: lightgoldenrodyellow;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  border-radius: 5%;
   padding: 3px;
-  max-width: 300px;
-  max-height: 300px;
+  max-width: auto;
+  max-height: auto;
 }
 
 .login-img{
@@ -141,6 +151,8 @@ button{
 /* =======================USER===================== */
 
 .user-card-container{
+  display: flex;
+  align-content: block;
   width: 30%;
   max-width: 30%;
   height: 90%;
@@ -151,6 +163,26 @@ button{
   border-radius: 10px;
   right: 1%;
   background-color: grey;
+}
+
+.user-card-div{
+  width: 50%;
+  max-width: 50%;
+  height: 90%;
+  padding: 1%;
+  margin: 0 1% 0 0;
+  border-radius: 10px;
+  background-color: rgb(243, 157, 77);
+}
+
+.general-info-card-div{
+  width: 50%;
+  max-width: 50%;
+  height: 90%;
+  margin: 0 1% 0 0;
+  padding: 1%;
+  border-radius: 10px;
+  background-color: rgb(243, 157, 77);
 }
 
 /* ===================COMMENTS==================== */
@@ -231,6 +263,16 @@ button{
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   background-color: beige;
   padding: .5%;
+}
+
+.new-user-modal-content{
+  background-color: #fefefe;
+  margin: 10% 10%; /* 15% from the top and centered */
+  padding: 10px;
+  border: 1px solid #888;
+  border-radius: 5px;
+  width: 30%;
+  height: auto; /* Could be more or less, depending on screen size */
 }
 
 .modal-content button{
