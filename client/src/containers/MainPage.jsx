@@ -22,7 +22,10 @@ export default class MainPage extends Component {
 	componentDidMount(){
 		if(localStorage.getItem('user-token') !== "undefined" && localStorage.getItem('user-token') !== null) {
 			fetch(`${API}users/current_user`, {
-				headers: {'Authorization': `Bearer ${localStorage.getItem('user-token')}`, 'Content-Type': 'application/json', Accept: 'application/json'}
+				headers: {
+				'Authorization': `Bearer ${localStorage.getItem('user-token')}`,
+				'Content-Type': 'application/json',
+				Accept: 'application/json'}
 			})
 			.then(res => res.json())
 			.then(res => this.setState({currentUser: res, isLoggedIn: true, token: res.token}))
@@ -92,7 +95,6 @@ export default class MainPage extends Component {
 			}
 			)
 			if(this.state.token !== null){
-				debugger
 				localStorage.setItem('user-token', this.state.token);
 			}
 	};

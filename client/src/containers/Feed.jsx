@@ -3,69 +3,60 @@ import User from '../components/User';
 import { API } from './MainPage';
 import Post from '../components/Post';
 import Header from './Header';
+import { selectCategories, fetchCategories} from '../actions/categoryActions'
+import { fetchPosts } from '../actions/postActions'
+import { connect } from 'react-redux'
 
-export default class Feed extends Component {
+class Feed extends Component {
 	state = {
 		votes: [],
 		downVoteCount: 0,
-		posts: [],
-		selectedPosts: [],
-		selectedCategories: null,
-		isPoster: false,
-		isMod: false,
-		categories: [],
+		// posts: [],
+		// selectedPosts: [],
+		// selectedCategories: null,
+		// isPoster: false,
+		// isMod: false,
+		// categories: [],
 		postsFilter: [],
 		filterBool: false,
 		howToFilterBool: false,
 		updateBool:false,
-		rapidVoteCount: null,
+		rapidVoteCount: null
 	};
 
 	async componentDidMount() {
-		await fetch(API + 'categories', {
-			headers: { Authorization: `Bearer ${this.props.token}` }
-		})
-			.then(res => res.json())
-			.then(res => this.setState({ categories: res }));
+		await this.props.fetchCategories()
 		await fetch(API + 'votes')
 			.then(res => res.json())
 			.then(votes => this.setState({ votes: votes }));
-		await this.handleSelect();
+		await this.props.fetchPosts();
 	}
 
-	// async componentDidUpdate(){
-	// 		if (this.state.filterBool){
-	// 		await fetch(API + 'votes')
-	// 		.then(res => res.json())
-	// 		.then(votes => this.setState({ votes: votes, filterBool:false }));
-	// 		}
-	// }
-
 	handleChange = async newSelection => {
-		await this.setState({ selectedCategories: newSelection });
-		await this.handleSelect();
+		await this.props.selectCategories(newSelection);
+		await this.props.fetchPosts();
 	};
 
 	handleSelect = async () => {
-		console.log('handleSelect')
-		const { selectedCategories, posts } = this.state;
-		const { token } = this.props;
-		if (!selectedCategories && posts) {
-			fetch(API + 'posts', {
-				headers: { Authorization: `Bearer ${token}` }
-			})
-				.then(res => res.json())
-				.then(res => this.setState({ posts: res }));
-		} else {
-			await this.setState({ selectedPosts: [] }); 
-			selectedCategories.forEach(category => {
-				fetch(API + 'categories/' + `${category.value}`, {
-					headers: { Authorization: `Bearer ${token}` }
-				})
-					.then(res => res.json())
-					.then(res => this.setState({ selectedPosts: [...this.state.selectedPosts, res].flat()}))
-			});
-		}
+		await this.props.fetchPosts()
+		// const { selectedCategories, posts } = this.state;
+		// const { token } = this.props;
+		// if (!selectedCategories && posts) {
+		// 	fetch(API + 'posts', {
+		// 		headers: { Authorization: `Bearer ${token}` }
+		// 	})
+		// 		.then(res => res.json())
+		// 		.then(res => this.setState({ posts: res }));
+		// } else {
+		// 	await this.setState({ selectedPosts: [] }); 
+		// 	selectedCategories.forEach(category => {
+		// 		fetch(API + 'categories/' + `${category.value}`, {
+		// 			headers: { Authorization: `Bearer ${token}` }
+		// 		})
+		// 			.then(res => res.json())
+		// 			.then(res => this.setState({ selectedPosts: [...this.state.selectedPosts, res].flat()}))
+		// 	});
+		// }
 	};
 
 	voteOnPost = async (postID, e) => {
@@ -115,7 +106,8 @@ export default class Feed extends Component {
 	postsFilter = async (postId, voteCount) => {
 		console.log("postsFilter")
 		let placeHolder = [];
-		const { postsFilter, posts } = this.state
+		const { postsFilter } = this.state
+		const { posts } = this.props
 		if (postsFilter.length !== posts.length) {
 		let placeHolder = this.state.postsFilter
 		await placeHolder.push([postId, voteCount])
@@ -152,7 +144,8 @@ export default class Feed extends Component {
 	}
 
 	filterPosts = async () => {
-		const { postsFilter, howToFilterBool, selectedPosts, posts  } = this.state
+		const { postsFilter, howToFilterBool  } = this.state
+		const { selectedPosts, posts } = this.props
 		let postsFiltered = await howToFilterBool ? postsFilter.sort((a, b) => {
 			const post1 = a[1]
 			const post2 = b[1]
@@ -197,13 +190,14 @@ export default class Feed extends Component {
 	}
 
 	render() {
-		const { selectedCategories, selectedPosts, votes, howToFilterBool, posts, categories } = this.state;
-		const { token, currentUser, logOut } = this.props;
-		if (this.state.posts.length > 0) {
+		const { votes, howToFilterBool } = this.state;
+		const { token, currentUser, logOut, selectedCategories, selectedPosts, categories, posts } = this.props;
+		if (this.props.posts.length > 0) {
+
 			return (
 				<div>
 					<Header
-						categories={this.state.categories}
+						categories={categories}
 						selectedCategories={selectedCategories}
 						handleChange={this.handleChange}
 						token={token}
@@ -216,7 +210,7 @@ export default class Feed extends Component {
 					<User currentUser={currentUser} posts={posts} votes={votes} categories={categories}/>
 					<div className='posts-container'>
 					{selectedPosts.length > 0
-						? this.state.selectedPosts.map((post, i) => {
+						? selectedPosts.map((post, i) => {
 								return (
 									<Post
 										key={i}
@@ -231,7 +225,8 @@ export default class Feed extends Component {
 									/>
 								);
 						  })
-						: this.state.posts.map((post, i) => {
+						:
+						posts.map((post, i) => {
 								return (
 									<Post
 										key={i}
@@ -255,7 +250,7 @@ export default class Feed extends Component {
 					<Header
 						handleSelect={this.handleSelect}
 						updatePosts={this.updatePosts}
-						categories={this.state.categories}
+						categories={categories}
 						selectedCategories={selectedCategories}
 						handleChange={this.handleChange}
 						token={token}
@@ -270,3 +265,12 @@ export default class Feed extends Component {
 		}
 	}
 }
+
+const mapStateToProps = state => ({
+	posts: state.posts.posts,
+	selectedPosts : state.posts.selectedPosts,
+	categories: state.categories.categories,
+	selectedCategories: state.categories.selectCategories
+})
+
+export default connect(mapStateToProps, { fetchCategories, fetchPosts, selectCategories })(Feed)

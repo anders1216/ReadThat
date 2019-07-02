@@ -7,7 +7,7 @@
         token = encode_token({ user_id: @user.id })
         render json: { user: @user, token: token }
         else
-        render json: { message: 'Invalid username or password' }
+        render json: { errors: 'Invalid username or password' }
         end
     end
     

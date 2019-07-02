@@ -2,9 +2,12 @@ import React, {Component} from 'react';
 import CategorySelector from '../components/CategorySelector';
 import NewPost from '../components/forms/NewPost';
 import NewCategory from '../components/forms/NewCategory';
-import { API } from './MainPage';
+import { connect } from 'react-redux';
+import { createPost } from '../actions/postActions'
+import { createCategory }from '../actions/categoryActions'
 
-export default class Header extends Component {
+
+class Header extends Component {
 
     state = {
         newPost: false,
@@ -54,14 +57,15 @@ export default class Header extends Component {
     
     handleSubmit = async (e, loc) => {
         e.preventDefault();
-        const { token } = this.props
         let stateHolder;
-        loc === "post" ? stateHolder = 'newPost' : stateHolder = 'newCategory'
-        await fetch(API + `${e.target.name}`, {
-            method: 'POST',
-            headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/json'},
-            body: JSON.stringify({[loc]: this.state[loc]})
-        }).then(this.setState({[stateHolder]: ![this.state.stateHolder] }))
+        if (loc === "post"){ 
+            stateHolder = 'newPost'
+            await this.props.createPost(this.state.post)
+        } else {
+            stateHolder = 'newCategory'
+            await this.props.createCategory(this.state.category)
+        }
+        this.setState({[stateHolder]: ![this.state.stateHolder] })
         await this.props.handleSelect()
     }
 
@@ -94,3 +98,5 @@ export default class Header extends Component {
         )
     }
 }
+
+export default connect(null, { createPost, createCategory })(Header)
