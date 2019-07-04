@@ -1,8 +1,7 @@
-import { FETCH_VOTES, NEW_VOTE } from '../actions/types'
+import { FETCH_VOTES } from '../actions/types'
 
 const initialState = {
-    votes: [],
-    newVote: {}
+    votes: []
 }
 
 export default function(state = initialState, action) {

@@ -5,6 +5,7 @@ import NewCategory from '../components/forms/NewCategory';
 import { connect } from 'react-redux';
 import { createPost } from '../actions/postActions'
 import { createCategory }from '../actions/categoryActions'
+import { userLogout } from '../actions/userActions'
 
 
 class Header extends Component {
@@ -70,7 +71,7 @@ class Header extends Component {
     }
 
     render () {
-        const { token, currentUser, selectedCategories, handleChange, categories, howToFilterBool, filterPosts, logOut } = this.props
+        const { token, currentUser, selectedCategories, handleChange, categories, howToFilterBool, filterPosts, userLogout } = this.props
         const { newPost, newCategory } = this.state
         return (
             <div className="header">
@@ -92,11 +93,18 @@ class Header extends Component {
                     {howToFilterBool ? <button onClick={e => filterPosts(true)}> Posts Low -> High </button> : <button onClick={e => filterPosts()}> Posts High -> Low </button>}
                 </span>
                 <span>  
-                    <button className='logout' onClick={e => logOut()}>Logout</button>
+                    <button className='logout' onClick={e => userLogout()}>Logout</button>
                 </span>
             </div>
         )
     }
 }
 
-export default connect(null, { createPost, createCategory })(Header)
+const mapStateToProps = state => ({
+    categories: state.categories.categories,
+    selectedCategories: state.categories.selectedCategories,
+    token: state.user.token,
+    currentUser: state.user.currentUser
+})
+
+export default connect(mapStateToProps, { createPost, createCategory, userLogout })(Header)

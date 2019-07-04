@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import defaultImage from '../images/logo.png';
 import { API } from '../containers/MainPage';
+import { connect } from 'react-redux'
 import NewComment from './forms/NewComment';
 import Comment from './Comment';
+import { newComment, fetchComments } from '../actions/commentActions'
 
 class Post extends Component {
 	state = {
@@ -22,7 +24,7 @@ class Post extends Component {
 		await this.votesThings()
 	}
 
-	 async componentDidUpdate() {
+	async componentDidUpdate() {
 		if (this.props.filterBool){
 		 await this.updatePostsVotes()
 		}
@@ -52,7 +54,6 @@ class Post extends Component {
 	}
 
 	votesThings = async () => {
-		console.log('votesthings')
 		const { votes, post, currentUser } = this.props;
 		let postsVotesVar = await votes.filter(vote => vote.post_id === post.id);
 		let upVotes = await postsVotesVar.filter(vote => vote.is_down_vote === false);
@@ -113,7 +114,6 @@ class Post extends Component {
 
 	displayComments = async () => {
 		const { post } = this.props;
-
 		await fetch(API + 'comments/' + `${post.id}`)
 			.then(res => res.json())
 			.then(comments => this.setState({ comments: comments }));
@@ -279,7 +279,13 @@ class Post extends Component {
 		);
 	}
 }
-export default Post;
+
+const mapStateToProps = state => ({
+	currentUser: state.user.currentUser,
+	votes: state.votes.votes
+})
+
+export default connect(mapStateToProps)(Post);
 
 // =============================================================================================================
 // voteOnPost = () => {

@@ -17,4 +17,9 @@ const store = createStore(
     )
   )
 
+  store.subscribe(() => {
+    const token = store.getState().user.token
+    localStorage.setItem('user-token', token)
+  });
+
 export default store;

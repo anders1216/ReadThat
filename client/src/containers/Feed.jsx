@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import User from '../components/User';
-import { API } from './MainPage';
+// import { API } from './MainPage';
 import Post from '../components/Post';
 import Header from './Header';
 import { selectCategories, fetchCategories} from '../actions/categoryActions'
+import { fetchVotes, createVote } from '../actions/voteActions'
 import { fetchPosts } from '../actions/postActions'
 import { connect } from 'react-redux'
 
 class Feed extends Component {
 	state = {
-		votes: [],
+		// votes: [],
 		downVoteCount: 0,
 		// posts: [],
 		// selectedPosts: [],
@@ -26,9 +27,7 @@ class Feed extends Component {
 
 	async componentDidMount() {
 		await this.props.fetchCategories()
-		await fetch(API + 'votes')
-			.then(res => res.json())
-			.then(votes => this.setState({ votes: votes }));
+		await this.props.fetchVotes()
 		await this.props.fetchPosts();
 	}
 
@@ -60,47 +59,48 @@ class Feed extends Component {
 	};
 
 	voteOnPost = async (postID, e) => {
-		console.log('voteOnPost')
-		const { currentUser } = this.props;
-		let placeHolder;
-		e === 'up'
-			? 
-			await fetch(API + 'votes', {
-					method: 'POST',
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem('user-token')}`,
-						'Content-Type': 'application/json',	
-						Accept: 'application/json'
-					},
-					body: JSON.stringify({ vote: { post_id: postID, user_id: currentUser.user.id, is_down_vote: false } })
-			  })
-					.then(res => res.json())
-					.then(vote => {
-						vote.message ? 
-						placeHolder = vote.votes
-						: 
-						placeHolder = vote;
-					})
-			: 
-			await fetch(API + 'votes/delete', {
-					method: 'POST',
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem('user-token')}`,
-						'Content-Type': 'application/json',
-						Accept: 'application/json'
-					},
-					body: JSON.stringify({ vote: { post_id: postID, user_id: currentUser.user.id, is_down_vote: true } })
-			  })
-					.then(res => res.json())
-					.then( vote =>
-						{
-						vote.message ? 
-						placeHolder = vote.votes
-						:
-						placeHolder = vote
-					}
-					)
-				await this.setState({ votes: placeHolder, updateBool:true})
+		this.props.createVote(postID, e)
+		await this.setState({ updateBool:true })
+		// console.log('voteOnPost')
+		// const { currentUser } = this.props;
+		// let placeHolder;
+		// e === 'up'
+		// 	? 
+		// 	await fetch(API + 'votes', {
+		// 			method: 'POST',
+		// 			headers: {
+		// 				Authorization: `Bearer ${localStorage.getItem('user-token')}`,
+		// 				'Content-Type': 'application/json',	
+		// 				Accept: 'application/json'
+		// 			},
+		// 			body: JSON.stringify({ vote: { post_id: postID, user_id: currentUser.user.id, is_down_vote: false } })
+		// 	  })
+		// 			.then(res => res.json())
+		// 			.then(vote => {
+		// 				vote.message ? 
+		// 				placeHolder = vote.votes
+		// 				: 
+		// 				placeHolder = vote;
+		// 			})
+		// 	: 
+		// 	await fetch(API + 'votes/delete', {
+		// 			method: 'POST',
+		// 			headers: {
+		// 				Authorization: `Bearer ${localStorage.getItem('user-token')}`,
+		// 				'Content-Type': 'application/json',
+		// 				Accept: 'application/json'
+		// 			},
+		// 			body: JSON.stringify({ vote: { post_id: postID, user_id: currentUser.user.id, is_down_vote: true } })
+		// 	  })
+		// 			.then(res => res.json())
+		// 			.then( vote =>
+		// 				{
+		// 				vote.message ? 
+		// 				placeHolder = vote.votes
+		// 				:
+		// 				placeHolder = vote
+		// 			}
+		// 			)
 	};
 
 	postsFilter = async (postId, voteCount) => {
@@ -190,49 +190,54 @@ class Feed extends Component {
 	}
 
 	render() {
-		const { votes, howToFilterBool } = this.state;
-		const { token, currentUser, logOut, selectedCategories, selectedPosts, categories, posts } = this.props;
+		const { howToFilterBool } = this.state;
+		const { currentUser, selectedPosts, categories, posts, votes } = this.props;
 		if (this.props.posts.length > 0) {
 
 			return (
 				<div>
 					<Header
-						categories={categories}
-						selectedCategories={selectedCategories}
+						// categories={categories}
+						// selectedCategories={selectedCategories}
 						handleChange={this.handleChange}
-						token={token}
-						currentUser={currentUser}
+						// token={token}
+						// currentUser={currentUser}
 						handleSelect={this.handleSelect}
 						filterPosts={this.filterPosts}
 						howToFilterBool={howToFilterBool}
-						logOut={logOut}
+						// logOut={logOut}
 					/>
-					<User currentUser={currentUser} posts={posts} votes={votes} categories={categories}/>
+					<User 
+						currentUser={currentUser} 
+						posts={posts} 
+						votes={votes} 
+						categories={categories}
+					/>
 					<div className='posts-container'>
 					{selectedPosts.length > 0
 						? selectedPosts.map((post, i) => {
-								return (
-									<Post
-										key={i}
-										post={post}
-										votes={votes}
-										currentUser={currentUser}
-										voteOnPost={this.voteOnPost}
-										postsFilter={this.postsFilter}
-										filterBool={this.state.filterBool}
-										updateBool={this.state.updateBool}
-										resetFilterBool={this.resetFilterBool}
-									/>
-								);
-						  })
-						:
+							return (
+								<Post
+									key={i}
+									post={post}
+									votes={votes}
+									currentUser={currentUser}
+									voteOnPost={this.voteOnPost}
+									postsFilter={this.postsFilter}
+									filterBool={this.state.filterBool}
+									updateBool={this.state.updateBool}
+									resetFilterBool={this.resetFilterBool}
+								/>
+							);
+						})
+					:
 						posts.map((post, i) => {
 								return (
 									<Post
 										key={i}
 										post={post}
-										votes={votes}
-										currentUser={currentUser}
+										// votes={votes}
+										// currentUser={currentUser}
 										voteOnPost={this.voteOnPost}
 										postsFilter={this.postsFilter}
 										filterBool={this.state.filterBool}
@@ -250,12 +255,12 @@ class Feed extends Component {
 					<Header
 						handleSelect={this.handleSelect}
 						updatePosts={this.updatePosts}
-						categories={categories}
-						selectedCategories={selectedCategories}
+						// categories={categories}
+						// selectedCategories={selectedCategories}
 						handleChange={this.handleChange}
-						token={token}
-						currentUser={currentUser}
-						logOut={logOut}
+						// token={token}
+						// currentUser={currentUser}
+						// logOut={logOut}
 					/> 
 					<br/>
 					<h1 className="lodaing">Loading Posts...</h1>
@@ -269,8 +274,9 @@ class Feed extends Component {
 const mapStateToProps = state => ({
 	posts: state.posts.posts,
 	selectedPosts : state.posts.selectedPosts,
-	categories: state.categories.categories,
-	selectedCategories: state.categories.selectCategories
+	// categories: state.categories.categories,
+	// selectedCategories: state.categories.selectCategories,
+	// votes: state.votes.votes
 })
 
-export default connect(mapStateToProps, { fetchCategories, fetchPosts, selectCategories })(Feed)
+export default connect(mapStateToProps, { fetchCategories, fetchPosts, selectCategories, fetchVotes, createVote })(Feed)
