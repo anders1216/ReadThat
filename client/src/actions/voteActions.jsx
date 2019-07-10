@@ -1,4 +1,4 @@
-import { FETCH_VOTES } from './types'
+import { FETCH_VOTES, NEW_VOTE } from './types'
 import { API } from '../containers/MainPage'
 
     export const fetchVotes = () => dispatch => {
@@ -64,7 +64,7 @@ import { API } from '../containers/MainPage'
 					}
 					)
 				await dispatch({
-					type: FETCH_VOTES,
+					type: NEW_VOTE,
 					payload: {
 						votes: placeHolder,
 						updateBool:true

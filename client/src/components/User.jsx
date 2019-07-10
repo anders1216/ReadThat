@@ -20,14 +20,20 @@ class User extends Component {
 
     async componentDidMount(){
         const { posts, votes } = this.props
+        this.setState({prevState: {votes: votes}})
         await this.fetchComments()
         await this.usersPosts(posts)
         await this.usersVotes(votes)
-
     }
 
+    // componentDidUpdate(){
+    //     if (this.props.votes === this.state.prevState.votes ){
+    //         this.forceUpdate()
+    //     }
+    // }
+
     usersVotes = (votes) => {
-        const usersVotes = votes.filter(vote => vote.user_id === this.props.currentUser.user.id)
+        let usersVotes = votes.filter(vote => vote.user_id === this.props.currentUser.user.id)
         this.setState({usersVotes: usersVotes })
     }
 
@@ -43,7 +49,10 @@ class User extends Component {
 
     render(){
         const { posts, votes, categories, currentUser } = this.props
-        const { usersComments, usersPosts, usersVotes, comments } = this.state
+        const { comments } = this.state
+        const usersPosts = posts.filter(post => post.user_id === this.props.currentUser.user.id)
+        const usersVotes = votes.filter(vote => vote.user_id === this.props.currentUser.user.id)
+        const usersComments = comments.filter(comment => comment.user_id === this.props.currentUser.user.id)
         return(
             <div className='user-card-container'>
                 <div className='user-card-div'>

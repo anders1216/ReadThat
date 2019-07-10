@@ -53,24 +53,24 @@ class Post extends Component {
 		await this.props.resetFilterBool()
 	}
 
-	votesThings = async () => {
+	votesThings = () => {
 		const { votes, post, currentUser } = this.props;
-		let postsVotesVar = await votes.filter(vote => vote.post_id === post.id);
-		let upVotes = await postsVotesVar.filter(vote => vote.is_down_vote === false);
-		let downVotes = await postsVotesVar.filter(vote => vote.is_down_vote === true);
-		let calculatedVoteCount = await upVotes.length - downVotes.length;
-		await this.props.postsFilter(post.id, calculatedVoteCount)
+		let postsVotesVar = votes.filter(vote => vote.post_id === post.id);
+		let upVotes = postsVotesVar.filter(vote => vote.is_down_vote === false);
+		let downVotes = postsVotesVar.filter(vote => vote.is_down_vote === true);
+		let calculatedVoteCount = upVotes.length - downVotes.length;
+	 	this.props.postsFilter(post.id, calculatedVoteCount)
 		this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
 		if ( upVotes.some(
 				vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === false
 			)
 		) {
-			await this.setState({ hasUpVoted: true });
+		 this.setState({ hasUpVoted: true });
 		} else if ( downVotes.some(
 				vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === true
 			)
 		)
-			await this.setState({ hasDownVoted: true });
+		 this.setState({ hasDownVoted: true });
 	}
 
 	commentOnPost = () => {

@@ -10,14 +10,7 @@ import { connect } from 'react-redux'
 
 class Feed extends Component {
 	state = {
-		// votes: [],
 		downVoteCount: 0,
-		// posts: [],
-		// selectedPosts: [],
-		// selectedCategories: null,
-		// isPoster: false,
-		// isMod: false,
-		// categories: [],
 		postsFilter: [],
 		filterBool: false,
 		howToFilterBool: false,
@@ -38,69 +31,11 @@ class Feed extends Component {
 
 	handleSelect = async () => {
 		await this.props.fetchPosts()
-		// const { selectedCategories, posts } = this.state;
-		// const { token } = this.props;
-		// if (!selectedCategories && posts) {
-		// 	fetch(API + 'posts', {
-		// 		headers: { Authorization: `Bearer ${token}` }
-		// 	})
-		// 		.then(res => res.json())
-		// 		.then(res => this.setState({ posts: res }));
-		// } else {
-		// 	await this.setState({ selectedPosts: [] }); 
-		// 	selectedCategories.forEach(category => {
-		// 		fetch(API + 'categories/' + `${category.value}`, {
-		// 			headers: { Authorization: `Bearer ${token}` }
-		// 		})
-		// 			.then(res => res.json())
-		// 			.then(res => this.setState({ selectedPosts: [...this.state.selectedPosts, res].flat()}))
-		// 	});
-		// }
 	};
 
 	voteOnPost = async (postID, e) => {
 		this.props.createVote(postID, e)
 		await this.setState({ updateBool:true })
-		// console.log('voteOnPost')
-		// const { currentUser } = this.props;
-		// let placeHolder;
-		// e === 'up'
-		// 	? 
-		// 	await fetch(API + 'votes', {
-		// 			method: 'POST',
-		// 			headers: {
-		// 				Authorization: `Bearer ${localStorage.getItem('user-token')}`,
-		// 				'Content-Type': 'application/json',	
-		// 				Accept: 'application/json'
-		// 			},
-		// 			body: JSON.stringify({ vote: { post_id: postID, user_id: currentUser.user.id, is_down_vote: false } })
-		// 	  })
-		// 			.then(res => res.json())
-		// 			.then(vote => {
-		// 				vote.message ? 
-		// 				placeHolder = vote.votes
-		// 				: 
-		// 				placeHolder = vote;
-		// 			})
-		// 	: 
-		// 	await fetch(API + 'votes/delete', {
-		// 			method: 'POST',
-		// 			headers: {
-		// 				Authorization: `Bearer ${localStorage.getItem('user-token')}`,
-		// 				'Content-Type': 'application/json',
-		// 				Accept: 'application/json'
-		// 			},
-		// 			body: JSON.stringify({ vote: { post_id: postID, user_id: currentUser.user.id, is_down_vote: true } })
-		// 	  })
-		// 			.then(res => res.json())
-		// 			.then( vote =>
-		// 				{
-		// 				vote.message ? 
-		// 				placeHolder = vote.votes
-		// 				:
-		// 				placeHolder = vote
-		// 			}
-		// 			)
 	};
 
 	postsFilter = async (postId, voteCount) => {
@@ -197,15 +132,10 @@ class Feed extends Component {
 			return (
 				<div>
 					<Header
-						// categories={categories}
-						// selectedCategories={selectedCategories}
 						handleChange={this.handleChange}
-						// token={token}
-						// currentUser={currentUser}
 						handleSelect={this.handleSelect}
 						filterPosts={this.filterPosts}
 						howToFilterBool={howToFilterBool}
-						// logOut={logOut}
 					/>
 					<User 
 						currentUser={currentUser} 
@@ -236,8 +166,6 @@ class Feed extends Component {
 									<Post
 										key={i}
 										post={post}
-										// votes={votes}
-										// currentUser={currentUser}
 										voteOnPost={this.voteOnPost}
 										postsFilter={this.postsFilter}
 										filterBool={this.state.filterBool}
@@ -255,12 +183,7 @@ class Feed extends Component {
 					<Header
 						handleSelect={this.handleSelect}
 						updatePosts={this.updatePosts}
-						// categories={categories}
-						// selectedCategories={selectedCategories}
 						handleChange={this.handleChange}
-						// token={token}
-						// currentUser={currentUser}
-						// logOut={logOut}
 					/> 
 					<br/>
 					<h1 className="lodaing">Loading Posts...</h1>
@@ -274,9 +197,7 @@ class Feed extends Component {
 const mapStateToProps = state => ({
 	posts: state.posts.posts,
 	selectedPosts : state.posts.selectedPosts,
-	// categories: state.categories.categories,
-	// selectedCategories: state.categories.selectCategories,
-	// votes: state.votes.votes
+	votes: state.votes.votes
 })
 
 export default connect(mapStateToProps, { fetchCategories, fetchPosts, selectCategories, fetchVotes, createVote })(Feed)
