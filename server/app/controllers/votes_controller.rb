@@ -18,22 +18,19 @@ class VotesController < ApplicationController
         if @usersVotes.length < 1 
             @vote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: false)
             @vote.save!
-                render json: @vote
+            @votes = Vote.all
+                render json: @votes
         elsif @usersVotes[0]['is_down_vote']
             @usersVotes[0].destroy
-            @vote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: false)
-            @vote.save!
-                render json: @vote
+            vote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: false)
+            vote.save!
+            @votes = Vote.all
+                render json: @votes
         elsif !@usersVotes[0]['is_down_vote']
             @usersVotes[0].destroy
             @votes = Vote.all
-            render json: {message: "Vote Deleted", votes: @votes } 
+                render json: {message: "Vote Deleted", votes: @votes } 
         end
-    end
-
-    def post
-        @votes = Vote.where(post_id == params[:post_id])
-        render json: @votes
     end
 
     def delete
@@ -46,17 +43,26 @@ class VotesController < ApplicationController
             render json: {errors: "Something went wrong. Call your local ReadThat call center to report the porblem....lol"}
         end
         if @usersVotes.length < 1
-            @downVote = Vote.create(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
-                render json: @downVote
+            @downVote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
+            @downVote.save!
+            @votes = Vote.all
+                render json: @votes
         elsif !@usersVotes[0]['is_down_vote']
             @usersVotes[0].destroy
-            @downVote = Vote.create(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
-                render json: @downVote
+            @downVote = Vote.new(post_id: vote_params[:post_id], user_id: vote_params[:user_id], is_down_vote: true)
+            @downVote.save!
+            @votes = Vote.all
+                render json: @votes
         elsif @usersVotes[0]['is_down_vote']
             @usersVotes[0].destroy
             @votes = Vote.all
                 render json: {message: "Vote Deleted", votes: @votes }          
         end
+    end
+
+    def post
+        @votes = Vote.where(post_id == params[:post_id])
+        render json: @votes
     end
 
  private
