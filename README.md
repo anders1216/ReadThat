@@ -2,7 +2,7 @@
 
 A Reddit clone for fun!
 
-Note: Currently a work in progress.
+Note: Currently a work in progress. Image upload is down due to potential security flaws.
 
 Ruby 2.6.1
 
