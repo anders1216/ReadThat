@@ -2,15 +2,15 @@
 
 A Reddit clone for fun!
 
-Ruby v1.5.3
+Ruby 2.6.1
 
-Rails v5.2.3
+Rails 5.2.3
 
-es6, JavaScript v1.7
+es6, JavaScript 1.7
 
-React v16.8.6
+React 16.8.6
 
-Redux v4.0.1
+Redux 4.0.1
 
 ## Start Instructions.
 
