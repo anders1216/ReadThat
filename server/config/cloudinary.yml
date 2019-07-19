@@ -2,18 +2,18 @@
 development:
   cloud_name: readthat
   api_key: '893869429663796'
-  api_secret: ULwCPyhNtW705KvnNtLMiLrti6I
+  api_secret: 
   enhance_image_tag: true
   static_file_support: false
 production:
   cloud_name: readthat
   api_key: '893869429663796'
-  api_secret: ULwCPyhNtW705KvnNtLMiLrti6I
+  api_secret: 
   enhance_image_tag: true
   static_file_support: true
 test:
   cloud_name: readthat
   api_key: '893869429663796'
-  api_secret: ULwCPyhNtW705KvnNtLMiLrti6I
+  api_secret: 
   enhance_image_tag: true
   static_file_support: false
