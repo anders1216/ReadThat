@@ -1,9 +1,9 @@
 import { NEW_USER, USER_LOGIN, USER_LOGOUT, PAGE_RELOAD } from '../actions/types'
 import { API } from '../containers/MainPage'
 
-    export const pageReload = () => dispatch => {
-        const { token } = localStorage.getItem('user-token')
-        if( token !== undefined && token !== null) {
+    export const pageReload = () => (dispatch, getState) => {
+        if( getState().user.token !== undefined && getState().user.token !== null) {
+            let token = getState().user.token
             fetch(`${API}users/current_user`, {
                 headers: {
                 'Authorization': `Bearer ${token}`,

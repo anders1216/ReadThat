@@ -53,7 +53,7 @@ class MainPage extends Component {
 			password: '',
 			passwordConfirmation: ''
 		})
-		localStorage.setItem('user-token', this.props.token)
+		// localStorage.setItem('user-token', this.props.token)
 
 		// const { username, password, passwordConfirmation } = this.state;
 		// e.preventDefault();
@@ -91,7 +91,7 @@ class MainPage extends Component {
 			username: '',
 			password: ''
 		})
-		localStorage.setItem('user-token', this.props.token);
+		// localStorage.setItem('user-token', this.props.token);
 		// const { username, password } = this.state;
 		// e.preventDefault();
 		// await fetch(API + 'login', {

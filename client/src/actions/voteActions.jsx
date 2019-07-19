@@ -11,7 +11,7 @@ import { API } from '../containers/MainPage'
 	}
 	
     export const createVote = (postID, e) => async (dispatch, getState) => {
-		const token = localStorage.getItem('user-token')
+		const token = getState().user.token
 		const currentUser = getState().user.currentUser
         let placeHolder;
 		e === 'up'

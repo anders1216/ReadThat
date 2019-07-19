@@ -3,23 +3,20 @@ import thunk from 'redux-thunk'
 import rootReducer from './reducers'
 
 
-const initialState = {}
-
 const middleWare = [thunk]
 
+const persistedState = localStorage.getItem('readThatState') ? JSON.parse(localStorage.getItem('readThatState')) : {}
 
 const store = createStore(
     rootReducer, 
-    initialState, 
+    persistedState, 
     compose(
     applyMiddleware(...middleWare),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     )
   )
 
-  store.subscribe(() => {
-    const token = store.getState().user.token
-    localStorage.setItem('user-token', token)
-  });
-
+store.subscribe(() => {
+    localStorage.setItem('readThatState', JSON.stringify(store.getState()))
+});
 export default store;
