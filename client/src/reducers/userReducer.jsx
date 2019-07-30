@@ -21,7 +21,8 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 currentUser: null,
-                isLoggedIn: false
+                isLoggedIn: false,
+                isNewUser: false
             }
         }
 
