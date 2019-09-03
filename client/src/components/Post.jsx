@@ -59,7 +59,7 @@ class Post extends Component {
 		let upVotes = postsVotesVar.filter(vote => vote.is_down_vote === false);
 		let downVotes = postsVotesVar.filter(vote => vote.is_down_vote === true);
 		let calculatedVoteCount = upVotes.length - downVotes.length;
-	 	this.props.postsFilter(post.id, calculatedVoteCount)
+	 	// this.props.postsFilter(post.id, calculatedVoteCount)
 		this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
 		if ( upVotes.some(
 				vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === false

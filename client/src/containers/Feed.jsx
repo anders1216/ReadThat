@@ -62,23 +62,35 @@ class Feed extends Component {
 	//   })
 
 	filterPosts = async () => {
-		const { selectedPosts, posts} = this.props
-		console.log("Filter Posts", this.props.posts[0])
+		const { selectedPosts, posts, votes} = this.props
+		console.log("Filter Posts")
 		if (selectedPosts.length !== 0){
-			console.log('if')
+			console.log('Selected Posts:', selectedPosts)
 		} else {
-			console.log("else")
+			console.log("All-Posts:", posts)
+			console.log("All-Votes:", votes)
+			let voteCount = {}
+				votes.map(vote => {
+					if(voteCount[vote.post_id]){
+						if(vote.is_down_vote){
+							voteCount[vote.post_id] -= 1
+						}else{
+							voteCount[vote.id] += 1
+						}
+					}else{
+						console.log(vote.id)
+						if(vote.is_down_vote){
+							voteCount[vote.post_id] = -1
+						}else{
+							voteCount[vote.post_id] = 1
+						}
+					}
+				})
+			console.log("voteCount:", voteCount)
 		}
 	}
 
-
-	// resetFilterBool = async () => {
-	// 	console.log("resetFilterBool")
-	// 	await this.setState({filterBool: false})
-	// }
-
 	render() {
-		const { howToFilterBool } = this.state;
 		const { currentUser, selectedPosts, categories, posts, votes } = this.props;
 		if (this.props.posts.length > 0) {
 
@@ -88,7 +100,6 @@ class Feed extends Component {
 						handleChange={this.handleChange}
 						handleSelect={this.handleSelect}
 						filterPosts={this.filterPosts}
-						howToFilterBool={howToFilterBool}
 					/>
 					<User 
 						currentUser={currentUser} 
