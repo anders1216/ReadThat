@@ -35,94 +35,47 @@ class Feed extends Component {
 
 	voteOnPost = async (postID, e) => {
 		this.props.createVote(postID, e)
-		await this.setState({ updateBool:true })
 	};
 
-	postsFilter = async (postId, voteCount) => {
-		console.log("postsFilter")
-		let placeHolder = [];
-		const { postsFilter } = this.state
-		const { posts } = this.props
-		if (postsFilter.length !== posts.length) {
-		let placeHolder = this.state.postsFilter
-		await placeHolder.push([postId, voteCount])
-		placeHolder.sort((a, b) => {
-			const post1 = a[1]
-			const post2 = b[1]
+	// let postsFiltered = await howToFilterBool ? postsFilter.sort((a, b) => {
+	// 	const post1 = a[1]
+	// 	const post2 = b[1]
 
-			let comparison = 0;
-			if (post1 > post2) {
-			  comparison = -1
-			} else if (post1 < post2) {
-			  comparison = 1
-			}
-			return comparison;
-		  })
-		this.setState({postsFilter: placeHolder})
-		} else if (this.state.updateBool){
-			await placeHolder.push([postId, voteCount])
-		placeHolder.sort((a, b) => {
-			const post1 = a[1]
-			const post2 = b[1]
+	// 	let comparison = 0;
+	// 	if (post1 > post2) {
+	// 	  comparison = 1
+	// 	} else if (post1 < post2) {
+	// 	  comparison = -1
+	// 	}
+	// 	return comparison;
+	//   }) : postsFilter.sort((a, b) => {
+	// 	const post1 = a[1]
+	// 	const post2 = b[1]
 
-			let comparison = 0;
-			if (post1 > post2) {
-			  comparison = -1
-			} else if (post1 < post2) {
-			  comparison = 1
-			}
-			return comparison;
-		  })
-		//   this.setState({filterBool: true})
-		}
-		this.setState({postsFilter: placeHolder, updateBool:false})
-	}
+	// 	let comparison = 0;
+	// 	if (post1 > post2) {
+	// 	  comparison = -1
+	// 	} else if (post1 < post2) {
+	// 	  comparison = 1
+	// 	}
+	// 	return comparison;
+	//   })
 
 	filterPosts = async () => {
-		const { postsFilter, howToFilterBool  } = this.state
-		const { selectedPosts, posts } = this.props
-		let postsFiltered = await howToFilterBool ? postsFilter.sort((a, b) => {
-			const post1 = a[1]
-			const post2 = b[1]
-
-			let comparison = 0;
-			if (post1 > post2) {
-			  comparison = 1
-			} else if (post1 < post2) {
-			  comparison = -1
-			}
-			return comparison;
-		  }) : postsFilter.sort((a, b) => {
-			const post1 = a[1]
-			const post2 = b[1]
-
-			let comparison = 0;
-			if (post1 > post2) {
-			  comparison = -1
-			} else if (post1 < post2) {
-			  comparison = 1
-			}
-			return comparison;
-		  })
+		const { selectedPosts, posts} = this.props
+		console.log("Filter Posts", this.props.posts[0])
 		if (selectedPosts.length !== 0){
-		console.log('if')
-			let filteredPosts = await postsFiltered.map((post1, i) => {
-				return selectedPosts.filter(post => post.id === post1[0])
-			}).flat()
-			await this.setState({selectedPosts: filteredPosts, filterBool: true, howToFilterBool: !howToFilterBool})
+			console.log('if')
 		} else {
-		console.log("else")
-		let filteredPosts = await postsFiltered.map((post1, i) => {
-			return posts.filter(post => post.id === post1[0])
-		}).flat()
-		await this.setState({posts: filteredPosts, filterBool: true, howToFilterBool: !howToFilterBool})}
+			console.log("else")
+		}
 	}
 
 
-	resetFilterBool = async () => {
-		console.log("resetFilterBool")
-		await this.setState({filterBool: false})
-	}
+	// resetFilterBool = async () => {
+	// 	console.log("resetFilterBool")
+	// 	await this.setState({filterBool: false})
+	// }
 
 	render() {
 		const { howToFilterBool } = this.state;
