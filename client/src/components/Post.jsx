@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import NewComment from './forms/NewComment';
 import Comment from './Comment';
 import { newComment, fetchComments } from '../actions/commentActions'
+import { createVote, voteCount } from '../actions/voteActions'
 
 class Post extends Component {
 	state = {
@@ -125,27 +126,9 @@ class Post extends Component {
 	};
 
 	rapidVoteIncrement = async (e) => {
-		const { voteOnPost, post } = this.props;
-		voteOnPost(post.id, e.target.name)
-		if (e.target.name === 'up' && !this.state.hasDownVoted && !this.state.hasUpVoted ) {
-			await this.setState({ voteCount: this.state.voteCount + 1, hasUpVoted: true });
-			console.log('up1')
-		} else if (e.target.name === 'up' && this.state.hasDownVoted && !this.state.hasUpVoted) {
-			await this.setState({ voteCount: this.state.voteCount + 2, hasDownVoted: false, hasUpVoted: true });
-			console.log('up2')
-		} else if (e.target.name === 'up' && !this.state.hasDownVoted && this.state.hasUpVoted) {
-			await this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: false, hasUpVoted: false });
-			console.log('up3')
-		} else if (e.target.name === 'down' && !this.state.hasDownVoted && !this.state.hasUpVoted) {
-			await this.setState({ voteCount: this.state.voteCount - 1, hasDownVoted: true });
-			console.log('down1')
-		} else if (e.target.name === 'down'&& !this.state.hasDownVoted  && this.state.hasUpVoted ) {
-			await this.setState({ voteCount: this.state.voteCount - 2, hasUpVoted: false, hasDownVoted: true });
-			console.log('down2')
-		} else if (e.target.name === 'down' && this.state.hasDownVoted && !this.state.hasUpVoted) {
-			await this.setState({ voteCount: this.state.voteCount + 1, hasDownVoted: false, hasUpVoted: false });
-			console.log('down3')
-		}
+		const { createVote, voteCount, post } = this.props;
+		await createVote(post.id, e.target.name)
+		await voteCount()
 	};
 
 	renderModal = () => {
@@ -154,7 +137,7 @@ class Post extends Component {
 
 	render() {
 		const { img, title, content, link, uploadedFile, id} = this.props.post;
-		const { post, currentUser, voteCount} = this.props
+		const { post, currentUser, countedVotes} = this.props
 		const { commenting, comments  } = this.state;
 		let image;
 		if (!img && !uploadedFile) {
@@ -179,7 +162,7 @@ class Post extends Component {
 				</div>
 				</div>
 				<div className='button-container'>
-					<span>Doots: {voteCount[post.id]}</span>
+					<span>Doots: {countedVotes[post.id]}</span>
 					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
 						▲
 					</button>
@@ -235,7 +218,7 @@ class Post extends Component {
 				</div>
 				</div>
 				<div className='button-container'>
-					<span>Doots: {voteCount[post.id]}</span>
+					<span>Doots: {countedVotes[post.id]}</span>
 					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
 						▲
 					</button>
@@ -284,10 +267,10 @@ class Post extends Component {
 const mapStateToProps = state => ({
 	currentUser: state.user.currentUser,
 	votes: state.votes.votes,
-	voteCount: state.votes.voteCount
+	countedVotes: state.votes.voteCount
 })
 
-export default connect(mapStateToProps)(Post);
+export default connect(mapStateToProps, { createVote, voteCount })(Post);
 
 // =============================================================================================================
 // voteOnPost = () => {

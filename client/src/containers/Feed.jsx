@@ -35,10 +35,6 @@ class Feed extends Component {
 		await this.props.fetchPosts()
 	};
 
-	voteOnPost = async (postID, e) => {
-		this.props.createVote(postID, e)
-	};
-
 	// let postsFiltered = await howToFilterBool ? postsFilter.sort((a, b) => {
 	// 	const post1 = a[1]
 	// 	const post2 = b[1]
