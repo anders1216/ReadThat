@@ -16,6 +16,8 @@ export const UPDATE_VOTE = 'UPDATE_VOTE';
 
 export const NEW_VOTE = 'NEW_VOTE';
 
+export const VOTE_COUNT = 'VOTE_COUNT';
+
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 
 export const NEW_CATEGORY = 'NEW_CATEGORY';

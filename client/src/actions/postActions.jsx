@@ -8,7 +8,7 @@ export const fetchPosts = () => async (dispatch, getState) => {
             type: CLEAR_POST_SELECTION,
         })
 		if (selectedCategories.length < 1) {
-			fetch(API + 'posts', {
+			fetch(`${API}posts`, {
 				headers: { Authorization: `Bearer ${token}` }
 			})
 				.then(res => res.json())
@@ -18,7 +18,7 @@ export const fetchPosts = () => async (dispatch, getState) => {
                 }));
 		} else {
             selectedCategories.forEach(category => {
-				fetch(API + 'categories/' + `${category.value}`, {
+				fetch(`${API}categories/${category.value}`, {
 					headers: { Authorization: `Bearer ${token}` }
 				})
                     .then(res => res.json())
@@ -32,7 +32,7 @@ export const fetchPosts = () => async (dispatch, getState) => {
 
 export const createPost = (post) => async (dispatch) => {
     const token = localStorage.getItem('user-token')
-    await fetch(API + 'posts', {
+    await fetch(`${API}posts`, {
         method: 'POST',
         headers: { 
             Authorization: `Bearer ${token}`,
@@ -45,4 +45,5 @@ export const createPost = (post) => async (dispatch) => {
         type: NEW_POST,
         payload: post
     }))
-} 
+}
+

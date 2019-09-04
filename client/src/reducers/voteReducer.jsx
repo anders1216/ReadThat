@@ -1,7 +1,8 @@
-import { FETCH_VOTES, NEW_VOTE } from '../actions/types'
+import { FETCH_VOTES, NEW_VOTE, VOTE_COUNT } from '../actions/types'
 
 const initialState = {
-    votes: []
+    votes: [],
+    voteCount: {}
 }
 
 export default function(state = initialState, action) {
@@ -15,6 +16,11 @@ export default function(state = initialState, action) {
                 return {
                     ...state,
                     votes: action.payload.votes
+                }
+        case VOTE_COUNT:
+                return {
+                    ...state,
+                    voteCount: action.payload
                 }
         default:
             return state

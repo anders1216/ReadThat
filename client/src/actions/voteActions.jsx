@@ -1,4 +1,4 @@
-import { FETCH_VOTES, NEW_VOTE } from './types'
+import { FETCH_VOTES, NEW_VOTE, VOTE_COUNT } from './types'
 import { API } from '../containers/MainPage'
 
     export const fetchVotes = () => dispatch => {
@@ -13,7 +13,7 @@ import { API } from '../containers/MainPage'
     export const createVote = (postID, e) => async (dispatch, getState) => {
 		const token = getState().user.token
 		const currentUser = getState().user.currentUser
-        let placeHolder;
+		let placeHolder;
 		e === 'up'
 			? 
 			await fetch(API + 'votes', {
@@ -71,3 +71,28 @@ import { API } from '../containers/MainPage'
 					}
 				})
 	};
+
+	export const voteCount = () => async (dispatch, getState) => {
+		const votes = getState().votes.votes
+		let placeholder = {}
+			votes.map(vote => {
+				if(placeholder[vote.post_id]){
+					if(vote.is_down_vote){
+						placeholder[vote.post_id] -= 1
+					}else{
+						placeholder[vote.post_id] += 1
+					}
+				}else{
+					console.log(vote.id)
+					if(vote.is_down_vote){
+						placeholder[vote.post_id] = -1
+					}else{
+						placeholder[vote.post_id] = 1
+					}
+				}
+			})
+		await dispatch({
+			type: VOTE_COUNT,
+			payload: placeholder
+		})
+	}

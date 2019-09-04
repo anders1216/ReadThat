@@ -7,6 +7,7 @@ import { selectCategories, fetchCategories} from '../actions/categoryActions'
 import { fetchVotes, createVote } from '../actions/voteActions'
 import { fetchPosts } from '../actions/postActions'
 import { connect } from 'react-redux'
+import { voteCount } from '../actions/voteActions'
 
 class Feed extends Component {
 	state = {
@@ -19,9 +20,10 @@ class Feed extends Component {
 	};
 
 	async componentDidMount() {
-		await this.props.fetchCategories()
-		await this.props.fetchVotes()
+		await this.props.fetchCategories();
+		await this.props.fetchVotes();
 		await this.props.fetchPosts();
+		await this.props.voteCount();
 	}
 
 	handleChange = async newSelection => {
@@ -64,30 +66,30 @@ class Feed extends Component {
 	filterPosts = async () => {
 		const { selectedPosts, posts, votes} = this.props
 		console.log("Filter Posts")
-		if (selectedPosts.length !== 0){
-			console.log('Selected Posts:', selectedPosts)
-		} else {
-			console.log("All-Posts:", posts)
-			console.log("All-Votes:", votes)
-			let voteCount = {}
-				votes.map(vote => {
-					if(voteCount[vote.post_id]){
-						if(vote.is_down_vote){
-							voteCount[vote.post_id] -= 1
-						}else{
-							voteCount[vote.id] += 1
-						}
-					}else{
-						console.log(vote.id)
-						if(vote.is_down_vote){
-							voteCount[vote.post_id] = -1
-						}else{
-							voteCount[vote.post_id] = 1
-						}
-					}
-				})
-			console.log("voteCount:", voteCount)
-		}
+		// if (selectedPosts.length !== 0){
+		// 	console.log('Selected Posts:', selectedPosts)
+		// } else {
+		// 	console.log("All-Posts:", posts)
+		// 	console.log("All-Votes:", votes)
+		// 	let voteCount = {}
+		// 		votes.map(vote => {
+		// 			if(voteCount[vote.post_id]){
+		// 				if(vote.is_down_vote){
+		// 					voteCount[vote.post_id] -= 1
+		// 				}else{
+		// 					voteCount[vote.id] += 1
+		// 				}
+		// 			}else{
+		// 				console.log(vote.id)
+		// 				if(vote.is_down_vote){
+		// 					voteCount[vote.post_id] = -1
+		// 				}else{
+		// 					voteCount[vote.post_id] = 1
+		// 				}
+		// 			}
+		// 		})
+		// 	console.log("voteCount:", voteCount)
+		// }
 	}
 
 	render() {
@@ -164,4 +166,4 @@ const mapStateToProps = state => ({
 	votes: state.votes.votes
 })
 
-export default connect(mapStateToProps, { fetchCategories, fetchPosts, selectCategories, fetchVotes, createVote })(Feed)
+export default connect(mapStateToProps, { voteCount, fetchCategories, fetchPosts, selectCategories, fetchVotes, createVote })(Feed)

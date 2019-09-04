@@ -11,7 +11,6 @@ class Post extends Component {
 		newComment: '',
 		comments: [],
 		postsVotes: [],
-		voteCount: 0,
 		displayComments: false,
 		commenting: false,
 		prevState: [],
@@ -34,43 +33,45 @@ class Post extends Component {
 	}
 
 	updatePostsVotes = async () => {
-		let postsVotesVar =  await this.props.votes.filter(vote => vote.post_id === this.props.post.id);
-		let upVotes = await postsVotesVar.filter(vote => vote.is_down_vote === false);
-		let downVotes =  await postsVotesVar.filter(vote => vote.is_down_vote === true);
-		let calculatedVoteCount =  await upVotes.length - downVotes.length;
-		this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
-		if ( upVotes.some(
-			vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === false
-			)
-		){ 
-			await this.setState({ hasUpVoted: true });
-		} else if ( downVotes.some(
-				vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === true
-			)
-		){ 
-			await this.setState({ hasDownVoted: true });
-		}
-		await this.props.resetFilterBool()
+		console.log("Update Votes")
+	// 	let postsVotesVar =  await this.props.votes.filter(vote => vote.post_id === this.props.post.id);
+	// 	let upVotes = await postsVotesVar.filter(vote => vote.is_down_vote === false);
+	// 	let downVotes =  await postsVotesVar.filter(vote => vote.is_down_vote === true);
+	// 	let calculatedVoteCount =  await upVotes.length - downVotes.length;
+	// 	this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
+	// 	if ( upVotes.some(
+	// 		vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === false
+	// 		)
+	// 	){ 
+	// 		await this.setState({ hasUpVoted: true });
+	// 	} else if ( downVotes.some(
+	// 			vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === true
+	// 		)
+	// 	){ 
+	// 		await this.setState({ hasDownVoted: true });
+	// 	}
+	// 	await this.props.resetFilterBool()
 	}
 
 	votesThings = () => {
-		const { votes, post, currentUser } = this.props;
-		let postsVotesVar = votes.filter(vote => vote.post_id === post.id);
-		let upVotes = postsVotesVar.filter(vote => vote.is_down_vote === false);
-		let downVotes = postsVotesVar.filter(vote => vote.is_down_vote === true);
-		let calculatedVoteCount = upVotes.length - downVotes.length;
-	 	// this.props.postsFilter(post.id, calculatedVoteCount)
-		this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
-		if ( upVotes.some(
-				vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === false
-			)
-		) {
-		 this.setState({ hasUpVoted: true });
-		} else if ( downVotes.some(
-				vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === true
-			)
-		)
-		 this.setState({ hasDownVoted: true });
+		console.log("votesThings")
+		// const { votes, post, currentUser } = this.props;
+		// let postsVotesVar = votes.filter(vote => vote.post_id === post.id);
+		// let upVotes = postsVotesVar.filter(vote => vote.is_down_vote === false);
+		// let downVotes = postsVotesVar.filter(vote => vote.is_down_vote === true);
+		// let calculatedVoteCount = upVotes.length - downVotes.length;
+	 	// // this.props.postsFilter(post.id, calculatedVoteCount)
+		// this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
+		// if ( upVotes.some(
+		// 		vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === false
+		// 	)
+		// ) {
+		//  this.setState({ hasUpVoted: true });
+		// } else if ( downVotes.some(
+		// 		vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === true
+		// 	)
+		// )
+		//  this.setState({ hasDownVoted: true });
 	}
 
 	commentOnPost = () => {
@@ -152,9 +153,9 @@ class Post extends Component {
 	}
 
 	render() {
-		const { img, title, content, link, uploadedFile, id } = this.props.post;
-		const { post, currentUser } = this.props
-		const { commenting, comments, voteCount } = this.state;
+		const { img, title, content, link, uploadedFile, id} = this.props.post;
+		const { post, currentUser, voteCount} = this.props
+		const { commenting, comments  } = this.state;
 		let image;
 		if (!img && !uploadedFile) {
 			image = defaultImage;
@@ -178,7 +179,7 @@ class Post extends Component {
 				</div>
 				</div>
 				<div className='button-container'>
-					<span>Doots: {voteCount}</span>
+					<span>Doots: {voteCount[post.id]}</span>
 					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
 						▲
 					</button>
@@ -234,7 +235,7 @@ class Post extends Component {
 				</div>
 				</div>
 				<div className='button-container'>
-					<span>Doots: {voteCount}</span>
+					<span>Doots: {voteCount[post.id]}</span>
 					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
 						▲
 					</button>
@@ -282,7 +283,8 @@ class Post extends Component {
 
 const mapStateToProps = state => ({
 	currentUser: state.user.currentUser,
-	votes: state.votes.votes
+	votes: state.votes.votes,
+	voteCount: state.votes.voteCount
 })
 
 export default connect(mapStateToProps)(Post);
