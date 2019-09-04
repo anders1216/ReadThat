@@ -2,7 +2,7 @@ import { FETCH_VOTES, NEW_VOTE, VOTE_COUNT } from '../actions/types'
 
 const initialState = {
     votes: [],
-    voteCount: {}
+    voteCount: []
 }
 
 export default function(state = initialState, action) {

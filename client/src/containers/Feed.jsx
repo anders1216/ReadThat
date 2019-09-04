@@ -35,57 +35,15 @@ class Feed extends Component {
 		await this.props.fetchPosts()
 	};
 
-	// let postsFiltered = await howToFilterBool ? postsFilter.sort((a, b) => {
-	// 	const post1 = a[1]
-	// 	const post2 = b[1]
-
-	// 	let comparison = 0;
-	// 	if (post1 > post2) {
-	// 	  comparison = 1
-	// 	} else if (post1 < post2) {
-	// 	  comparison = -1
-	// 	}
-	// 	return comparison;
-	//   }) : postsFilter.sort((a, b) => {
-	// 	const post1 = a[1]
-	// 	const post2 = b[1]
-
-	// 	let comparison = 0;
-	// 	if (post1 > post2) {
-	// 	  comparison = -1
-	// 	} else if (post1 < post2) {
-	// 	  comparison = 1
-	// 	}
-	// 	return comparison;
-	//   })
-
 	filterPosts = async () => {
-		const { selectedPosts, posts, votes} = this.props
 		console.log("Filter Posts")
-		// if (selectedPosts.length !== 0){
-		// 	console.log('Selected Posts:', selectedPosts)
-		// } else {
-		// 	console.log("All-Posts:", posts)
-		// 	console.log("All-Votes:", votes)
-		// 	let voteCount = {}
-		// 		votes.map(vote => {
-		// 			if(voteCount[vote.post_id]){
-		// 				if(vote.is_down_vote){
-		// 					voteCount[vote.post_id] -= 1
-		// 				}else{
-		// 					voteCount[vote.id] += 1
-		// 				}
-		// 			}else{
-		// 				console.log(vote.id)
-		// 				if(vote.is_down_vote){
-		// 					voteCount[vote.post_id] = -1
-		// 				}else{
-		// 					voteCount[vote.post_id] = 1
-		// 				}
-		// 			}
-		// 		})
-		// 	console.log("voteCount:", voteCount)
-		// }
+		const { selectedPosts, posts, countedVotes} = this.props
+		let keys = Object.keys(countedVotes)
+		keys.sort((a, b) => {return countedVotes[a] - countedVotes[b]})
+		let filteredPosts = keys.map(key => {
+			return {[key]: countedVotes[key]}
+		})
+		
 	}
 
 	render() {
@@ -159,7 +117,8 @@ class Feed extends Component {
 const mapStateToProps = state => ({
 	posts: state.posts.posts,
 	selectedPosts : state.posts.selectedPosts,
-	votes: state.votes.votes
+	votes: state.votes.votes,
+	countedVotes: state.votes.voteCount
 })
 
 export default connect(mapStateToProps, { voteCount, fetchCategories, fetchPosts, selectCategories, fetchVotes, createVote })(Feed)

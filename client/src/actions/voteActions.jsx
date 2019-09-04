@@ -75,7 +75,7 @@ import { API } from '../containers/MainPage'
 	export const voteCount = () => async (dispatch, getState) => {
 		const votes = getState().votes.votes
 		let placeholder = {}
-			votes.map(vote => {
+			votes.forEach(vote => {
 				if(placeholder[vote.post_id]){
 					if(vote.is_down_vote){
 						placeholder[vote.post_id] -= 1
@@ -83,7 +83,6 @@ import { API } from '../containers/MainPage'
 						placeholder[vote.post_id] += 1
 					}
 				}else{
-					console.log(vote.id)
 					if(vote.is_down_vote){
 						placeholder[vote.post_id] = -1
 					}else{
