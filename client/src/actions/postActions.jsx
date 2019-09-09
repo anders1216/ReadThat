@@ -32,16 +32,28 @@ export const fetchPosts = () => async (dispatch, getState) => {
 
 export const filterPosts = () => async (dispatch, getState) => {
    
-    const { countedVotes } = getState().countedVotes
-    let keys = Object.keys(countedVotes)
-    keys.sort((a, b) => {return countedVotes[a] - countedVotes[b]})
+    const { voteCount } = getState().votes
+    const { posts } = getState().posts
+    let placeholder = []
+    let keys = Object.keys(voteCount)
+    keys.sort((a, b) => {return voteCount[a] - voteCount[b]})
     let filteredPosts = keys.map(key => {
-        return {[key]: countedVotes[key]}
+        return {[key]: voteCount[key]}
     })
+    
+    await filteredPosts.forEach(post => {
+       while(Object.values(post) >= 0){
+        debugger
+        if (posts.post) {
+           placeholder.push(posts.post)
+       }}
+    })
+
+    console.log("placeholder:", placeholder)
 
     dispatch({
         type: FILTER_POSTS,
-        payload: filterPosts
+        payload: filteredPosts
     })
 
 }
