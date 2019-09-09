@@ -1,8 +1,8 @@
-import { FETCH_POSTS, NEW_POST, SELECT_POSTS, CLEAR_POST_SELECTION } from './types'
+import { FETCH_POSTS, NEW_POST, SELECT_POSTS, CLEAR_POST_SELECTION, FILTER_POSTS } from './types'
 import { API } from '../containers/MainPage'
 
 export const fetchPosts = () => async (dispatch, getState) => {
-		const { selectedCategories } = getState().categories;
+        const { selectedCategories } = getState().categories
         const token = localStorage.getItem('user-token');
         await dispatch({
             type: CLEAR_POST_SELECTION,
@@ -29,6 +29,22 @@ export const fetchPosts = () => async (dispatch, getState) => {
  
 		}
     };
+
+export const filterPosts = () => async (dispatch, getState) => {
+   
+    const { countedVotes } = getState().countedVotes
+    let keys = Object.keys(countedVotes)
+    keys.sort((a, b) => {return countedVotes[a] - countedVotes[b]})
+    let filteredPosts = keys.map(key => {
+        return {[key]: countedVotes[key]}
+    })
+
+    dispatch({
+        type: FILTER_POSTS,
+        payload: filterPosts
+    })
+
+}
 
 export const createPost = (post) => async (dispatch) => {
     const token = localStorage.getItem('user-token')

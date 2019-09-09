@@ -3,7 +3,7 @@ import CategorySelector from '../components/CategorySelector';
 import NewPost from '../components/forms/NewPost';
 import NewCategory from '../components/forms/NewCategory';
 import { connect } from 'react-redux';
-import { createPost } from '../actions/postActions'
+import { createPost, filterPosts } from '../actions/postActions'
 import { createCategory }from '../actions/categoryActions'
 import { userLogout } from '../actions/userActions'
 
@@ -107,4 +107,4 @@ const mapStateToProps = state => ({
     currentUser: state.user.currentUser
 })
 
-export default connect(mapStateToProps, { createPost, createCategory, userLogout })(Header)
+export default connect(mapStateToProps, { createPost, filterPosts, createCategory, userLogout })(Header)

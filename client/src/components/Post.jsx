@@ -218,7 +218,7 @@ class Post extends Component {
 				</div>
 				</div>
 				<div className='button-container'>
-					<span>Doots: {countedVotes[post.id]}</span>
+					<span>Doots: {countedVotes[post.id] ? countedVotes[post.id] : 0}</span>
 					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
 						▲
 					</button>

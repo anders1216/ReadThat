@@ -1,3 +1,5 @@
+//-------------------------POSTS----------------------
+
 export const FETCH_POSTS = 'FETCH_POSTS';
 
 export const NEW_POST = 'NEW_POST';
@@ -6,9 +8,15 @@ export const SELECT_POSTS = 'SELECT_POSTS';
 
 export const CLEAR_POST_SELECTION = 'CLEAR_POST_SELECTION';
 
+export const FILTER_POSTS = 'FILTER_POSTS';
+
+//------------------------COMMNETS-----------------------
+
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
 
 export const NEW_COMMENT = 'NEW_COMMENT';
+
+//-----------------------VOTES-------------------------
 
 export const FETCH_VOTES = 'FETCH_VOTES';
 
@@ -18,11 +26,15 @@ export const NEW_VOTE = 'NEW_VOTE';
 
 export const VOTE_COUNT = 'VOTE_COUNT';
 
+//----------------------------CATEGORIES-----------------
+
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 
 export const NEW_CATEGORY = 'NEW_CATEGORY';
 
 export const SELECT_CATEGORIES = 'SELECT_CATEGORIES';
+
+//------------------------USER--------------------
 
 export const NEW_USER = 'NEW_USER';
 

@@ -35,16 +35,17 @@ class Feed extends Component {
 		await this.props.fetchPosts()
 	};
 
-	filterPosts = async () => {
-		console.log("Filter Posts")
-		const { selectedPosts, posts, countedVotes} = this.props
-		let keys = Object.keys(countedVotes)
-		keys.sort((a, b) => {return countedVotes[a] - countedVotes[b]})
-		let filteredPosts = keys.map(key => {
-			return {[key]: countedVotes[key]}
-		})
-		
-	}
+	// filterPosts = async () => {
+
+	// 	const { selectedPosts, posts, countedVotes} = this.props
+	// 	let keys = Object.keys(countedVotes)
+	// 	keys.sort((a, b) => {return countedVotes[a] - countedVotes[b]})
+	// 	let filteredPosts = keys.map(key => {
+	// 		return {[key]: countedVotes[key]}
+	// 	})
+	// 	console.log("Filter Posts:", filteredPosts)
+	// 	console.log("Posts:", posts)
+	// }
 
 	render() {
 		const { currentUser, selectedPosts, categories, posts, votes } = this.props;
@@ -55,7 +56,6 @@ class Feed extends Component {
 					<Header
 						handleChange={this.handleChange}
 						handleSelect={this.handleSelect}
-						filterPosts={this.filterPosts}
 					/>
 					<User 
 						currentUser={currentUser} 
