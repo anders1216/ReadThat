@@ -4,7 +4,7 @@ import { API } from '../containers/MainPage';
 import { connect } from 'react-redux'
 import NewComment from './forms/NewComment';
 import Comment from './Comment';
-import { newComment, fetchComments } from '../actions/commentActions'
+// import { newComment, fetchComments } from '../actions/commentActions'
 import { createVote, voteCount } from '../actions/voteActions'
 
 class Post extends Component {
@@ -31,48 +31,6 @@ class Post extends Component {
 		else if(this.props.updateBool){
 		await this.votesThings
 		}
-	}
-
-	updatePostsVotes = async () => {
-		console.log("Update Votes")
-	// 	let postsVotesVar =  await this.props.votes.filter(vote => vote.post_id === this.props.post.id);
-	// 	let upVotes = await postsVotesVar.filter(vote => vote.is_down_vote === false);
-	// 	let downVotes =  await postsVotesVar.filter(vote => vote.is_down_vote === true);
-	// 	let calculatedVoteCount =  await upVotes.length - downVotes.length;
-	// 	this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
-	// 	if ( upVotes.some(
-	// 		vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === false
-	// 		)
-	// 	){ 
-	// 		await this.setState({ hasUpVoted: true });
-	// 	} else if ( downVotes.some(
-	// 			vote => vote['user_id'] === this.props.currentUser.user.id && vote['is_down_vote'] === true
-	// 		)
-	// 	){ 
-	// 		await this.setState({ hasDownVoted: true });
-	// 	}
-	// 	await this.props.resetFilterBool()
-	}
-
-	votesThings = () => {
-		console.log("votesThings")
-		// const { votes, post, currentUser } = this.props;
-		// let postsVotesVar = votes.filter(vote => vote.post_id === post.id);
-		// let upVotes = postsVotesVar.filter(vote => vote.is_down_vote === false);
-		// let downVotes = postsVotesVar.filter(vote => vote.is_down_vote === true);
-		// let calculatedVoteCount = upVotes.length - downVotes.length;
-	 	// // this.props.postsFilter(post.id, calculatedVoteCount)
-		// this.setState({ postsVotes: postsVotesVar, voteCount: calculatedVoteCount });
-		// if ( upVotes.some(
-		// 		vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === false
-		// 	)
-		// ) {
-		//  this.setState({ hasUpVoted: true });
-		// } else if ( downVotes.some(
-		// 		vote => vote['user_id'] === currentUser.user.id && vote['is_down_vote'] === true
-		// 	)
-		// )
-		//  this.setState({ hasDownVoted: true });
 	}
 
 	commentOnPost = () => {
@@ -272,38 +230,3 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, { createVote, voteCount })(Post);
 
-// =============================================================================================================
-// voteOnPost = () => {
-// 	const { currentUser, post } = this.props
-// 	const { votes } = this.state
-// 	console.log('vote')
-// 	fetch(API + 'votes', {
-// 		method: 'POST',
-// 		headers: {'Authorization': `Bearer ${localStorage.getItem(currentUser)}`, 'Content-Type': 'application/json', Accept: 'application/json'},
-// 		body: JSON.stringify({vote: {post: post, user: currentUser.id}})
-// 	}).then(res => res.json()).then(vote => { vote.errors ? alert(vote.errors) :
-// 		this.setState({votes: [...votes, vote]})})
-// 	//
-// }
-
-// unvoteOnPost = (e) => {
-// 	const { currentUser, post } = this.props
-// 	console.log('unvote')
-
-// 	fetch(API + 'votes/delete', {
-// 		method: 'POST',
-// 		headers: {'Authorization': `Bearer ${localStorage.getItem(currentUser)}`, 'Content-Type': 'application/json', Accept: 'application/json'},
-// 		body: JSON.stringify({vote: {post: post, user: currentUser.id}})
-// 	}).then(res => res.json()).then(votes => this.setState({votes: votes})).then(this.countDownVotes())
-// }
-
-// countDownVotes = () => {
-// 	const { votes } = this.state
-// 	if (votes.length > 0){
-// 		votes.forEach(vote => {
-// 			if (vote.is_down_vote){
-// 				this.setState({downVoteCount: this.state.downVoteCount++})
-// 			}
-// 		})
-// 	}
-// }
