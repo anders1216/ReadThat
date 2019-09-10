@@ -71,7 +71,7 @@ class Header extends Component {
     }
 
     render () {
-        const { token, currentUser, selectedCategories, handleChange, categories, howToFilterBool, filterPosts, userLogout } = this.props
+        const { token, currentUser, selectedCategories, handleChange, categories, filterPosts, userLogout, howToFilterBool } = this.props
         const { newPost, newCategory } = this.state
         return (
             <div className="header">
@@ -90,7 +90,7 @@ class Header extends Component {
                     {newCategory ? <span><NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} handleClick={this.handleClick}/> </span>: <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
                 </span>
                 <span>
-                    {howToFilterBool ? <button onClick={e => filterPosts(true)}> Posts Low -> High </button> : <button onClick={e => filterPosts()}> Posts High -> Low </button>}
+                    {howToFilterBool ? <button onClick={e => filterPosts()}> Posts Low -> High </button> : <button onClick={e => filterPosts()}> Posts High -> Low </button>}
                 </span>
                 <span>  
                     <button className='logout' onClick={e => userLogout()}>Logout</button>
@@ -104,7 +104,8 @@ const mapStateToProps = state => ({
     categories: state.categories.categories,
     selectedCategories: state.categories.selectedCategories,
     token: state.user.token,
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    howToFilterBool: state.posts.howToFilterBool
 })
 
 export default connect(mapStateToProps, { createPost, filterPosts, createCategory, userLogout })(Header)

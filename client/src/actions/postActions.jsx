@@ -33,27 +33,44 @@ export const fetchPosts = () => async (dispatch, getState) => {
 export const filterPosts = () => async (dispatch, getState) => {
    
     const { voteCount } = getState().votes
-    const { posts } = getState().posts
+    let { posts } = getState().posts
+    const { selectedPosts } = getState().posts
     let placeholder = []
     let keys = Object.keys(voteCount)
     keys.sort((a, b) => {return voteCount[a] - voteCount[b]})
     let filteredPosts = keys.map(key => {
         return {[key]: voteCount[key]}
     })
-    
+
+    if (selectedPosts.length > 0)
+        posts = selectedPosts
+
     await filteredPosts.forEach(post => {
-       while(Object.values(post) >= 0){
-        debugger
-        if (posts.post) {
-           placeholder.push(posts.post)
-       }}
+        if (Object.values(post) >= 0){
+            placeholder.unshift(posts.find( pos => {return pos.id === Object.keys(post)*1}))
+        }
     })
 
-    console.log("placeholder:", placeholder)
+    await posts.forEach(post =>{
+        if(!placeholder.includes(post)) {
+            placeholder.push(post)
+        }
+    })
+
+    await filteredPosts.reverse()
+    await filteredPosts.forEach(post => {
+        if (Object.values(post) < 0){
+            placeholder.push(posts.find( pos => {return pos.id === Object.keys(post)*1}))
+        }
+    })
+
+    if (getState().posts.howToFilterBool){
+        placeholder.reverse()
+    }
 
     dispatch({
         type: FILTER_POSTS,
-        payload: filteredPosts
+        payload: placeholder
     })
 
 }

@@ -1,9 +1,10 @@
-import { FETCH_POSTS, NEW_POST, SELECT_POSTS, CLEAR_POST_SELECTION } from '../actions/types'
+import { FETCH_POSTS, NEW_POST, SELECT_POSTS, CLEAR_POST_SELECTION, FILTER_POSTS } from '../actions/types'
 
 const initialState = {
     posts: [],
     newPost: {},
-    selectedPosts: []
+    selectedPosts: [],
+    howToFilterBool: false
 }
 
 export default function(state = initialState, action) {
@@ -27,6 +28,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 newPost: action.payload
+            }
+        case FILTER_POSTS:
+            return {
+                ...state,
+                selectedPosts: action.payload,
+                howToFilterBool: !state.howToFilterBool
             }
         default:
             return state

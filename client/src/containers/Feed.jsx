@@ -14,7 +14,6 @@ class Feed extends Component {
 		downVoteCount: 0,
 		postsFilter: [],
 		filterBool: false,
-		howToFilterBool: false,
 		updateBool:false,
 		rapidVoteCount: null
 	};
@@ -34,18 +33,6 @@ class Feed extends Component {
 	handleSelect = async () => {
 		await this.props.fetchPosts()
 	};
-
-	// filterPosts = async () => {
-
-	// 	const { selectedPosts, posts, countedVotes} = this.props
-	// 	let keys = Object.keys(countedVotes)
-	// 	keys.sort((a, b) => {return countedVotes[a] - countedVotes[b]})
-	// 	let filteredPosts = keys.map(key => {
-	// 		return {[key]: countedVotes[key]}
-	// 	})
-	// 	console.log("Filter Posts:", filteredPosts)
-	// 	console.log("Posts:", posts)
-	// }
 
 	render() {
 		const { currentUser, selectedPosts, categories, posts, votes } = this.props;
