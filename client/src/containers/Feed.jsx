@@ -21,8 +21,8 @@ class Feed extends Component {
 	async componentDidMount() {
 		await this.props.fetchCategories();
 		await this.props.fetchVotes();
-		await this.props.fetchPosts();
 		await this.props.voteCount();
+		await this.props.fetchPosts();
 	}
 
 	handleChange = async newSelection => {

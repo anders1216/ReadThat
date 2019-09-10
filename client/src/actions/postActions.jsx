@@ -42,11 +42,12 @@ export const filterPosts = () => async (dispatch, getState) => {
         return {[key]: voteCount[key]}
     })
 
-    if (selectedPosts.length > 0)
+    if (selectedPosts.length > 0){
         posts = selectedPosts
+    }
 
     await filteredPosts.forEach(post => {
-        if (Object.values(post) >= 0){
+        if (Object.values(post) > 0 && posts.find( pos => {return pos.id === Object.keys(post)*1})){
             placeholder.unshift(posts.find( pos => {return pos.id === Object.keys(post)*1}))
         }
     })
@@ -59,7 +60,7 @@ export const filterPosts = () => async (dispatch, getState) => {
 
     await filteredPosts.reverse()
     await filteredPosts.forEach(post => {
-        if (Object.values(post) < 0){
+        if (Object.values(post) < 0 && posts.find( pos => {return pos.id === Object.keys(post)*1})){
             placeholder.push(posts.find( pos => {return pos.id === Object.keys(post)*1}))
         }
     })

@@ -21,16 +21,7 @@ class Post extends Component {
 	};
 
 	async componentDidMount() {
-		await this.votesThings()
-	}
 
-	async componentDidUpdate() {
-		if (this.props.filterBool){
-		 await this.updatePostsVotes()
-		}
-		else if(this.props.updateBool){
-		await this.votesThings
-		}
 	}
 
 	commentOnPost = () => {
