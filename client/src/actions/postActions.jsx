@@ -46,32 +46,36 @@ export const filterPosts = () => async (dispatch, getState) => {
         posts = selectedPosts
     }
 
-    await filteredPosts.forEach(post => {
-        if (Object.values(post) > 0 && posts.find( pos => {return pos.id === Object.keys(post)*1})){
-            placeholder.unshift(posts.find( pos => {return pos.id === Object.keys(post)*1}))
+    filteredPosts.forEach(post => {
+        if (Object.values(post) >= 0 && posts.find(pos => { return pos.id === Object.keys(post) * 1; })) {
+            placeholder.unshift(posts.find(pos => { return pos.id === Object.keys(post) * 1; }));
         }
     })
 
     await posts.forEach(post =>{
-        if(!placeholder.includes(post)) {
+        if(!placeholder.includes(post) && !filteredPosts.find(pos => { return Object.keys(pos)*1 === post.id})) {
             placeholder.push(post)
         }
     })
 
-    await filteredPosts.reverse()
-    await filteredPosts.forEach(post => {
-        if (Object.values(post) < 0 && posts.find( pos => {return pos.id === Object.keys(post)*1})){
-            placeholder.push(posts.find( pos => {return pos.id === Object.keys(post)*1}))
+    filteredPosts.reverse()
+    filteredPosts.forEach(post => {
+        if (Object.values(post) < 0 && posts.find(pos => { return pos.id === Object.keys(post) * 1; })) {
+            placeholder.push(posts.find(pos => { return pos.id === Object.keys(post) * 1; }));
         }
     })
 
+    const output = Array.from(new Set(placeholder.map(a => a.id))).map(id => {
+        return placeholder.find(a => a.id === id);
+    })
+
     if (getState().posts.howToFilterBool){
-        placeholder.reverse()
+        output.reverse()
     }
 
     dispatch({
         type: FILTER_POSTS,
-        payload: placeholder
+        payload: output
     })
 
 }
