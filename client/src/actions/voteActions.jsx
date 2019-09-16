@@ -15,54 +15,31 @@ import { API } from '../containers/MainPage'
 		const currentUser = getState().user.currentUser
 		let placeHolder;
 		let bool = true
-		if (e === 'up')
-			bool = false
-		await fetch(API + 'votes', {
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${token}`,
-					'Content-Type': 'application/json',	
-					Accept: 'application/json'
-				},
-				body: JSON.stringify({ 
-					vote: {
-						post_id: postID,
-						user_id: currentUser.user.id,
-						is_down_vote: bool
-					} 
+			if (e === 'up')
+				bool = false
+			await fetch(API + 'votes', {
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json',	
+						Accept: 'application/json'
+					},
+					body: JSON.stringify({ 
+						vote: {
+							post_id: postID,
+							user_id: currentUser.user.id,
+							is_down_vote: bool
+						} 
+					})
 				})
-			})
-				.then(res => res.json())
-				.then(vote => {
-					vote.message ? 
-					placeHolder = vote.votes
-					: 
-					placeHolder = vote;
-				})
-		await fetch(API + 'votes/delete', {
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${token}`,
-					'Content-Type': 'application/json',
-					Accept: 'application/json'
-				},
-				body: JSON.stringify({ 
-					vote: { 
-						post_id: postID,
-						user_id: currentUser.user.id,
-						is_down_vote: bool 
-					} 
-				})
-			})
-				.then(res => res.json())
-				.then( vote =>
-					{
-					vote.message ? 
-					placeHolder = vote.votes
-					:
-					placeHolder = vote
-				}
-				)
+					.then(res => res.json())
+					.then(vote => {
+						vote.message ? 
+						placeHolder = vote.votes
+						: 
+						placeHolder = vote;
+					})
+					
 			await dispatch({
 				type: NEW_VOTE,
 				payload: {

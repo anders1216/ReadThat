@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   resources :user_preferences
   get 'categories/:category', to: 'categories#category' 
   get 'votes/:post_id', to: 'votes#post'
-  post 'votes/delete', to: 'votes#delete'
   get 'comments/:post_id', to: 'comments#post'
   get 'comments/:post_id/:comment_id', to: 'comments#comments_comments'
   get 'users/current_user', to: 'users#find_current_user'

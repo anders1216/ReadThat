@@ -77,7 +77,7 @@ class Post extends Component {
 	rapidVoteIncrement = async (e) => {
 		const { createVote, voteCount, post } = this.props;
 		await createVote(post.id, e.target.name)
-		await voteCount("post_id")
+		await voteCount("post")
 	};
 
 	renderModal = () => {
