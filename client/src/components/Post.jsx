@@ -77,7 +77,7 @@ class Post extends Component {
 	rapidVoteIncrement = async (e) => {
 		const { createVote, voteCount, post } = this.props;
 		await createVote(post.id, e.target.name)
-		await voteCount()
+		await voteCount("post_id")
 	};
 
 	renderModal = () => {
@@ -111,7 +111,7 @@ class Post extends Component {
 				</div>
 				</div>
 				<div className='button-container'>
-					<span>Doots: {countedVotes[post.id]}</span>
+					<span>Doots: {countedVotes.post[post.id] ? countedVotes.post[post.id] : 0}</span>
 					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
 						▲
 					</button>
@@ -167,7 +167,7 @@ class Post extends Component {
 				</div>
 				</div>
 				<div className='button-container'>
-					<span>Doots: {countedVotes[post.id] ? countedVotes[post.id] : 0}</span>
+					<span>Doots: {countedVotes.post[post.id] ? countedVotes.post[post.id] : 0}</span>
 					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
 						▲
 					</button>

@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import NewComment from './forms/NewComment';
 import { API } from '../containers/MainPage'
+import { connect } from 'react-redux'
+import { createVote, voteCount } from '../actions/voteActions'
 
-export default class Comment extends Component {
+class Comment extends Component {
 	state = {
 		newComment: '',
 		commentsComments: [],
@@ -67,15 +69,28 @@ export default class Comment extends Component {
 			headers: {Authorization: `Bearer ${localStorage.getItem('user-token')}`}})
 			.then(res => res.json())
 			.then(comments => this.setState({ commentsComments: comments }));
-		await this.setState({ displayComments: !this.state.displayComments });
+		this.setState({ displayComments: !this.state.displayComments });
+	};
+
+	rapidVoteIncrement = async (e) => {
+		const { createVote, voteCount, comment } = this.props;
+		await createVote(comment.id, e.target.name)
+		await voteCount("comment")
 	};
 
 	render(){
-		const { comment, comments, currentUser, post } = this.props
+		const { comment, comments, currentUser, post, countedVotes } = this.props
 		const { displayComments, commentsComments } = this.state
 		return (
 		<div className='comment-card'>
 			<p>{comment.content}</p>
+			<span>Doots: {countedVotes.comment[comment.id] ? countedVotes.comment[comment.id] : 0}</span>
+					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
+						▲
+					</button>
+					<button name='down' onClick={e => this.rapidVoteIncrement(e)}>
+						▼
+				</button>
 			<button onClick={e => this.commentOnPost(e)}>Reply</button>
 			{this.state.commenting ? (
 				<NewComment
@@ -107,3 +122,11 @@ export default class Comment extends Component {
 	);
 	};
 }
+
+const mapStateToProps = state => ({
+	currentUser: state.user.currentUser,
+	votes: state.votes.votes,
+	countedVotes: state.votes.voteCount
+})
+
+export default connect(mapStateToProps, { createVote, voteCount })(Comment);
