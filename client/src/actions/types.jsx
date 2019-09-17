@@ -24,7 +24,9 @@ export const UPDATE_VOTE = 'UPDATE_VOTE';
 
 export const NEW_VOTE = 'NEW_VOTE';
 
-export const VOTE_COUNT = 'VOTE_COUNT';
+export const VOTE_COUNT_POSTS = 'VOTE_COUNT_POSTS';
+
+export const VOTE_COUNT_COMMENTS = 'VOTE_COUNT_COMMENTS';
 
 //----------------------------CATEGORIES-----------------
 

@@ -74,7 +74,7 @@ class Comment extends Component {
 
 	rapidVoteIncrement = async (e) => {
 		const { createVote, voteCount, comment } = this.props;
-		await createVote(comment.id, e.target.name)
+		await createVote(comment.id, e.target.name, "comment")
 		await voteCount("comment")
 	};
 
@@ -84,7 +84,7 @@ class Comment extends Component {
 		return (
 		<div className='comment-card'>
 			<p>{comment.content}</p>
-			<span>Doots: {countedVotes.comment[comment.id] ? countedVotes.comment[comment.id] : 0}</span>
+			<span>Doots: {countedVotes["comment"][comment.id] ? countedVotes["comment"][comment.id] : 0}</span>
 					<button name='up' onClick={e => this.rapidVoteIncrement(e)}>
 						▲
 					</button>
