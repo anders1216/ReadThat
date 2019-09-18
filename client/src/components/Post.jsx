@@ -20,10 +20,6 @@ class Post extends Component {
 		renderModalBool: false
 	};
 
-	async componentDidMount() {
-
-	}
-
 	commentOnPost = () => {
 		const { commenting } = this.state;
 		this.setState({ commenting: !commenting });

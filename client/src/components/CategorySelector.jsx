@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { API } from '../containers/MainPage';
 
 export default class CategorySelector extends Component {
 	state = {

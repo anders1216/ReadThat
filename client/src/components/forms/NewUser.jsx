@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Selector from 'react-select';
 
 export default class NewUser extends Component {
 	render() {
