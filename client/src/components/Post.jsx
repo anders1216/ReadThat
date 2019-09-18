@@ -20,6 +20,10 @@ class Post extends Component {
 		renderModalBool: false
 	};
 
+	async componentDidMount() {	
+
+	}
+
 	commentOnPost = () => {
 		const { commenting } = this.state;
 		this.setState({ commenting: !commenting });
@@ -73,6 +77,7 @@ class Post extends Component {
 	rapidVoteIncrement = async (e) => {
 		const { createVote, voteCount, post } = this.props;
 		await createVote(post.id, e.target.name)
+		debugger
 		await voteCount("post")
 	};
 

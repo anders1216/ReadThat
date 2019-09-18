@@ -21,13 +21,6 @@ export default class CategorySelector extends Component {
 	componentDidMount(){
 		this.setState({prevProps: this.state.data})
 	}
-
-	// fetchCats = () => {
-	// fetch(API + 'categories')
-	// 	.then(res => res.json())
-	// 	.then(res => this.setState({categories: res}))
-	// 	this.manageData()
-	// }
 	 
 	componentDidUpdate(){
 		if(this.state.prevProps === this.state.data)

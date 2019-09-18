@@ -36,12 +36,12 @@ export const filterPosts = () => async (dispatch, getState) => {
     let { posts } = getState().posts
     const { selectedPosts } = getState().posts
     let placeholder = []
-    let keys = Object.keys(voteCount)
-    keys.sort((a, b) => {return voteCount[a] - voteCount[b]})
+    let keys = Object.keys(voteCount["post"])
+    await keys.sort((a, b) => {return voteCount["post"][a]*1 - voteCount["post"][b]*1})
     let filteredPosts = keys.map(key => {
-        return {[key]: voteCount[key]}
+        return {[key]: voteCount["post"][key]}
     })
-
+    debugger
     if (selectedPosts.length > 0){
         posts = selectedPosts
     }
@@ -57,22 +57,26 @@ export const filterPosts = () => async (dispatch, getState) => {
             placeholder.push(post)
         }
     })
-
+    
     filteredPosts.reverse()
     filteredPosts.forEach(post => {
         if (Object.values(post) < 0 && posts.find(pos => { return pos.id === Object.keys(post) * 1; })) {
             placeholder.push(posts.find(pos => { return pos.id === Object.keys(post) * 1; }));
         }
     })
-
-    const output = Array.from(new Set(placeholder.map(a => a.id))).map(id => {
-        return placeholder.find(a => a.id === id);
+    debugger
+    placeholder.reverse()
+    let output = Array.from(new Set(placeholder.map(a => a.id))).map(id => {
+        return placeholder.find(a => a.id === id)
     })
 
+
+    debugger
+    output.reverse()
     if (getState().posts.howToFilterBool){
         output.reverse()
     }
-
+    debugger
     dispatch({
         type: FILTER_POSTS,
         payload: output

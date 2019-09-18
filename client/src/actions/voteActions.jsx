@@ -78,6 +78,7 @@ import { API } from '../containers/MainPage'
 					}
 				}
 			})
+		debugger
 		if(comOrPost === "post"){
 			debugger
 			await dispatch({
