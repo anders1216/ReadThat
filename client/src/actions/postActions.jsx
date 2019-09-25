@@ -41,7 +41,6 @@ export const filterPosts = () => async (dispatch, getState) => {
     let filteredPosts = keys.map(key => {
         return {[key]: voteCount["post"][key]}
     })
-    debugger
     if (selectedPosts.length > 0){
         posts = selectedPosts
     }
