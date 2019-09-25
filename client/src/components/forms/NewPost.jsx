@@ -9,7 +9,7 @@ const NewPost = (props) => {
 
 		return (
 			<div className='modal'>
-				<div className='modal-content'>
+				<div className='modal-content-new-post'>
 				<button className='close' name="newPost" onClick={e => handleClick(e)}>Close</button>
 				<form name="posts" onSubmit={e => onSubmit(e, "post")}>
                     <input
