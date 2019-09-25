@@ -16,20 +16,20 @@ const NewPost = (props) => {
 						name='title'
 						type='text'
 						onChange={e => handleChange(e, "post")}
-						placeholder='Title'
+						placeholder='Catchy Title. (e.g. The Hunt for the Bread October...)'
 					/>
 					<br/>
 					<textarea
 						name='content'
 						onChange={e => handleChange(e, "post")}
-						placeholder='Content'
+						placeholder= "The Medium is the Message so...¯\_(ツ)_/¯"
 					/>
 					<br/>
 					<input
 						name='img'
 						type='url'
 						onChange={e => handleChange(e, "post")}
-						placeholder='Image URL'
+						placeholder="Stable Image URLs only"
 					/>
 					<p>Or Upload an Image:</p>
 					<button className="upload-img-btn" onClick={e => handleWidget(e, widget)}>Upload Image</button>
