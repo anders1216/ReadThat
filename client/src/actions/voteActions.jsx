@@ -78,15 +78,14 @@ import { API } from '../containers/MainPage'
 					}
 				}
 			})
-		debugger
 		if(comOrPost === "post"){
-			debugger
+
 			await dispatch({
 				type: VOTE_COUNT_POSTS,
 				payload: placeholder
 			})
 		}else if (comOrPost === "comment"){
-			debugger
+
 			await dispatch({
 				type: VOTE_COUNT_COMMENTS,
 				payload: placeholder

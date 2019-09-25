@@ -77,7 +77,6 @@ class Post extends Component {
 	rapidVoteIncrement = async (e) => {
 		const { createVote, voteCount, post } = this.props;
 		await createVote(post.id, e.target.name)
-		debugger
 		await voteCount("post")
 	};
 

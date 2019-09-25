@@ -63,19 +63,16 @@ export const filterPosts = () => async (dispatch, getState) => {
             placeholder.push(posts.find(pos => { return pos.id === Object.keys(post) * 1; }));
         }
     })
-    debugger
     placeholder.reverse()
     let output = Array.from(new Set(placeholder.map(a => a.id))).map(id => {
         return placeholder.find(a => a.id === id)
     })
 
 
-    debugger
     output.reverse()
     if (getState().posts.howToFilterBool){
         output.reverse()
     }
-    debugger
     dispatch({
         type: FILTER_POSTS,
         payload: output
