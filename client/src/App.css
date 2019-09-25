@@ -14,7 +14,8 @@ input{
   padding: 1%;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   border-radius: 10px/10px;
-  max-width: relative;
+  min-width: fit-content;
+  max-width: auto;
 }
 
 textarea{
