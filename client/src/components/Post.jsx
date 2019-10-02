@@ -100,9 +100,9 @@ class Post extends Component {
 			this.state.renderModalBool ? 
 			<div className="modal">
 				<div className='modal-content-post'>
-				<div className='title-container'>{title}</div>
-				<div className='contents-container'>
-				<div className='modal-post-img-container'>
+					<div className='title-container'>{title}</div>
+					<div className='contents-container'>
+					<div className='modal-post-img-container'>
 					<img className='modal-post-img' src={image} alt={title} />
 				</div>
 				<div className='content-container'>
