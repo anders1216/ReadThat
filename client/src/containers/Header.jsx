@@ -75,13 +75,16 @@ class Header extends Component {
         const { newPost, newCategory } = this.state
         return (
             <div className="header">
-                <span className="cat-selector">
+                <div className="cat-selector">
                 <CategorySelector
                     handleChange={ handleChange }
                     selectedCategories={ selectedCategories }
                     token={token}
                     categories={categories}
                 />
+                </div>
+                <span>  
+                    <button className='logout' onClick={e => userLogout()}>Logout</button>
                 </span>
                 <span className="newPost">
                     {newPost ? <span><NewPost handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} categories={categories} handleWidget={this.handleWidget} handleImageUpload={this.handleImageUpload} handleClick={this.handleClick}/></span> : <button name="newPost" onClick={e => this.handleClick(e)}>Create New Post</button>}
@@ -89,11 +92,8 @@ class Header extends Component {
                 <span className="newCategory">
                     {newCategory ? <span><NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} handleClick={this.handleClick}/> </span>: <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
                 </span>
-                <span>
+                <span className="filterButton">
                     {howToFilterBool ? <button onClick={e => filterPosts()}> Posts Low -> High </button> : <button onClick={e => filterPosts()}> Posts High -> Low </button>}
-                </span>
-                <span>  
-                    <button className='logout' onClick={e => userLogout()}>Logout</button>
                 </span>
             </div>
         )

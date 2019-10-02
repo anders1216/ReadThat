@@ -44,7 +44,6 @@ button:hover{
   float: right;
   background-color: aquamarine;
 border-radius: 10px/10px
-
 }
 
 .header{
@@ -56,6 +55,22 @@ border-radius: 10px/10px
   padding-left: 1%;
   padding-right: 1%;
   width: 98%;
+}
+
+.newPost{
+  float: right;
+}
+
+.newCategory{
+  float: right;
+}
+
+.filterButton{
+  float: right;
+}
+
+.cat-selector {
+  max-width: 90%;
 }
 
 .logout{
