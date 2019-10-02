@@ -223,6 +223,7 @@ border-radius: 10px/10px
   border-color: rgb(61, 60, 60);
   background-color: rgb(156, 152, 152);
   box-shadow: 0 4px 8px 0 rgba(117, 43, 43, 0.2);
+  min-width: 10%
 }
 
 .post-ul {
