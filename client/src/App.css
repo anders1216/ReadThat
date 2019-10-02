@@ -40,6 +40,13 @@ button:hover{
   box-shadow: 0 8px 16px 0;
 }
 
+.close-button{
+  float: right;
+  background-color: aquamarine;
+border-radius: 10px/10px
+
+}
+
 .header{
   background-color: rgba(156, 154, 154, 0.5);
   position: fixed;

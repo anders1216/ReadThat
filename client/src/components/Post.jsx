@@ -100,7 +100,10 @@ class Post extends Component {
 			this.state.renderModalBool ? 
 			<div className="modal">
 				<div className='modal-content-post'>
+					<span>
+					<button className='close-button' onClick={e => this.renderModal()}> X </button>
 					<div className='title-container'>{title}</div>
+					</span>
 					<div className='contents-container'>
 					<div className='modal-post-img-container'>
 					<img className='modal-post-img' src={image} alt={title} />
@@ -118,6 +121,7 @@ class Post extends Component {
 					<button name='down' onClick={e => this.rapidVoteIncrement(e)}>
 						▼
 					</button>
+					{/* comments conditional */}
 					<button onClick={e => this.commentOnPost(e)}>Comment</button>
 					{commenting ? (
 						<NewComment
@@ -129,7 +133,6 @@ class Post extends Component {
 						/>
 					) : null}
 					<button onClick={e => this.displayComments(e)}>Display Comments</button>
-					<button onClick={e => this.renderModal()}>Close Post</button>
 					<ul className='post-ul'>
 						{this.state.displayComments && comments.length > 0
 							? comments.map(comment => {
