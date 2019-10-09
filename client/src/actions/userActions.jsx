@@ -1,7 +1,7 @@
 import { NEW_USER, USER_LOGIN, USER_LOGOUT, PAGE_RELOAD } from '../actions/types'
 import { API } from '../containers/MainPage'
 
-    export const pageReload = () => (dispatch, getState) => {
+    export const pageReload = () => (dispatch, getState, localStorage) => {
         if( getState().user.token !== undefined && getState().user.token !== null) {
             let token = getState().user.token
             fetch(`${API}users/current_user`, {
@@ -44,9 +44,9 @@ import { API } from '../containers/MainPage'
 		)
     }
 
-    export const userLogout = () => dispatch => {
+    export const userLogout = (e) => async dispatch => {
         localStorage.clear()
-        dispatch({
+        await dispatch({
             type: USER_LOGOUT
         })
     }
