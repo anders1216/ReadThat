@@ -56,6 +56,7 @@ button:hover{
   padding-left: 1%;
   padding-right: 1%;
   width: 98%;
+  z-index: 1;
 }
 
 .newPostButton{
@@ -85,7 +86,7 @@ button:hover{
 /*===================POST=================== */
 .posts-container{
   padding: 1%;
-  margin-top: 4.5%;
+  margin-top: 7%;
 }
 
 .post-card{
