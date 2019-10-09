@@ -84,16 +84,16 @@ class Header extends Component {
                 />
                 </div>
                 <span>  
-                    <button className='logout' onClick={e => userLogout()}>Logout</button>
+                    <button className='logoutButton' onClick={e => userLogout()}>Logout</button>
                 </span>
-                <span className="newPost">
-                    {newPost ? <span><NewPost handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} categories={categories} handleWidget={this.handleWidget} handleImageUpload={this.handleImageUpload} handleClick={this.handleClick}/></span> : <button name="newPost" onClick={e => this.handleClick(e)}>Create New Post</button>}
+                <span>
+                    {newPost ? <span><NewPost handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} categories={categories} handleWidget={this.handleWidget} handleImageUpload={this.handleImageUpload} handleClick={this.handleClick}/></span> : <button className="newPostButton" onClick={e => this.handleClick(e)}>Create New Post</button>}
                 </span>
-                <span className="newCategory">
-                    {newCategory ? <span><NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} handleClick={this.handleClick}/> </span>: <button name="newCategory" onClick={e => this.handleClick(e)}>Create New Category</button>}
+                <span>
+                    {newCategory ? <span><NewCategory handleChange={this.handleChange} onSubmit={this.handleSubmit} currentUser={currentUser} handleClick={this.handleClick}/> </span>: <button className="newCategoryButton" onClick={e => this.handleClick(e)}>Create New Category</button>}
                 </span>
-                <span className="filterButton">
-                    {howToFilterBool ? <button onClick={e => filterPosts()}> Posts Low -> High </button> : <button onClick={e => filterPosts()}> Posts High -> Low </button>}
+                <span>
+                    {howToFilterBool ? <button className="filterButton" onClick={e => filterPosts()}> Posts Low -> High </button> : <button className="filterButton" onClick={e => filterPosts()}> Posts High -> Low </button>}
                 </span>
             </div>
         )

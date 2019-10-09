@@ -1,6 +1,7 @@
 /* ================GENERAL=================== */
-
 .App {
+  background-color: blanchedalmond;
+  z-index: -100;
   /* align-items: left; */
 }
 
@@ -30,8 +31,8 @@ textarea{
 
 
 button{
-  background-color: rgb(245, 120, 89, 0.5);
-  box-shadow: 0 4px 8px 0 rgba(230, 126, 174, 0.5);
+  background-color: rgba(151, 122, 136, 0.5);
+  box-shadow: 0 4px 8px 0 rgba(151, 122, 136, 0.5);
   margin: 3px;
 }
 
@@ -43,11 +44,11 @@ button:hover{
 .close-button{
   float: right;
   background-color: aquamarine;
-border-radius: 10px/10px
+  border-radius: 10px/10px
 }
 
 .header{
-  background-color: rgba(156, 154, 154, 0.5);
+  background-color: rgba(156, 154, 154, 0.75);
   position: fixed;
   top: 0;
   padding-top: .5%;
@@ -57,23 +58,26 @@ border-radius: 10px/10px
   width: 98%;
 }
 
-.newPost{
+.newPostButton{
   float: left;
+  background: rgba(144, 247, 199, 0.5);
 }
 
-.newCategory{
+.newCategoryButton{
   float: left;
+  background-color: rgba(144, 247, 170, 0.5);
 }
 
 .filterButton{
   float: left;
+  background-color: rgba(155, 224, 245, 0.5)
 }
 
 .cat-selector {
   max-width: 90%;
 }
 
-.logout{
+.logoutButton{
   float: right;
   background: transparent;
 }
@@ -86,23 +90,22 @@ border-radius: 10px/10px
 
 .post-card{
   margin: 1%;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  transition: 0.3s;
-  width: 65%;
   padding: .5% .5% 0 .5% ;
+  width: 65%;
+  border-radius: 1px;
   background-color: lightgrey;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
 .post-img-container{
+  padding: .5%;
   display: inline-block;
   align-items: center;
   border: 1px;
   border-style: solid;
   border-color: black;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   background-color: beige;
-  padding: .5%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
 .post-img{
@@ -112,21 +115,15 @@ border-radius: 10px/10px
 
 .title-container{
   padding: .5%;
-  align-items: top left;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  border: 1px;
-  border-style: solid;
-  border-color: black;
-  border-radius: 10px;
   width: auto;
   max-width: 100%;
   margin-bottom: 1%;
-
-  background-color: rgb(250, 185, 161);
-}
-.button-container{
-  margin-top: 1%;
-  margin-bottom: 0%;
+  align-items: top left;
+  border: 1px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 1px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
 .title{
@@ -136,60 +133,60 @@ border-radius: 10px/10px
   margin: 1%;
 }
 .contents-container{
-  align-content: center;
+  width: 98%;
   padding: 1%;
   display: flex;
-  width: 98%;
+  align-content: center;
 }
 
 /* ==================LOGIN================== */
 
 .login-card{
-  padding: 10px;
-  margin: auto;
-  margin-top: 5%;
-  text-align: center;
-  background-color: rgb(194, 95, 2);
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  border-radius: 5%;
   height: 40%;
   width: 20%;
+  margin: auto;
+  margin-top: 5%;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5%;
+  background-color: rgb(194, 95, 2);
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
 .login-img-container{
-  margin-bottom: 3px;
-  border: 2px;
-  background-color: lightgoldenrodyellow;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  border-radius: 5%;
-  padding: 3px;
   max-width: auto;
   max-height: auto;
+  margin-bottom: 3px;
+  padding: 3px;
+  border: 2px;
+  border-radius: 5%;
+  background-color: lightgoldenrodyellow;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
 .login-img{
-  animation: rotation 10s infinite;
-  animation-direction: alternate;
   max-width: 100%;
   max-height: 100%;
+  animation: rotation 10s infinite;
+  animation-direction: alternate;
 }
 
 /* =======================USER===================== */
 
 .user-card-container{
-  display: flex;
-  align-content: block;
   width: 30%;
   max-width: 30%;
   height: 90%;
+  max-height: 50%;
   margin-top: 2%;
   padding: 1%;
-  position: fixed;
-  z-index: -1;
-  border-radius: 10px;
   right: 1%;
+  position: fixed;
+  display: flex;
+  align-content: block;
+  z-index: -.9;
+  border-radius: 10px;
   background-color: grey;
-  max-height: 50%
 }
 
 .user-card-div{
@@ -199,7 +196,7 @@ border-radius: 10px/10px
   padding: 1%;
   margin: 0 1% 0 0;
   border-radius: 10px;
-  background-color: rgb(243, 157, 77);
+  background-color:  rgb(202, 200, 198);
 }
 
 .general-info-card-div{
@@ -209,7 +206,7 @@ border-radius: 10px/10px
   margin: 0 1% 0 0;
   padding: 1%;
   border-radius: 10px;
-  background-color: rgb(243, 157, 77);
+  background-color: rgb(202, 200, 198);
 }
 
 /* ===================COMMENTS==================== */
