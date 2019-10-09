@@ -58,15 +58,15 @@ border-radius: 10px/10px
 }
 
 .newPost{
-  float: right;
+  float: left;
 }
 
 .newCategory{
-  float: right;
+  float: left;
 }
 
 .filterButton{
-  float: right;
+  float: left;
 }
 
 .cat-selector {
