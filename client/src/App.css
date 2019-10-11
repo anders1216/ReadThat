@@ -1,6 +1,6 @@
 /* ================GENERAL=================== */
 .App {
-  background-color: blanchedalmond;
+  background-color:grey;
   z-index: -100;
   /* align-items: left; */
 }
@@ -116,6 +116,7 @@ button:hover{
 
 .title-container{
   padding: .5%;
+  min-height: 10px;
   width: auto;
   max-width: 100%;
   margin-bottom: 1%;

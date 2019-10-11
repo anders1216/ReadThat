@@ -81,6 +81,7 @@ class Comment extends Component {
 	render(){
 		const { comment, comments, currentUser, post, countedVotes } = this.props
 		const { displayComments, commentsComments } = this.state
+		debugger
 		return (
 		<div className='comment-card'>
 			<p>{comment.content}</p>
