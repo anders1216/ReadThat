@@ -17,20 +17,13 @@ class User extends Component {
             .then(res => res.json())
             .then(res => this.usersComments(res))
     }
-
-    async componentDidMount(){
+     componentDidMount(){
         const { posts, votes } = this.props
         this.setState({prevState: {votes: votes}})
-        await this.fetchComments()
-        await this.usersPosts(posts)
-        await this.usersVotes(votes)
+        this.fetchComments()
+        this.usersPosts(posts)
+        this.usersVotes(votes)
     }
-
-    // componentDidUpdate(){
-    //     if (this.props.votes === this.state.prevState.votes ){
-    //         this.forceUpdate()
-    //     }
-    // }
 
     usersVotes = (votes) => {
         let usersVotes = votes.filter(vote => vote.user_id === this.props.currentUser.user.id)
@@ -59,13 +52,13 @@ class User extends Component {
                     <h1 className='user-heading'>{currentUser.user.username}</h1>
                         <p>Total Posts: {usersPosts.length}</p>
                         <p>Total Votes: {usersVotes.length}</p>
-                        <p>Total Commentss: {usersComments.length}</p>
+                        <p>Total Comments: {usersComments.length}</p>
                 </div>
                 <div className='general-info-card-div'>
                 <h2 className='general-info-heading'> ReadThat General info </h2>
                     <p>Total Posts: {posts.length}</p>
                     <p>Total Votes: {votes.length}</p>
-                    <p>Total Commentss: {comments.length}</p>
+                    <p>Total Comments: {comments.length}</p>
                     <p>Total Categories: {categories.length}</p>
                 </div>
             </div>

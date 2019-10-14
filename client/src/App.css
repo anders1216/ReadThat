@@ -57,6 +57,7 @@ button:hover{
   padding-right: 1%;
   width: 98%;
   z-index: 1;
+  max-height: 5%
 }
 
 .newPostButton{
@@ -86,7 +87,8 @@ button:hover{
 /*===================POST=================== */
 .posts-container{
   padding: 1%;
-  margin-top: 7%;
+  height: 100%;
+  padding-top: 5%;
 }
 
 .post-card{
@@ -182,6 +184,7 @@ button:hover{
   max-height: 50%;
   margin-top: 2%;
   padding: 1%;
+  padding-top: 17%;
   right: 1%;
   position: fixed;
   display: flex;
