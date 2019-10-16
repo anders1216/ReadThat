@@ -58,31 +58,37 @@ button:hover{
   top: 0;
   width: 100%;
   z-index: 1;
-  max-height: 5%
+  max-height: 5%;
+  padding: 1%;
+  object-fit: contain;
 }
 
 .newPostButton{
-  float: left;
+  float: right;
   background: rgba(144, 247, 199, 0.5);
 }
 
 .newCategoryButton{
-  float: left;
+  float: right;
   background-color: rgba(144, 247, 170, 0.5);
 }
 
 .filterButton{
-  float: left;
+  float: right;
   background-color: rgba(155, 224, 245, 0.5)
 }
 
 .cat-selector {
+  float: left;
+  min-width: 50%;
   max-width: 75%;
+  width: fill;
 }
 
 .logoutButton{
   float: right;
   background: transparent;
+  margin-right: 3%
 }
 
 /*===================POST=================== */
@@ -99,6 +105,7 @@ button:hover{
   border-radius: 1px;
   background-color: lightgrey;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  position: relative;
 }
 
 .post-img-container{
