@@ -50,15 +50,13 @@ button:hover{
   border-radius: 10px/10px
 }
 
+/*===================HEADER=================== */
+
 .header{
   background-color: rgba(156, 154, 154, 0.75);
   position: fixed;
   top: 0;
-  padding-top: .5%;
-  padding-bottom: .5%;
-  padding-left: 1%;
-  padding-right: 1%;
-  width: 98%;
+  width: 100%;
   z-index: 1;
   max-height: 5%
 }
@@ -79,7 +77,7 @@ button:hover{
 }
 
 .cat-selector {
-  max-width: 90%;
+  max-width: 75%;
 }
 
 .logoutButton{
