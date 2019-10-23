@@ -265,8 +265,8 @@ button:hover{
 }
 
 .modal-content {
-  background-color: #fefefe;
   margin: 10% 10%;
+  position: relative;
   z-index: 1;
   padding: 10px;
   border: 1px solid #888;

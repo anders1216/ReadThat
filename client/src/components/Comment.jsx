@@ -81,7 +81,7 @@ class Comment extends Component {
 	render(){
 		const { comment, comments, currentUser, post, countedVotes } = this.props
 		const { displayComments, commentsComments } = this.state
-		debugger
+		 
 		return (
 		<div className='comment-card'>
 			<p>{comment.content}</p>
@@ -99,6 +99,7 @@ class Comment extends Component {
 					value={comment.id}
 					handleChange={this.handleChange}
 					handleSubmit={this.handleSubmit}
+					commentOnPost={this.commentOnPost}
 				/>
 			) : null}
 			<button onClick={e => this.displayComments(e)}>Display Comments</button>
