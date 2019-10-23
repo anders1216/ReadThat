@@ -6,14 +6,12 @@ html {
 .App {
   background-color:grey;
   z-index: -100;
-  /* align-items: left; */
 }
 
 .main-container{
   padding: 1%;
   z-index: auto;
   background-color:grey;
-  /* padding: 1%; */
 }
 
 input{
@@ -316,12 +314,12 @@ button:hover{
 
 .new-user-modal-content{
   background-color: #fefefe;
-  margin: 10% 10%; /* 15% from the top and centered */
+  margin: 10% 10%; 
   padding: 10px;
   border: 1px solid #888;
   border-radius: 5px;
   width: 30%;
-  height: auto; /* Could be more or less, depending on screen size */
+  height: auto;
 }
 
 .modal-content button{
@@ -331,7 +329,7 @@ button:hover{
 .modal-content select{
   margin:1%;
 }
-/* The Close Button */
+/*===============The Close Button=============== */
 .close {
   color: #aaa;
   float: right;
