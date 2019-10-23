@@ -200,6 +200,8 @@ button:hover{
   z-index: -.9;
   border-radius: 10px;
   background-color: chartreuse;
+  font-size: 16px;
+  font-size: 1vw;
 }
 
 .user-card-div{
