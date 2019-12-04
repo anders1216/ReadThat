@@ -83,11 +83,11 @@ import { API } from '../containers/MainPage'
 				type: VOTE_COUNT_POSTS,
 				payload: placeholder
 			})
-		}else if (comOrPost === "comment"){
+			}else if (comOrPost === "comment"){
 
-			await dispatch({
-				type: VOTE_COUNT_COMMENTS,
-				payload: placeholder
+				await dispatch({
+					type: VOTE_COUNT_COMMENTS,
+					payload: placeholder
 			})
 		}}
 
