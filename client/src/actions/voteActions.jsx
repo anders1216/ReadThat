@@ -10,6 +10,11 @@ import { API } from '../containers/MainPage'
             );
 	}
 	
+	export const NewSortingFunction = () => {
+		console.log("Maybe Later?")
+		
+	}
+
     export const createVote = (ID, e, comment) => async (dispatch, getState) => {
 		const token = getState().user.token
 		const currentUser = getState().user.currentUser
