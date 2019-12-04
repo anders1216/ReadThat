@@ -61,7 +61,9 @@ import { API } from '../containers/MainPage'
 
 	export const voteCount = (comOrPost = "post") => async (dispatch, getState) => {
 			const votes = await getState().votes.votes
-			mOrPost}_id`]]){
+			let placeholder = {};
+				await votes.forEach(vote => {
+				if(placeholder[vote[`${comOrPost}_id`]]){
 					if(vote.is_down_vote){
 						placeholder[vote[`${comOrPost}_id`]] -= 1
 					}else{
@@ -88,7 +90,3 @@ import { API } from '../containers/MainPage'
 					payload: placeholder
 			})
 		}}
-
-		export const NewFuckTion = () => {
-			console.log("YeahBiatchReaDThat!")
-		}
