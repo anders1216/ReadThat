@@ -78,9 +78,8 @@ import { API } from '../containers/MainPage'
 					}
 				}
 			})
-		if(comOrPost === "post"){
-
-			await dispatch({
+			if(comOrPost === "post"){
+				await dispatch({
 				type: VOTE_COUNT_POSTS,
 				payload: placeholder
 			})
@@ -90,5 +89,8 @@ import { API } from '../containers/MainPage'
 				type: VOTE_COUNT_COMMENTS,
 				payload: placeholder
 			})
+		}}
+
+		export const NewFuckTion = () => {
+			console.log("YeahBiatchReaDThat!")
 		}
-	}
